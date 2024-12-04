@@ -97,4 +97,5 @@ return [
     'generate' => 'Get report',
     'firstDate' => 'Choose start date',
     'lastDate' => 'Select end date',
+    'language' => 'Language',
 ];
