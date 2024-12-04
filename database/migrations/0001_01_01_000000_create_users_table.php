@@ -19,6 +19,23 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->float('kcal_per_day_normal')->nullable();
+            $table->float('kcal_per_day')->nullable();
+            $table->float('fat_percent')->nullable();
+            $table->integer('BMR')->nullable();
+            $table->float('BMI')->nullable();
+            $table->integer('breakfast_percent')->nullable();
+            $table->integer('lunch_percent')->nullable();
+            $table->integer('dinner_percent')->nullable();
+            $table->integer('snack_percent')->nullable();
+            $table->string('product_hash')->nullable();
+            $table->string('sex')->nullable();
+            $table->integer('growth_cm')->nullable();
+            $table->float('activity_coefficient')->nullable();
+            $table->integer('deficit_kcal')->nullable();
+            $table->float('target_kg')->nullable();
+            $table->date('birthday_date')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
