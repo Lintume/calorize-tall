@@ -21,16 +21,36 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'fat_percent',
+        'kcal_per_day_normal',
+        'fat_percent',
+        'BMR',
+        'BMI',
+        'breakfast_percent',
+        'lunch_percent',
+        'dinner_percent',
+        'snack_percent',
+        'product_hash',
+        'kcal_per_day',
+        'sex',
+        'growth_cm',
+        'activity_coefficient',
+        'birthday_date',
+        'target_kg',
+        'deficit_kcal'
     ];
 
+    public $appends = [
+
+        ];
+
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that should be hidden for arrays.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
     /**
@@ -44,5 +64,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function foodIntakes()
+    {
+        return $this->hasMany(FoodIntake::class);
+    }
+
+    public function measurements()
+    {
+        return $this->hasMany(Measurement::class);
     }
 }

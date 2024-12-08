@@ -21,7 +21,7 @@ class CreateTableProducts extends Migration
             $table->float('carbohydrates')->nullable();
             $table->float('calories')->nullable();
             $table->boolean('base')->default(true);
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->float('total_weight')->unsigned()->nullable();
             $table->timestamps();
         });
