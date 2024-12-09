@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,10 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
         return redirect()->back();
     })->name('switch-language');
 
+    Route::get('products', ProductIndex::class)
+        ->middleware(['auth', 'verified'])
+        ->name('products');
+
     require __DIR__ . '/auth.php';
 
 //
@@ -30,7 +35,6 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Auth::routes();
 //Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //
-    Route::get('/products', 'ProductController@index')->name('products');
     Route::get('/create-product', 'ProductController@create')->name('createProduct');
 //Route::post('/save-product', 'ProductController@store')->name('saveProduct');
 //Route::get('/edit-product/{id}', 'ProductController@edit')->name('editProduct');
