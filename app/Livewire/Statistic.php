@@ -114,9 +114,11 @@ class Statistic extends Component
 
     public function setTimeRange($timeRange): void
     {
+        if(!$timeRange) {
+            return;
+        }
         $this->startDate = Carbon::now()->{$timeRange}()->toDateString();
         $this->endDate = Carbon::now()->toDateString();
-        $this->rebuildChartData();
     }
 
     private function rebuildChartData(): void
