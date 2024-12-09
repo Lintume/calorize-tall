@@ -4,98 +4,134 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Statistic extends Component
 {
-    #[Validate('required|date')]
+    #[Validate('required|date|before_or_equal:endDate')]
     public string $startDate;
 
-    #[Validate('required|date')]
+    #[Validate('required|date|after_or_equal:startDate')]
     public string $endDate;
 
+    #[Validate('required|in:kg,thighs_cm,chest_cm,waist_cm,wrist_cm,neck_cm,biceps_cm')]
+    public string $currentTab = 'kg';
+
+    public array $tabs = [
+        'kg' => 'Weight',
+        'chest_cm' => 'Chest',
+        'waist_cm' => 'Waist',
+        'thighs_cm' => 'Thighs',
+        'wrist_cm' => 'Wrist',
+        'neck_cm' => 'Neck',
+        'biceps_cm' => 'Biceps',
+    ];
+
     public array $data = [
-        'weight' => [
-            'dates' => [],
-            'measurements' => []
-        ],
-        'thighs' => [
-            'dates' => [],
-            'measurements' => []
-        ],
-        'chest' => [
-            'dates' => [],
-            'measurements' => []
-        ],
-        'waist' => [
-            'dates' => [],
-            'measurements' => []
-        ],
-        'wrist' => [
-            'dates' => [],
-            'measurements' => []
-        ],
-        'neck' => [
-            'dates' => [],
-            'measurements' => []
-        ],
-        'biceps' => [
-            'dates' => [],
-            'measurements' => []
-        ],
+        'dates' => [],
+        'measurements' => []
+    ];
+
+    #[Validate('nullable|in:subWeek,subMonth,subYear')]
+    public string $timeRange = '';
+
+    public array $timeRanges = [
+        'subWeek' => 'Last Week',
+        'subMonth' => 'Last Month',
+        'subYear' => 'Last Year',
     ];
 
     public function mount()
     {
-        $this->startDate = Carbon::now()->subYears(2)->toDateString();
+        $firstAvailableDate = Auth::user()
+            ->measurements()
+            ->orderBy('date', 'ASC')
+            ->where($this->currentTab, '!=', 0)
+            ->first()->date;
+        $this->startDate = Carbon::parse($firstAvailableDate)->toDateString();
         $this->endDate = Carbon::now()->toDateString();
-        $this->getWeightData();
+
+        $this->getData();
     }
 
     public function updated($field)
     {
+        try {
         $this->validate();
-        $this->getWeightData();
-        // Emit an event to the frontend
-        $this->dispatch('chartDataUpdated', $this->data['weight']['dates'], $this->data['weight']['measurements']);
+        } catch (ValidationException $e) {
+            $this->reset('currentTab');
+            $this->reset('timeRange');
+            return;
+        }
+        if ($field === 'timeRange') {
+            $this->setTimeRange($this->timeRange);
+        }
+        if ($field === 'startDate' || $field === 'endDate') {
+            $this->reset('timeRange');
+        }
+        $this->rebuildChartData();
     }
 
-    private function getWeightData()
+    public function changeTab($tab): void
     {
-        $measurements = Auth::user()
+        try {
+            $this->currentTab = $tab;
+            $this->validate();
+        } catch (ValidationException $e) {
+            $this->reset('currentTab');
+            return;
+        }
+
+        $this->rebuildChartData();
+    }
+
+    private function getData(): void
+    {
+        $measurementsCollection = Auth::user()
             ->measurements()
             ->whereBetween('date', [$this->startDate, $this->endDate])
+            ->where($this->currentTab, '!=', 0)
             ->orderBy('date', 'ASC')
             ->get();
 
-        $kgMeasurements = $measurements->where('kg', '!=', 0);
+        $reducedDates = $this->getReducedDates($measurementsCollection->pluck('date')->toArray());
 
-        $kgDates = $this->getReducedDates($kgMeasurements->pluck('date')->toArray());
-
-        $kgWeights = [];
-        foreach ($kgDates as $date) {
-            $kgWeights[] = $kgMeasurements->where('date', $date)->first()['kg'];
+        $measurements = [];
+        foreach ($reducedDates as $date) {
+            $measurements[] = $measurementsCollection->where('date', $date)->first()->{$this->currentTab};
         }
 
-        $formattedKgDates = [];
-        foreach ($kgDates as $date) {
-            $formattedKgDates[] = Carbon::parse($date)->format('d M y');
+        $formattedDates = [];
+        foreach ($reducedDates as $date) {
+            $formattedDates[] = Carbon::parse($date)->format('d M y');
         }
 
-        $this->data['weight']['dates'] = $formattedKgDates;
-        $this->data['weight']['measurements'] = $kgWeights;
+        $this->data['dates'] = $formattedDates;
+        $this->data['measurements'] = $measurements;
     }
 
-    public function render()
+    public function setTimeRange($timeRange): void
     {
-
-        return view('livewire.statistic');
+        $this->startDate = Carbon::now()->{$timeRange}()->toDateString();
+        $this->endDate = Carbon::now()->toDateString();
+        $this->rebuildChartData();
     }
 
-    function getReducedDates(array $dates)
+    private function rebuildChartData(): void
+    {
+        $this->getData();
+        // Emit an event to the frontend
+        $this->dispatch('chartDataUpdated', $this->data['dates'], $this->data['measurements']);
+    }
+
+    function getReducedDates(array $dates): array
     {
         $reduce = 10;
+        if (count($dates) <= $reduce) {
+            return $dates;
+        }
         $totalDates = count($dates);
         $timeframeSize = ceil($totalDates / $reduce);
         $selectedDates = [];
@@ -111,5 +147,10 @@ class Statistic extends Component
         }
 
         return $selectedDates;
+    }
+
+    public function render()
+    {
+        return view('livewire.statistic');
     }
 }
