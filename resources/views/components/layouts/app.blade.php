@@ -38,7 +38,11 @@
 
     <!-- Page Content -->
     <main>
-        {{ $slot }}
+        <div class="flex items-center justify-center">
+            <div class="w-full max-w-4xl px-4 sm:px-6 lg:px-8 ">
+                {{ $slot }}
+            </div>
+        </div>
     </main>
 </div>
 @livewireScripts
