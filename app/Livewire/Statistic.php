@@ -57,6 +57,8 @@ class Statistic extends Component
     {
         $this->validate();
         $this->getWeightData();
+        // Emit an event to the frontend
+        $this->dispatch('chartDataUpdated', $this->data['weight']['dates'], $this->data['weight']['measurements']);
     }
 
     private function getWeightData()

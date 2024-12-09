@@ -28,51 +28,76 @@
     </div>
 
 
-
     <div class="flex flex-col justify-center">
-            <div class="flex flex-col h-full shadow justify-between rounded-lg pb-8 p-6 xl:p-8 mt-3 bg-gray-50">
-                    <h2 class="text-2xl font-bold mb-4">{{__('Weight dynamic')}}</h2>
-                    <canvas id="myChart"></canvas>
-            </div>
+        <div class="flex flex-col h-full shadow justify-between rounded-lg pb-8 p-6 xl:p-8 mt-3 bg-gray-50">
+            <h2 class="text-2xl font-bold mb-4">{{__('Weight dynamic')}}</h2>
+            <canvas id="myChart"></canvas>
         </div>
+    </div>
 
 </div>
 
-  @script
-    <script>
-            let ctx = document.getElementById('myChart').getContext('2d');
-
-            let myChart = new Chart(ctx, {
-                type: 'line', // Choose chart type (line, bar, etc.)
-                data: {
-                    labels: @json($data['weight']['dates']), // X-axis labels
-                    datasets: [{
-                        data: @json($data['weight']['measurements']), // Y-axis values
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            title: {
-                                display: true,
-                                text: @json(__('Weight, kg')),
-                            },
-                            beginAtZero: false,
-                        }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index',
-                    },
-                    pointRadius: 5,
-                    plugins: {
-                        legend: {
-                            display: false // Hide the legend
-                        }
+@script
+<script>
+    let myChart;
+    function createChart(labels, data) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        myChart = new Chart(ctx, {
+            type: 'line', // Chart type
+            data: {
+                labels: labels, // X-axis labels
+                datasets: [{
+                    data: data, // Y-axis values
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: @json(__('Weight, kg')),
+                        },
+                        beginAtZero: false,
                     }
                 },
-            });
-    </script>
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+                pointRadius: 5,
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend
+                    }
+                }
+            },
+        });
+    }
+
+    // Initialize the chart with initial data
+    createChart(@json($data['weight']['dates']), @json($data['weight']['measurements']));
+
+    // Listen for Livewire event to update chart
+    Livewire.on('chartDataUpdated', (data) => {
+        const canvas = document.getElementById('myChart');
+
+        // Ensure canvas is available and myChart exists
+        if (!canvas || !canvas.getContext) {
+            console.error("Canvas element is not ready.");
+            return;
+        }
+
+        // Destroy existing chart if it exists
+        if (myChart) {
+            myChart.destroy();
+        }
+
+        // Recreate the chart with new data
+        createChart(data[0], data[1]);
+    });
+
+</script>
 @endscript
+
