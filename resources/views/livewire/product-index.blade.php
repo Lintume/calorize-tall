@@ -15,21 +15,32 @@
                     <table class="min-w-full divide-y divide-gray-200 table-fixed">
                          <thead class="bg-gray-50">
                          <tr>
-                              <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Product title') }}</th>
-                              <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Prot.') }}</th>
-                              <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Fat') }}</th>
-                              <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Ch.') }}</th>
-                              <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Cal.') }}</th>
+                              <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
+                              <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">{{ __('Prot') }}</th>
+                              <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">{{ __('Fat') }}</th>
+                              <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">{{ __('Carb') }}</th>
+                              <th class="w-1/12 px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kcal') }}</th>
+                              <th class="w-1/12 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                          </tr>
                          </thead>
                          <tbody class="bg-white divide-y divide-gray-200">
                          @foreach($products as $product)
                               <tr>
-                                   <td class="px-2 py-4 break-words">{{ $product->title }}</td>
-                                   <td class="px-2 py-4 whitespace-nowrap">{{ $product->proteins }}</td>
-                                   <td class="px-2 py-4 whitespace-nowrap">{{ $product->fats }}</td>
-                                   <td class="px-2 py-4 whitespace-nowrap">{{ $product->carbohydrates }}</td>
-                                   <td class="px-2 py-4 whitespace-nowrap">{{ $product->calories }}</td>
+                                   <td class="px-2 py-4 break-words">
+                                        <a href="#" wire:click.prevent="edit({{ $product->id }})" class="text-blue-800 hover:underline">
+                                             <i class="fas fa-edit"></i>
+                                        </a>
+                                        {{ $product->title }}
+                                   </td>
+                                   <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->proteins }}</td>
+                                   <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->fats }}</td>
+                                   <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->carbohydrates }}</td>
+                                   <td class="px-2 py-3 text-center whitespace-nowrap">{{ $product->calories }}</td>
+                                   <td class="px-2 py-3 whitespace-nowrap">
+                                        <a href="#" wire:click.prevent="delete({{ $product->id }})" class="text-red-500 hover:underline">
+                                             <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                   </td>
                               </tr>
                          @endforeach
                          </tbody>
