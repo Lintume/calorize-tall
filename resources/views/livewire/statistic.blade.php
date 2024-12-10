@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="flex flex-col justify-center">
-        <div class="flex flex-col shadow justify-between rounded-lg pb-8 xl:p-8 mt-3 bg-gray-50">
+        <div class="flex flex-col shadow justify-between rounded-lg pb-8 xl:p-8 mt-3 bg-white">
             {{--tabs--}}
             <div
                 class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mx-6">

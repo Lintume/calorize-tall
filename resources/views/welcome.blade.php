@@ -69,10 +69,10 @@
     @if (Route::has('login'))
         <div class="top-right links">
             @auth
-                <a href="{{ route('home') }}">{{__('welcome.productList')}}</a>
+                <a href="{{ route('products') }}">{{__('welcome.productList')}}</a>
                 <a href="{{ url('/recipes') }}">{{__('welcome.recipes')}}</a>
                 <a href="{{ url('/create-recipe') }}">{{__('welcome.createRecipe')}}</a>
-                <a href="{{ route('createProduct') }}">{{__('welcome.createProduct')}}</a>
+                <a href="{{ route('product.create') }}">{{__('welcome.createProduct')}}</a>
                 <a href="{{route('personal')}}">{{__('welcome.personal')}}</a>
             @else
                 <a href="{{ route('login') }}">{{ __('auth.login') }}</a>

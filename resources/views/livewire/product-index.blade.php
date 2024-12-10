@@ -7,8 +7,9 @@
                         type="text"
                         placeholder="{{ __('Search...') }}"
                         class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                        wire:model="searchTerm"
+                        wire:model.live.debounce.500ms="search"
                     />
+                    <div class="text-red-600">@error('search') {{ $message }} @enderror</div>
                </div>
                <!-- Table -->
                <div class="overflow-x-auto">
@@ -27,19 +28,27 @@
                          @foreach($products as $product)
                               <tr>
                                    <td class="px-2 py-4 break-words">
-                                        <a href="#" wire:click.prevent="edit({{ $product->id }})" class="text-blue-800 hover:underline">
-                                             <i class="fas fa-edit"></i>
-                                        </a>
-                                        {{ $product->title }}
+                                        @if($product->user_id)
+                                             <a href="{{route('product.edit', $product->id) }}"
+                                                class="hover:underline">
+                                                  <i class="fas fa-edit text-blue-800"></i>
+                                                  {{ $product->title }}
+                                             </a>
+                                        @else
+                                             <span>{{ $product->title }}</span>
+                                        @endif
                                    </td>
                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->proteins }}</td>
                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->fats }}</td>
                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->carbohydrates }}</td>
                                    <td class="px-2 py-3 text-center whitespace-nowrap">{{ $product->calories }}</td>
                                    <td class="px-2 py-3 whitespace-nowrap">
-                                        <a href="#" wire:click.prevent="delete({{ $product->id }})" class="text-red-500 hover:underline">
-                                             <i class="fas fa-trash-alt"></i>
-                                        </a>
+                                        @if($product->user_id)
+                                             <a href="#" wire:click.prevent="delete({{ $product->id }})"
+                                                class="text-red-500 hover:underline">
+                                                  <i class="fas fa-trash-alt"></i>
+                                             </a>
+                                        @endif
                                    </td>
                               </tr>
                          @endforeach

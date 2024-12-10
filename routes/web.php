@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use Illuminate\Support\Facades\Route;
@@ -21,10 +22,6 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
         return redirect()->back();
     })->name('switch-language');
 
-    Route::get('products', ProductIndex::class)
-        ->middleware(['auth', 'verified'])
-        ->name('products');
-
     require __DIR__ . '/auth.php';
 
 //
@@ -35,9 +32,13 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Auth::routes();
 //Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //
-    Route::get('/create-product', 'ProductController@create')->name('createProduct');
-//Route::post('/save-product', 'ProductController@store')->name('saveProduct');
-//Route::get('/edit-product/{id}', 'ProductController@edit')->name('editProduct');
+    Route::get('products', ProductIndex::class)->name('products');
+    Route::view('/create-product', 'product.create')->middleware(['auth', 'verified'])->name('product.create');
+    Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+    Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('product.store');
+    Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('product.update');
+    Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('product.edit');
+//Route::view('/edit-product/{id}', 'products.edit')->name('products.edit');
 //Route::post('/update-product/{id}', 'ProductController@update')->name('updateProduct');
 //Route::post('/delete-product', 'ProductController@destroy')->name('deleteProduct');
 //

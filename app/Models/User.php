@@ -75,4 +75,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Measurement::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
