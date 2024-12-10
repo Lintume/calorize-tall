@@ -1,5 +1,5 @@
 # Calorize - Health Tracker Application
-![Calorize Logo](![Calorize Logo](https://raw.githubusercontent.com/Lintume/calorize-tall/main/public/logo.png))
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/6BmJTRr/logo.png" alt="logo" border="0"></a>
 
 ## Overview
 
