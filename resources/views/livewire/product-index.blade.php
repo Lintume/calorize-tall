@@ -1,8 +1,8 @@
 <div class="flex flex-col justify-center">
-     <div class="flex flex-col shadow justify-between rounded-lg xl:p-8 mt-5 bg-white mb-1">
-          <div class="p-5">
+     <div class="flex flex-col shadow justify-between rounded-lg mt-5 bg-white mb-1">
+          <div class="p-5 md:p-10">
                <!-- Search bar -->
-               <div class="mb-5">
+               <div class="mb-5 md:mb-10">
                     <input
                         type="text"
                         placeholder="{{ __('Search...') }}"
