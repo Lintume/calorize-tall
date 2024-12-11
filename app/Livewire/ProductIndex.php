@@ -53,13 +53,7 @@ class ProductIndex extends Component
                 });
         })
             ->where('base', !$this->isRecipesRequest)
-            ->where(function ($query) {
-                $query->where('title', 'like', '%' . $this->search . '%')
-                    ->orWhere('proteins', 'like', '%' . $this->search . '%')
-                    ->orWhere('fats', 'like', '%' . $this->search . '%')
-                    ->orWhere('carbohydrates', 'like', '%' . $this->search . '%')
-                    ->orWhere('calories', 'like', '%' . $this->search . '%');
-            })
+            ->search($this->search)
             ->orderBy('created_at', 'desc')
             ->simplePaginate(25);
 

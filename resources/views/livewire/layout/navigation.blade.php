@@ -39,14 +39,14 @@ new class extends Component {
                                 wire:navigate>
                         {{__('welcome.createProduct')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('products')" wire:navigate>
+                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')" wire:navigate>
                         {{__('welcome.productList')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('createRecipe')"
+                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"
                                 wire:navigate>
                         {{__('welcome.createRecipe')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipes')" wire:navigate>
+                    <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')" wire:navigate>
                         {{__('welcome.recipes')}}
                     </x-nav-link>
                     <x-nav-link :href="route('personal')" :active="request()->routeIs('personal')" wire:navigate>
@@ -156,18 +156,18 @@ new class extends Component {
             <x-responsive-nav-link :href="route('diary')" :active="request()->routeIs('diary')" wire:navigate>
                 {{__('welcome.diary')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('product.create')" :active="request()->routeIs('createProduct')"
+            <x-responsive-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"
                                    wire:navigate>
                 {{__('welcome.createProduct')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('product.index')" :active="request()->routeIs('products')" wire:navigate>
+            <x-responsive-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')" wire:navigate>
                 {{__('welcome.productList')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('recipe.create')" :active="request()->routeIs('createRecipe')"
+            <x-responsive-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"
                                    wire:navigate>
                 {{__('welcome.createRecipe')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipes')" wire:navigate>
+            <x-responsive-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')" wire:navigate>
                 {{__('welcome.recipes')}}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('personal')" :active="request()->routeIs('personal')" wire:navigate>
