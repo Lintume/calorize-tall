@@ -27,9 +27,11 @@ class ProductIndex extends Component
         }
     }
 
-    public function delete()
+    public function delete(Product $product)
     {
+        $this->authorize('delete', $product);
 
+        $product->delete();
     }
 
     public function render()

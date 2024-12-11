@@ -8,11 +8,20 @@
     <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-8 mx-auto">
         <div class="flex items-center justify-between mb-4">
             <h5 class="text-xl font-bold leading-none text-gray-900">{{ $product->title }}</h5>
-            <a href="{{ route('products') }}">
-                <x-secondary-button>
-                    {{ __('Show All') }}
-                </x-secondary-button>
-            </a>
+            <div>
+                <a href="{{ route('products') }}">
+                    <x-secondary-button>
+                        {{ __('Show All') }}
+                    </x-secondary-button>
+                </a>
+                @if($product->user_id === auth()->id())
+                    <a class="ml-2" href="{{ route('product.edit', $product->id) }}">
+                        <x-secondary-button>
+                            <i class="fas fa-edit"></i>
+                        </x-secondary-button>
+                    </a>
+                @endif
+            </div>
         </div>
         <div class="flow-root">
             <ul role="list" class="divide-y divide-gray-200">

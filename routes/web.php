@@ -33,7 +33,7 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 //
     Route::get('products', ProductIndex::class)->name('products');
-    Route::view('/create-product', 'product.create')->middleware(['auth', 'verified'])->name('product.create');
+    Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('product.create');
     Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
     Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('product.store');
     Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('product.update');

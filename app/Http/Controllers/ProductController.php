@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        return view('products.create');
+        return view('product.create');
     }
 
     public function edit(Product $product)

@@ -84,8 +84,8 @@ new class extends Component {
                 </div>
 
                 <!-- Settings Dropdown -->
-                @if (auth()->check())
                     <div class="hidden sm:flex sm:items-center">
+                        @auth
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button
@@ -117,9 +117,16 @@ new class extends Component {
                                 </button>
                             </x-slot>
                         </x-dropdown>
+                        @else
+                            <x-nav-link :href="route('login')" wire:navigate>
+                                {{ __('auth.login') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('register')" wire:navigate>
+                                {{ __('auth.register') }}
+                            </x-nav-link>
+                        @endauth
                     </div>
             </div>
-            @endif
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
@@ -177,7 +184,7 @@ new class extends Component {
             </div>
         </div>
         <!-- Responsive Settings Options -->
-        @if (auth()->check())
+        @auth
             <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="px-4">
                     <div class="font-medium text-base text-gray-800"
@@ -199,6 +206,13 @@ new class extends Component {
                     </button>
                 </div>
             </div>
-        @endif
+        @else
+            <x-responsive-nav-link :href="route('login')" wire:navigate>
+                {{ __('auth.login') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('register')" wire:navigate>
+                {{ __('auth.register') }}
+            </x-responsive-nav-link>
+        @endauth
     </div>
 </nav>

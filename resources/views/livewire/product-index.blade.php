@@ -32,11 +32,12 @@
                                              <a href="{{route('product.edit', $product->id) }}"
                                                 class="hover:underline">
                                                   <i class="fas fa-edit text-blue-800"></i>
-                                                  {{ $product->title }}
                                              </a>
-                                        @else
-                                             <span>{{ $product->title }}</span>
                                         @endif
+                                        <a href="{{route('product.show', $product->id) }}"
+                                           class="hover:underline">
+                                             {{ $product->title }}
+                                        </a>
                                    </td>
                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->proteins }}</td>
                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->fats }}</td>
