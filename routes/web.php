@@ -24,25 +24,30 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 
     require __DIR__ . '/auth.php';
 
-//
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-//
-//Auth::routes();
-//Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-//
-    Route::get('products', ProductIndex::class)->name('products');
-    Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('product.create');
-    Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
-    Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('product.store');
-    Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('product.update');
-    Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('product.edit');
+    Route::name('product.')->group(function () {
+        Route::get('products', ProductIndex::class)->name('index');
+        Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('create');
+        Route::get('/product/{product}', [ProductController::class, 'show'])->name('show');
+        Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
+        Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update');
+        Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit');
+    });
+
+    Route::name('recipe.')->group(function () {
+        Route::get('recipes', ProductIndex::class)->name('index');
+//        Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('create');
+//        Route::get('/product/{product}', [ProductController::class, 'show'])->name('show');
+//        Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
+//        Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update');
+//        Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit');
+    });
+
+
 //Route::view('/edit-product/{id}', 'products.edit')->name('products.edit');
 //Route::post('/update-product/{id}', 'ProductController@update')->name('updateProduct');
 //Route::post('/delete-product', 'ProductController@destroy')->name('deleteProduct');
 //
-    Route::get('/recipes', 'RecipeController@index')->name('recipes');
+//    Route::get('/recipes', 'RecipeController@index')->name('recipes');
     Route::get('/create-recipe', 'RecipeController@create')->name('createRecipe');
 //Route::get('/edit-recipe/{id}', 'RecipeController@edit')->name('editRecipe');
 //Route::post('/save-recipe', 'RecipeController@store')->name('saveRecipe');
@@ -57,9 +62,9 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Route::get('/measurement', 'MeasurementController@create')->name('measurement');
 //Route::post('/save-measurement', 'MeasurementController@store')->name('saveMeasurement');
 //
-    Route::get('/personal', 'UserController@index')->name('personal');
+//    Route::get('/personal', 'UserController@index')->name('personal');
 //Route::post('/personal', 'UserController@store');
 //
-    Route::get('/statistic', 'StatisticController@index')->name('statistic');
+//    Route::get('/statistic', 'StatisticController@index')->name('statistic');
 //Route::post('/statistic', 'StatisticController@getData');
 });

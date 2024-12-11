@@ -39,14 +39,14 @@ new class extends Component {
                                 wire:navigate>
                         {{__('welcome.createProduct')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('products')" :active="request()->routeIs('products')" wire:navigate>
+                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('products')" wire:navigate>
                         {{__('welcome.productList')}}
                     </x-nav-link>
                     <x-nav-link :href="route('createRecipe')" :active="request()->routeIs('createRecipe')"
                                 wire:navigate>
                         {{__('welcome.createRecipe')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('recipes')" :active="request()->routeIs('recipes')" wire:navigate>
+                    <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipes')" wire:navigate>
                         {{__('welcome.recipes')}}
                     </x-nav-link>
                 </div>
@@ -157,14 +157,14 @@ new class extends Component {
                                    wire:navigate>
                 {{__('welcome.createProduct')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products')" :active="request()->routeIs('products')" wire:navigate>
+            <x-responsive-nav-link :href="route('product.index')" :active="request()->routeIs('products')" wire:navigate>
                 {{__('welcome.productList')}}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('createRecipe')" :active="request()->routeIs('createRecipe')"
                                    wire:navigate>
                 {{__('welcome.createRecipe')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('recipes')" :active="request()->routeIs('recipes')" wire:navigate>
+            <x-responsive-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipes')" wire:navigate>
                 {{__('welcome.recipes')}}
             </x-responsive-nav-link>
         </div>

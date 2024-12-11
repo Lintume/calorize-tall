@@ -45,11 +45,17 @@ class Statistic extends Component
 
     public function mount()
     {
-        $firstAvailableDate = Auth::user()
+        $firstMeasurement = Auth::user()
             ->measurements()
             ->orderBy('date', 'ASC')
             ->where($this->currentTab, '!=', 0)
-            ->first()->date;
+            ->first();
+        if (!$firstMeasurement) {
+            $this->startDate = Carbon::now()->subWeek()->toDateString();
+            $this->endDate = Carbon::now()->toDateString();
+            return;
+        }
+        $firstAvailableDate = $firstMeasurement->date;
         $this->startDate = Carbon::parse($firstAvailableDate)->toDateString();
         $this->endDate = Carbon::now()->toDateString();
 
@@ -95,6 +101,9 @@ class Statistic extends Component
             ->where($this->currentTab, '!=', 0)
             ->orderBy('date', 'ASC')
             ->get();
+        if ($measurementsCollection->isEmpty()) {
+            return;
+        }
 
         $reducedDates = $this->getReducedDates($measurementsCollection->pluck('date')->toArray());
 

@@ -35,7 +35,7 @@ class ProductController extends Controller
 
         Auth::user()->products()->create($request->all());
 
-        return redirect()->route('products');
+        return redirect()->route('product.index');
     }
 
     public function update(ProductRequest $request, Product $product)
@@ -44,6 +44,6 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        return redirect()->route('products');
+        return redirect()->route('product.index');
     }
 }

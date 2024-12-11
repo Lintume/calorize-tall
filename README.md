@@ -66,12 +66,24 @@ Calorize is a comprehensive health tracker application designed to help users ma
     php artisan db:seed
     ```
 
-8. **Build front-end assets**:
+8. **Seed measurements data for testing purposes** (optional):
+   Ensure a user with ID 1 exists before running this command.
+    ```sh
+    php artisan db:seed --class=SeedMeasurements
+    ```
+
+9. **Parse products from `table.xlsx` file** (optional):
+   Ensure the `table.xlsx` file is placed in the root directory before running this command.
+    ```sh
+    php artisan parse:products
+    ```
+
+10. **Build front-end assets**:
     ```sh
     npm run dev
     ```
 
-9. **Start the development server**:
+11. **Start the development server**:
     ```sh
     php artisan serve
     ```

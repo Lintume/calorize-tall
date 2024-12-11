@@ -78,7 +78,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ route('products') }}">{{ __('welcome.productList') }}</a>
+                        <a href="{{ route('product.index') }}">{{ __('welcome.productList') }}</a>
                         <a href="{{ url('/recipes') }}">{{ __('welcome.recipes') }}</a>
                         <a href="{{ url('/create-recipe') }}">{{ __('welcome.createRecipe') }}</a>
                         <a href="{{ route('product.create') }}">{{ __('welcome.createProduct') }}</a>
@@ -100,7 +100,7 @@
                     <a href="{{ route('personal') }}">{{ __('welcome.personal') }}</a>
                     <a href="{{ route('statistic') }}">{{ __('welcome.statistic') }}</a>
                     <a href="http://pariamonia.in.ua">{{ __('welcome.contacts') }}</a>
-                    <a href="{{ route('products') }}">{{ __('welcome.productList') }}</a>
+                    <a href="{{ route('product.index') }}">{{ __('welcome.productList') }}</a>
                 </div>
             </div>
         </div>

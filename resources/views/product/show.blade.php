@@ -18,7 +18,7 @@
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-xl font-bold leading-none text-gray-900">{{ $product->title }}</h1>
             <div>
-                <a href="{{ route('products') }}">
+                <a href="{{ route('product.index') }}">
                     <x-secondary-button>
                         {{ __('Show All') }}
                     </x-secondary-button>

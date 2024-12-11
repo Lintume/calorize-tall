@@ -55,10 +55,20 @@
                 </ul>
             </div>
             {{--chart--}}
-            <div class="p-6">
-                <h2 class="text-xl font-bold mb-4 md:text-2xl">{{__($tabs[$currentTab])}} {{__('dynamic for selected period:')}}</h2>
-                <canvas id="myChart"></canvas>
-            </div>
+            @if($data['dates'] && $data['measurements'])
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-4 md:text-2xl">{{__($tabs[$currentTab])}} {{__('dynamic for selected period:')}}</h2>
+                    <canvas id="myChart"></canvas>
+                </div>
+            @else
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-4 md:text-2xl">{{__('No data for selected period')}}</h2>
+                    <p>{{__('Please add measurements in ')}}
+                        <a href="{{route('diary')}}"
+                           class="text-blue-600 hover:underline">{{__('Diary')}}</a>
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
 </div>
