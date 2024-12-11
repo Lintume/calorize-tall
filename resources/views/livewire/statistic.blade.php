@@ -57,7 +57,6 @@
             {{--chart--}}
             @if($data['dates'] && $data['measurements'])
                 <div class="p-6">
-                    <h2 class="text-xl font-bold mb-4 md:text-2xl">{{__($tabs[$currentTab])}} {{__('dynamic for selected period:')}}</h2>
                     <canvas id="myChart"></canvas>
                 </div>
             @else
