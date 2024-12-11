@@ -73,6 +73,7 @@
     </div>
 </div>
 
+@if($data['dates'] && $data['measurements'])
 @script
 <script>
     let myChart;
@@ -128,4 +129,5 @@
 
 </script>
 @endscript
+@endif
 

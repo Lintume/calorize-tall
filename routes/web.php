@@ -62,7 +62,7 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Route::get('/measurement', 'MeasurementController@create')->name('measurement');
 //Route::post('/save-measurement', 'MeasurementController@store')->name('saveMeasurement');
 //
-//    Route::get('/personal', 'UserController@index')->name('personal');
+    Route::get('/personal', 'UserController@index')->name('personal');
 //Route::post('/personal', 'UserController@store');
 //
 //    Route::get('/statistic', 'StatisticController@index')->name('statistic');
