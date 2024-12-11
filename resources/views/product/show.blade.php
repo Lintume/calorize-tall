@@ -5,9 +5,18 @@
         </h2>
     </x-slot>
 
+    @section('meta')
+        <meta name="description" content="{{ $product->title }} - {{ __('Product details including proteins, fats, carbohydrates, and calories.') }}">
+        <meta name="keywords" content="{{ __('Product, Proteins, Fats, Carbohydrates, Calories') }}, {{ $product->title }}">
+        <meta property="og:title" content="{{ $product->title }}">
+        <meta property="og:description" content="{{ $product->title }} - {{ __('Product details including proteins, fats, carbohydrates, and calories.') }}">
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="{{ url()->current() }}">
+    @endsection
+
     <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-8 mx-auto">
         <div class="flex items-center justify-between mb-4">
-            <h5 class="text-xl font-bold leading-none text-gray-900">{{ $product->title }}</h5>
+            <h1 class="text-xl font-bold leading-none text-gray-900">{{ $product->title }}</h1>
             <div>
                 <a href="{{ route('products') }}">
                     <x-secondary-button>
