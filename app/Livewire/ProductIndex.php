@@ -16,6 +16,13 @@ class ProductIndex extends Component
     #[Validate('nullable|string|max:100')]
     public ?string $search = null;
 
+    public bool $isRecipesRequest = false;
+
+    public function mount()
+    {
+        $this->isRecipesRequest = request()->routeIs('recipe.index');
+    }
+
     public function updated($field)
     {
         try {
@@ -45,6 +52,7 @@ class ProductIndex extends Component
                     $query->orWhere('user_id', $userId);
                 });
         })
+            ->where('base', !$this->isRecipesRequest)
             ->where(function ($query) {
                 $query->where('title', 'like', '%' . $this->search . '%')
                     ->orWhere('proteins', 'like', '%' . $this->search . '%')

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Livewire\CreateRecipe;
 use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use Illuminate\Support\Facades\Route;
@@ -34,10 +35,10 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     });
 
     Route::name('recipe.')->group(function () {
-        Route::get('recipes', ProductIndex::class)->name('index');
-//        Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('create');
+        Route::get('recipes', ProductIndex::class)->middleware(['auth', 'verified'])->name('index');
+        Route::get('/create-recipe', CreateRecipe::class)->middleware(['auth', 'verified'])->name('create');
 //        Route::get('/product/{product}', [ProductController::class, 'show'])->name('show');
-//        Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
+//        Route::post('/recipe', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
 //        Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update');
 //        Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit');
     });
@@ -48,7 +49,7 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Route::post('/delete-product', 'ProductController@destroy')->name('deleteProduct');
 //
 //    Route::get('/recipes', 'RecipeController@index')->name('recipes');
-    Route::get('/create-recipe', 'RecipeController@create')->name('createRecipe');
+//    Route::get('/create-recipe', 'RecipeController@create')->name('createRecipe');
 //Route::get('/edit-recipe/{id}', 'RecipeController@edit')->name('editRecipe');
 //Route::post('/save-recipe', 'RecipeController@store')->name('saveRecipe');
 //Route::post('/update-recipe', 'RecipeController@update')->name('updateRecipe');

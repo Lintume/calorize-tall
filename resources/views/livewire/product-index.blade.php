@@ -2,13 +2,21 @@
      <x-slot name="header">
           <div class="flex justify-between items-center">
                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ __('Product list') }}
+                    @if($isRecipesRequest) {{ __('Recipes') }} @else {{ __('Products') }} @endif
                </h2>
-               <a href="{{ route('product.create') }}">
-                    <x-primary-button>
-                         {{ __('Create Product') }}
-                    </x-primary-button>
-               </a>
+               @if($isRecipesRequest)
+                    <a href="{{ route('recipe.create') }}">
+                         <x-secondary-button>
+                              {{ __('Create Recipe') }}
+                         </x-secondary-button>
+                    </a>
+               @else
+                    <a href="{{ route('product.create') }}">
+                         <x-secondary-button>
+                              {{ __('Create Product') }}
+                         </x-secondary-button>
+                    </a>
+               @endif
           </div>
      </x-slot>
 
