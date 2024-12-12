@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 
 class CreateRecipe extends Component
 {
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
 
     #[Validate('nullable|string|max:100')]
     public ?string $search = null;
@@ -27,10 +28,10 @@ class CreateRecipe extends Component
         $this->selectedProducts = collect();
     }
 
-    public function updated($field)
+    public function updatedSearch($field)
     {
         try {
-            $this->validate();
+            $this->validateOnly('search');
             $this->resetPage();
         } catch (ValidationException $e) {
             $this->reset($field);
@@ -48,6 +49,13 @@ class CreateRecipe extends Component
         $this->selectedProducts = $this->selectedProducts->reject(function ($selectedProduct) use ($product) {
             return $selectedProduct->id === $product->id;
         });
+    }
+
+    public function save()
+    {
+        $this->validate();
+
+
     }
 
     public function render()
