@@ -8,10 +8,12 @@
         <title>{{ __('Calorize') }}</title>
 
         <!-- Meta Tags for SEO -->
-        <meta name="description" content="{{ __('Calorize - Your personal calorie tracker and nutrition assistant.') }}">
+        <meta name="description"
+              content="{{ __('Calorize - Your personal calorie tracker and nutrition assistant.') }}">
         <meta name="keywords" content="{{ __('Calorize, Calorie Tracker, Nutrition, Health, Fitness') }}">
         <meta property="og:title" content="{{ __('Calorize') }}">
-        <meta property="og:description" content="{{ __('Calorize - Your personal calorie tracker and nutrition assistant.') }}">
+        <meta property="og:description"
+              content="{{ __('Calorize - Your personal calorie tracker and nutrition assistant.') }}">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:image" content="{{ asset('path/to/your/image.jpg') }}">
@@ -52,15 +54,12 @@
 
             .content {
                 text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
+                padding-bottom: 10%;
             }
 
             .links > a {
                 color: #636b6f;
-                padding: 0 25px;
+                padding: 0 20px;
                 font-size: 12px;
                 font-weight: 600;
                 letter-spacing: .1rem;
@@ -68,39 +67,38 @@
                 text-transform: uppercase;
             }
 
-            .m-b-md {
-                margin-bottom: 30px;
+            @media (max-width: 600px) {
+                .links-middle > a {
+                    display: block;
+                    margin-bottom: 20px; /* Adjust the value to increase the distance */
+                }
             }
         </style>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ route('product.index') }}">{{ __('welcome.productList') }}</a>
-                        <a href="{{ url('/recipes') }}">{{ __('welcome.recipes') }}</a>
-                        <a href="{{ url('/create-recipe') }}">{{ __('welcome.createRecipe') }}</a>
-                        <a href="{{ route('product.create') }}">{{ __('welcome.createProduct') }}</a>
-                        <a href="{{ route('personal') }}">{{ __('welcome.personal') }}</a>
-                    @else
-                        <a href="{{ route('login') }}">{{ __('auth.login') }}</a>
-                        <a href="{{ route('register') }}">{{ __('auth.register') }}</a>
-                    @endauth
-                </div>
-            @endif
+            <div class="top-right links">
+                @if (app()->getLocale() == 'en')
+                    <a href="{{ route('switch-language', 'ua') }}">Українська</a>
+                @else
+                    <a href="{{ route('switch-language', 'en') }}">English</a>
+                @endif
+                @auth
+                @else
+                    <a href="{{ route('login') }}">{{ __('auth.login') }}</a>
+                    <a href="{{ route('register') }}">{{ __('auth.register') }}</a>
+                @endauth
+            </div>
 
             <div class="content">
-                <h1 class="title m-b-md">
-                    {{ __('Calorize') }}
-                </h1>
+                <img src="{{ asset('logo.png') }}" alt="Calorize" width="200" height="200">
 
-                <div class="links">
+                <div class="links links-middle">
                     <a href="{{ route('diary') }}">{{ __('welcome.diary') }}</a>
                     <a href="{{ route('personal') }}">{{ __('welcome.personal') }}</a>
                     <a href="{{ route('dashboard') }}">{{ __('welcome.statistic') }}</a>
-                    <a href="http://pariamonia.in.ua">{{ __('welcome.contacts') }}</a>
                     <a href="{{ route('product.index') }}">{{ __('welcome.productList') }}</a>
+                    <a href="http://pariamonia.in.ua">{{ __('welcome.contacts') }}</a>
                 </div>
             </div>
         </div>
