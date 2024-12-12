@@ -28,29 +28,26 @@ new class extends Component {
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-6 sm:-my-px sm:ms-3 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{__('welcome.statistic')}}
                     </x-nav-link>
                     <x-nav-link :href="route('diary')" :active="request()->routeIs('diary')" wire:navigate>
                         {{__('welcome.diary')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"
-                                wire:navigate>
-                        {{__('welcome.createProduct')}}
-                    </x-nav-link>
+{{--                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"--}}
+{{--                                wire:navigate>--}}
+{{--                        {{__('welcome.createProduct')}}--}}
+{{--                    </x-nav-link>--}}
                     <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')" wire:navigate>
                         {{__('welcome.productList')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"
-                                wire:navigate>
-                        {{__('welcome.createRecipe')}}
-                    </x-nav-link>
+{{--                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"--}}
+{{--                                wire:navigate>--}}
+{{--                        {{__('welcome.createRecipe')}}--}}
+{{--                    </x-nav-link>--}}
                     <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')" wire:navigate>
                         {{__('welcome.recipes')}}
-                    </x-nav-link>
-                    <x-nav-link :href="route('personal')" :active="request()->routeIs('personal')" wire:navigate>
-                        {{__('welcome.personal')}}
                     </x-nav-link>
                 </div>
 
@@ -118,6 +115,10 @@ new class extends Component {
                                         {{ __('Log Out') }}
                                     </x-dropdown-link>
                                 </button>
+
+                                <x-dropdown-link :href="route('personal')" wire:navigate>
+                                    {{ __('welcome.personal') }}
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
                         @else
