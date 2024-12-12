@@ -88,8 +88,8 @@ Calorize is a comprehensive health tracker application designed to help users ma
     php artisan serve
     ```
 12. **Collect translations (if needed)**:
-    ```
-     php artisan translatable:export ua,en
+    ```sh
+    php artisan translatable:export ua,en
     ```
 
 ## Usage
