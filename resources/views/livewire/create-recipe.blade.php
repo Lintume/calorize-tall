@@ -123,7 +123,7 @@
 <script>
     function recipeApp() {
         return {
-            selectedProducts: [],
+            selectedProducts: @entangle('selectedProducts'),
 
             totalGrams: 0,
 

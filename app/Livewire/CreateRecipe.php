@@ -18,15 +18,10 @@ class CreateRecipe extends Component
     #[Validate('nullable|string|max:100')]
     public ?string $search = null;
 
-    public Collection $selectedProducts;
+    public array $selectedProducts;
 
     #[Validate('required|string|max:255')]
     public string $title = '';
-
-    public function mount()
-    {
-        $this->selectedProducts = collect();
-    }
 
     public function updatedSearch($field)
     {
@@ -37,18 +32,6 @@ class CreateRecipe extends Component
             $this->reset($field);
             return;
         }
-    }
-
-    public function addProduct(Product $product): void
-    {
-        $this->selectedProducts->push($product);
-    }
-
-    public function delete(Product $product)
-    {
-        $this->selectedProducts = $this->selectedProducts->reject(function ($selectedProduct) use ($product) {
-            return $selectedProduct->id === $product->id;
-        });
     }
 
     public function save()
