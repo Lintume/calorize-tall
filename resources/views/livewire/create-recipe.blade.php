@@ -1,4 +1,9 @@
 <div class="flex flex-col justify-center" x-data="recipeApp()">
+    <div class="text-red-600">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
     <div class="flex flex-col shadow justify-between rounded-lg mt-5 bg-white mb-1">
         <div class="p-5 md:p-10">
 
@@ -12,7 +17,7 @@
                 <div class="text-red-600">@error('title') {{ $message }} @enderror</div>
                 <x-secondary-button
                     class="ml-2 h-10 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                    wire:click="save"
+                    @click="save"
                 >
                     {{ __('Save') }}
                 </x-secondary-button>
@@ -56,21 +61,21 @@
                         <tr class="bg-gray-50">
                             <td class="px-2 py-4 break-words">{{ __('Total') }}</td>
                             <td class="px-2 py-4">
-                                <input type="number" class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" x-model="totalGrams">
+                                <input type="number" class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" x-model="calculated.totalGrams">
                             </td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="totalProteins"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="totalFats"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="totalCarbohydrates"></td>
-                            <td class="px-2 py-3 text-center whitespace-nowrap hidden sm:table-cell" x-text="totalCalories"></td>
+                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="calculated.totalProteins"></td>
+                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="calculated.totalFats"></td>
+                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="calculated.totalCarbohydrates"></td>
+                            <td class="px-2 py-3 text-center whitespace-nowrap hidden sm:table-cell" x-text="calculated.totalCalories"></td>
                             <td class="px-2 py-3 whitespace-nowrap"></td>
                         </tr>
                         <tr class="bg-gray-100">
                             <td class="px-2 py-4 break-words">{{ __('Kcal per 100 gram') }}</td>
                             <td class="px-2 py-4 hidden sm:table-cell"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="proteinsPer100g"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="fatsPer100g"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="carbohydratesPer100g"></td>
-                            <td class="px-2 py-3 text-center font-extrabold whitespace-nowrap" x-text="kcalPer100g"></td>
+                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="calculated.proteinsPer100g"></td>
+                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="calculated.fatsPer100g"></td>
+                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell" x-text="calculated.carbohydratesPer100g"></td>
+                            <td class="px-2 py-3 text-center font-extrabold whitespace-nowrap" x-text="calculated.kcalPer100g"></td>
                             <td class="px-2 py-3 whitespace-nowrap"></td>
                         </tr>
                     </tbody>
@@ -123,48 +128,50 @@
 <script>
     function recipeApp() {
         return {
-            selectedProducts: @entangle('selectedProducts'),
+            selectedProducts: [],
 
-            totalGrams: 0,
+            calculated: {
+                totalGrams: 0,
 
-            totalProteins: 0,
-            totalFats: 0,
-            totalCarbohydrates: 0,
-            totalCalories: 0,
-            totalKcal: 0,
+                totalProteins: 0,
+                totalFats: 0,
+                totalCarbohydrates: 0,
+                totalCalories: 0,
+                totalKcal: 0,
 
-            proteinsPer100g: 0,
-            fatsPer100g: 0,
-            carbohydratesPer100g: 0,
-            kcalPer100g: 0,
+                proteinsPer100g: 0,
+                fatsPer100g: 0,
+                carbohydratesPer100g: 0,
+                kcalPer100g: 0,
+            },
 
             init() {
                 this.$watch('selectedProducts', value => {
-                    this.totalGrams = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.grams), 0);
-                    this.totalProteins = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.proteins) * product.grams / 100, 0).toFixed(2);
-                    this.totalFats = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.fats) * product.grams / 100, 0).toFixed(2);
-                    this.totalCarbohydrates = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.carbohydrates) * product.grams / 100, 0).toFixed(2);
-                    this.totalCalories = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.calories) * product.grams / 100, 0).toFixed(2);
+                    this.calculated.totalGrams = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.grams), 0);
+                    this.calculated.totalProteins = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.proteins) * product.grams / 100, 0).toFixed(2);
+                    this.calculated.totalFats = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.fats) * product.grams / 100, 0).toFixed(2);
+                    this.calculated.totalCarbohydrates = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.carbohydrates) * product.grams / 100, 0).toFixed(2);
+                    this.calculated.totalCalories = this.selectedProducts.reduce((acc, product) => acc + parseInt(product.calories) * product.grams / 100, 0).toFixed(2);
 
                     this.calculatePer100g();
                 }, { deep: true });
 
-                this.$watch('totalGrams', value => {
+                this.$watch('calculated.totalGrams', value => {
                     this.calculatePer100g();
                 });
             },
 
             calculatePer100g() {
-                if (this.totalGrams > 0) {
-                    this.proteinsPer100g = (this.totalProteins / this.totalGrams * 100).toFixed(2);
-                    this.fatsPer100g = (this.totalFats / this.totalGrams * 100).toFixed(2);
-                    this.carbohydratesPer100g = (this.totalCarbohydrates / this.totalGrams * 100).toFixed(2);
-                    this.kcalPer100g = (this.totalCalories / this.totalGrams * 100).toFixed(2);
+                if (this.calculated.totalGrams > 0) {
+                    this.calculated.proteinsPer100g = (this.calculated.totalProteins / this.calculated.totalGrams * 100).toFixed(2);
+                    this.calculated.fatsPer100g = (this.calculated.totalFats / this.calculated.totalGrams * 100).toFixed(2);
+                    this.calculated.carbohydratesPer100g = (this.calculated.totalCarbohydrates / this.calculated.totalGrams * 100).toFixed(2);
+                    this.calculated.kcalPer100g = (this.calculated.totalCalories / this.calculated.totalGrams * 100).toFixed(2);
                 } else {
-                    this.proteinsPer100g = 0;
-                    this.fatsPer100g = 0;
-                    this.carbohydratesPer100g = 0;
-                    this.kcalPer100g = 0;
+                    this.calculated.proteinsPer100g = 0;
+                    this.calculated.fatsPer100g = 0;
+                    this.calculated.carbohydratesPer100g = 0;
+                    this.calculated.kcalPer100g = 0;
                 }
             },
 
@@ -179,6 +186,10 @@
             removeProduct(productId) {
                 this.selectedProducts = this.selectedProducts.filter(product => product.id !== productId);
             },
+
+            save() {
+                this.$wire.call('save', this.selectedProducts, this.calculated);
+            }
         }
     }
 </script>
