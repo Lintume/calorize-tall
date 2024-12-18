@@ -1,4 +1,4 @@
-<div x-data="diaryApp()">
+<div x-data="diaryApp()" class="mb-10">
     <div class="flex flex-wrap mt-8 mb-4">
         <div class="flex w-full">
             <!-- дейтпікер -->
@@ -23,7 +23,12 @@
                 <template x-for="(foodIntakeData, index) in foodIntakes" :key="index">
                     <div>
                         <div class="rounded-lg border border-gray-300 p-4 flex justify-between items-center">
-                            <div x-text="index"></div>
+                            <div class="flex items-center">
+                                <div x-text="index"></div>
+                                <div x-text="foodIntakeData.totalCalories"
+                                    class="ml-3 inline-flex px-2 items-center bg-gray-400 border border-transparent rounded-md font-semibold text-white tracking-widest">
+                                </div>
+                            </div>
                             <i class="fas fa-plus"></i>
                         </div>
                         <table class="mt-5 min-w-full divide-y divide-gray-200 table-fixed">
@@ -81,6 +86,7 @@
                     </div>
                 </template>
                 <livewire:product-search/>
+                <livewire:product-create />
                 <div class="rounded-lg border border-gray-300 p-4 flex justify-around">
                     <div class="text-green-500">
                         {{ __('Proteins: ') }} <span x-text="totalProteins"></span>
@@ -97,7 +103,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
                 <div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-8 gap-4">
                         <div>
                             <label for="measurement1"
                                    class="block text-sm font-medium text-gray-700">{{ __('Weight') }}</label>
@@ -140,11 +146,11 @@
                             <input type="text" id="measurement6"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                         </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <x-primary-button>
-                            {{ __('Save') }}
-                        </x-primary-button>
+                        <div class="flex flex-col justify-end h-full">
+                            <x-primary-button class="self-end">
+                                {{ __('Save') }}
+                            </x-primary-button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -204,6 +210,9 @@
                         // calculate all products calories
                         intake.products.forEach(product => {
                             product.calories = Math.round(product.product.calories * product.g / 100);
+                            product.fats = Math.round(product.product.fats * product.g / 100);
+                            product.proteins = Math.round(product.product.proteins * product.g / 100);
+                            product.carbohydrates = Math.round(product.product.carbohydrates * product.g / 100);
                         });
                         // calculate total intake calories
                         intake.totalCalories = intake.products.reduce((acc, product) => acc + product.calories, 0);
