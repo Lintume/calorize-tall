@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use App\Livewire\CreateRecipe;
 use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
+use App\Livewire\UpdateRecipe;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
@@ -37,10 +38,7 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     Route::name('recipe.')->group(function () {
         Route::get('recipes', ProductIndex::class)->middleware(['auth', 'verified'])->name('index');
         Route::get('/create-recipe', CreateRecipe::class)->middleware(['auth', 'verified'])->name('create');
-//        Route::get('/product/{product}', [ProductController::class, 'show'])->name('show');
-//        Route::post('/recipe', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
-//        Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update');
-//        Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit');
+        Route::get('/edit-recipe/{product}', UpdateRecipe::class)->middleware(['auth', 'verified'])->name('edit');
     });
 
 

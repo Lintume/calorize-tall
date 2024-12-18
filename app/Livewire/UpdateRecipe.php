@@ -12,15 +12,23 @@ use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 
-class CreateRecipe extends Component
+class UpdateRecipe extends Component
 {
     use WithPagination, WithoutUrlPagination;
+
+    public Product $product;
 
     #[Validate('nullable|string|max:100')]
     public ?string $search = null;
 
     #[Validate('required|string|max:255')]
     public string $title = '';
+
+    public function mount(Product $product): void
+    {
+        $this->product = $product;
+        $this->title = $product->title;
+    }
 
     public function updatedSearch($field)
     {
@@ -54,16 +62,15 @@ class CreateRecipe extends Component
         }
 
         DB::transaction(function () use ($selectedProducts, $calculated) {
-            $product = Product::create([
+            $this->product->update([
                 'title' => $this->title,
                 'proteins' => $calculated['proteinsPer100g'],
                 'fats' => $calculated['fatsPer100g'],
                 'carbohydrates' => $calculated['carbohydratesPer100g'],
                 'calories' => $calculated['kcalPer100g'],
-                'base' => false,
-                'user_id' => Auth::id(),
                 'total_weight' => $calculated['totalGrams'],
             ]);
+            $selectedProdsSync = [];
             foreach ($selectedProducts as $ingredient) {
                 $validator = Validator::make($ingredient, [
                     'id' => 'required|exists:products,id',
@@ -74,12 +81,11 @@ class CreateRecipe extends Component
                     throw new ValidationException($validator);
                 }
 
-                DB::table('product_to_products')->insert([
-                    'related_product_id' => $product->id,
-                    'product_id' => $ingredient['id'],
+                $selectedProdsSync[$ingredient['id']] = [
                     'g' => $ingredient['grams']
-                ]);
+                ];
             }
+            $this->product->ingredients()->sync($selectedProdsSync);
         });
 
         return redirect()->route('recipe.index');
@@ -97,9 +103,21 @@ class CreateRecipe extends Component
             ->orderBy('created_at', 'desc')
             ->simplePaginate(5);
 
+        $selectedProducts = $this->product->ingredients->map(function ($ingredient) {
+            return [
+                'id' => $ingredient->id,
+                'title' => $ingredient->title,
+                'proteins' => $ingredient->proteins,
+                'fats' => $ingredient->fats,
+                'carbohydrates' => $ingredient->carbohydrates,
+                'calories' => $ingredient->calories,
+                'grams' => $ingredient->pivot->g,
+            ];
+        })->toArray();
+
         return view('livewire.recipe-form', [
             'products' => $products,
-            'selectedProducts' => collect(),
+            'selectedProducts' => $selectedProducts,
         ]);
     }
 }

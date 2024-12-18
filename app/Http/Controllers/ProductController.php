@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -26,24 +24,10 @@ class ProductController extends Controller
     {
         $this->authorize('update', $product);
 
+        if ($product->base === 0) {
+            return redirect()->route('recipe.edit', $product);
+        }
+
         return view('product.edit', compact('product'));
-    }
-
-    public function store(ProductRequest $request)
-    {
-        $this->authorize('create', Product::class);
-
-        Auth::user()->products()->create($request->all());
-
-        return redirect()->route('product.index');
-    }
-
-    public function update(ProductRequest $request, Product $product)
-    {
-        $this->authorize('update', $product);
-
-        $product->update($request->all());
-
-        return redirect()->route('product.index');
     }
 }

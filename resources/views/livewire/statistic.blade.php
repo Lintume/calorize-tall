@@ -57,7 +57,7 @@
             {{--chart--}}
             @if($data['dates'] && $data['measurements'])
                 <div class="p-6">
-                    <canvas id="myChart"></canvas>
+                    <canvas id="myChart" class="w-full"></canvas>
                 </div>
             @else
                 <div class="p-6">
