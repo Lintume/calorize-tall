@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Livewire\CreateRecipe;
+use App\Livewire\Diary;
 use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use App\Livewire\UpdateRecipe;
@@ -41,6 +42,8 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
         Route::get('/edit-recipe/{product}', UpdateRecipe::class)->middleware(['auth', 'verified'])->name('edit');
     });
 
+    Route::get('/diary', Diary::class)->middleware(['auth', 'verified'])->name('diary');
+
 
 //Route::view('/edit-product/{id}', 'products.edit')->name('products.edit');
 //Route::post('/update-product/{id}', 'ProductController@update')->name('updateProduct');
@@ -53,7 +56,6 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 //Route::post('/update-recipe', 'RecipeController@update')->name('updateRecipe');
 //Route::post('/delete-recipe', 'RecipeController@destroy')->name('deleteRecipe');
 //
-    Route::get('/diary', 'DiaryController@index')->name('diary');
 //Route::post('/diary-store', 'DiaryController@store')->name('diaryStore');
 //
 //Route::get('/locale/{locale}', 'LanguageController@locale')->name('locale');

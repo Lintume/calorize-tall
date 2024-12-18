@@ -5,17 +5,17 @@ namespace App\Livewire;
 use App\Livewire\Forms\ProductForm;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ProductCreate extends Component
 {
     public ProductForm $form;
 
-    public function mount(?string $title = null): void
+    #[On('search-updated')]
+    public function searchUpdated(string $search): void
     {
-        if ($title) {
-            $this->form->title = $title;
-        }
+        $this->form->title = $search;
     }
 
     public function save()
