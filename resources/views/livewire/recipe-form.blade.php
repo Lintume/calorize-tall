@@ -102,7 +102,7 @@
                 <livewire:product-create />
             </div>
 
-            <div x-show="!createProductForm">
+            <div x-show="!createProductForm" class="mt-6">
                <livewire:product-search />
             </div>
         </div>

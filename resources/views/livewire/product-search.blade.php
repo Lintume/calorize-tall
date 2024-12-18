@@ -1,7 +1,7 @@
 <div>
     <!-- Search bar -->
-    <div class="mt-5 mb-5 md:mt-10">
-        <div class="mt-5 mb-5 md:mt-10 relative">
+    <div class="mb-5">
+        <div class="mb-5 md:mt-5 relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-search text-gray-400"></i>
             </div>
