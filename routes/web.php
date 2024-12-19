@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProductController;
 use App\Livewire\CreateRecipe;
 use App\Livewire\Diary;
+use App\Livewire\Personal;
 use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use App\Livewire\UpdateRecipe;
@@ -44,28 +45,5 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 
     Route::get('/diary', Diary::class)->middleware(['auth', 'verified'])->name('diary');
 
-
-//Route::view('/edit-product/{id}', 'products.edit')->name('products.edit');
-//Route::post('/update-product/{id}', 'ProductController@update')->name('updateProduct');
-//Route::post('/delete-product', 'ProductController@destroy')->name('deleteProduct');
-//
-//    Route::get('/recipes', 'RecipeController@index')->name('recipes');
-//    Route::get('/create-recipe', 'RecipeController@create')->name('createRecipe');
-//Route::get('/edit-recipe/{id}', 'RecipeController@edit')->name('editRecipe');
-//Route::post('/save-recipe', 'RecipeController@store')->name('saveRecipe');
-//Route::post('/update-recipe', 'RecipeController@update')->name('updateRecipe');
-//Route::post('/delete-recipe', 'RecipeController@destroy')->name('deleteRecipe');
-//
-//Route::post('/diary-store', 'DiaryController@store')->name('diaryStore');
-//
-//Route::get('/locale/{locale}', 'LanguageController@locale')->name('locale');
-//
-//Route::get('/measurement', 'MeasurementController@create')->name('measurement');
-//Route::post('/save-measurement', 'MeasurementController@store')->name('saveMeasurement');
-//
-    Route::get('/personal', 'UserController@index')->name('personal');
-//Route::post('/personal', 'UserController@store');
-//
-//    Route::get('/statistic', 'StatisticController@index')->name('statistic');
-//Route::post('/statistic', 'StatisticController@getData');
+    Route::get('/personal', Personal::class)->middleware(['auth', 'verified'])->name('personal');
 });
