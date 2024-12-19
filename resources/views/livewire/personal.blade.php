@@ -67,7 +67,7 @@
                     <i x-show="active !== 'measurements'" class="fas fa-plus"></i>
                     <i x-show="active === 'measurements'" class="fas fa-minus"></i>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-8 gap-4 mt-4"
+                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-7 gap-4 mt-4"
                      x-show="active === 'measurements'">
                     <template x-for="(measurement, index) in measurements" :key="index">
                         <div>
