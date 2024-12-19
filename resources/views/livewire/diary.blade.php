@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Str; @endphp
 <div x-data="diaryApp()" class="mb-10">
     <div class="flex flex-wrap mt-8 mb-4">
         <div class="flex w-full">
@@ -20,91 +21,88 @@
     <div class="flex flex-col justify-center">
         <div class="flex flex-col shadow justify-between rounded-lg pb-4 xl:p-8 mt-3 bg-white">
             <div class="block-container p-4 md:p-8 xl:p-10 space-y-3">
-                <template x-for="(foodIntakeData, index) in foodIntakes" :key="index">
-                    <div>
+                @foreach(['breakfast', 'lunch', 'dinner', 'snack'] as $intake)
 
-                        {{--food intake label--}}
-                        <div @click="active==index ? (active = '') : (active = index)"
-                             class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
-                            <div class="flex items-center">
-                                <div class="text-xl" x-text="foodIntakeData.translatable"></div>
-                                <div x-text="foodIntakeData.totalCalories"
-                                     class="ml-3 inline-flex px-2 items-center bg-gray-400 border border-transparent rounded-md font-semibold text-white tracking-widest">
-                                </div>
+                    {{--food intake label--}}
+                    <div @click="(active === '{{ $intake }}') ? (active = null) : (active = '{{ $intake }}')"
+                         class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
+                        <div class="flex items-center">
+                            <div class="text-xl" x-text="foodIntakes.{{ $intake }}.translatable"></div>
+                            <div x-text="foodIntakes.{{ $intake }}.totalCalories"
+                                 class="ml-3 inline-flex px-2 items-center bg-gray-400 border border-transparent rounded-md font-semibold text-white tracking-widest">
                             </div>
-                            <i x-show="active !== index" class="fas fa-plus"></i>
-                            <i x-show="active === index" class="fas fa-minus"></i>
                         </div>
-
-                        <template x-if="active === index">
-                            <div>
-                                {{--food intake table--}}
-                                <template x-if="foodIntakeData.products.length">
-                                    <table class="mt-5 min-w-full divide-y divide-gray-200 table-fixed">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
-                                                <th class="w-1/12 px-1 py-2 text-xs text-left font-medium text-gray-400 uppercase tracking-wider">{{ __('Grams') }}</th>
-                                                <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Prot') }}</th>
-                                                <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Fat') }}</th>
-                                                <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Carb') }}</th>
-                                                <th class="w-1/12 px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sm:table-cell">{{ __('Kcal') }}</th>
-                                                <th class="w-1/12 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <template x-for="prod in foodIntakeData.products" :key="prod.id">
-                                                <tr>
-                                                    <td class="px-2 py-4 break-words" x-text="prod.product.title"></td>
-                                                    <td class="px-2 py-4">
-                                                        <input type="number"
-                                                               class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                                               x-model="prod.g">
-                                                    </td>
-                                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                        x-text="prod.proteins"></td>
-                                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                        x-text="prod.fats"></td>
-                                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                        x-text="prod.carbohydrates"></td>
-                                                    <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
-                                                        x-text="prod.calories"></td>
-                                                    <td class="px-2 py-3 whitespace-nowrap">
-                                                        <a href="#" @click.prevent="removeProduct(prod.id)"
-                                                           class="text-red-500 hover:underline">
-                                                            <i class="fas fa-trash-alt"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </template>
-                                            <tr class="bg-gray-50 hidden sm:table-row">
-                                                <td class="px-2 py-4 break-words">{{ __('Total') }}</td>
-                                                <td class="px-2 py-4"></td>
-                                                <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                    x-text="foodIntakeData.totalProteins"></td>
-                                                <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                    x-text="foodIntakeData.totalFats"></td>
-                                                <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                    x-text="foodIntakeData.totalCarbohydrates"></td>
-                                                <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
-                                                    x-text="foodIntakeData.totalCalories"></td>
-                                                <td class="px-2 py-3 whitespace-nowrap"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </template>
-
-                                {{--search or create product--}}
-                                <div x-show="createProductForm" class="mt-5">
-                                    <livewire:product-create wire:key="productCreate-{{ \Illuminate\Support\Str::random() }}"/>
-                                </div>
-                                <div x-show="!createProductForm" class="mt-5">
-                                    <livewire:product-search wire:key="productSearch-{{ \Illuminate\Support\Str::random() }}"/>
-                                </div>
-                            </div>
-                        </template>
+                        <i x-show="active !== '{{ $intake }}'" class="fas fa-plus"></i>
+                        <i x-show="active === '{{ $intake }}'" class="fas fa-minus"></i>
                     </div>
-                </template>
+
+                    <div x-show="active === '{{ $intake }}'">
+
+                        {{--food intake table--}}
+                        <template x-if="foodIntakes.{{ $intake }}.products.length">
+                            <table class="mt-5 min-w-full divide-y divide-gray-200 table-fixed">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
+                                        <th class="w-1/12 px-1 py-2 text-xs text-left font-medium text-gray-400 uppercase tracking-wider">{{ __('Grams') }}</th>
+                                        <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Prot') }}</th>
+                                        <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Fat') }}</th>
+                                        <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Carb') }}</th>
+                                        <th class="w-1/12 px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sm:table-cell">{{ __('Kcal') }}</th>
+                                        <th class="w-1/12 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="prod in foodIntakes.{{ $intake }}.products" :key="prod.id">
+                                        <tr>
+                                            <td class="px-2 py-4 break-words" x-text="prod.product.title"></td>
+                                            <td class="px-2 py-4">
+                                                <input type="number"
+                                                       class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                       x-model="prod.g">
+                                            </td>
+                                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
+                                                x-text="prod.proteins"></td>
+                                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
+                                                x-text="prod.fats"></td>
+                                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
+                                                x-text="prod.carbohydrates"></td>
+                                            <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
+                                                x-text="prod.calories"></td>
+                                            <td class="px-2 py-3 whitespace-nowrap">
+                                                <a href="#" @click.prevent="removeProduct(prod.id)"
+                                                   class="text-red-500 hover:underline">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <tr class="bg-gray-50 hidden sm:table-row">
+                                        <td class="px-2 py-4 break-words">{{ __('Total') }}</td>
+                                        <td class="px-2 py-4"></td>
+                                        <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
+                                            x-text="foodIntakes.{{ $intake }}.totalProteins"></td>
+                                        <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
+                                            x-text="foodIntakes.{{ $intake }}.totalFats"></td>
+                                        <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
+                                            x-text="foodIntakes.{{ $intake }}.totalCarbohydrates"></td>
+                                        <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
+                                            x-text="foodIntakes.{{ $intake }}.totalCalories"></td>
+                                        <td class="px-2 py-3 whitespace-nowrap"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </template>
+
+                        {{--search or create product--}}
+                        <div x-show="createProductForm" class="mt-5">
+                            <livewire:product-create wire:key="productCreate-{{ Str::random() }}"/>
+                        </div>
+                        <div x-show="!createProductForm" class="mt-5">
+                            <livewire:product-search wire:key="productSearch-{{ Str::random() }}"/>
+                        </div>
+                    </div>
+                @endforeach
                 <div class="rounded-lg border border-gray-300 p-2 flex justify-around">
                     <div class="text-green-500">
                         {{ __('Proteins: ') }} <span x-text="totalProteins"></span>
@@ -117,7 +115,7 @@
                     </div>
                 </div>
 
-                <div @click="active==='measurements' ? active = '' : active = 'measurements'"
+                <div @click="active === 'measurements' ? active = null : active = 'measurements'"
                      class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
                     <div> {{ __('Measurements') }}</div>
                     <i x-show="active !== 'measurements'" class="fas fa-plus"></i>
@@ -148,8 +146,8 @@
         'bg-yellow-600': !showRemainingCalories
         }"
          class="fixed bottom-0 right-0 mb-4 mr-4 w-20 h-20  rounded-full z-50 flex flex-col items-center justify-center bg-opacity-75 text-white">
-        <div x-show="!showRemainingCalories" class="font-bold" x-text="totalCalories">1560</div>
-        <div x-show="showRemainingCalories" class="font-bold" x-text="remainingCalories">1360</div>
+        <div x-show="!showRemainingCalories" class="font-bold" x-text="totalCalories"></div>
+        <div x-show="showRemainingCalories" class="font-bold" x-text="remainingCalories"></div>
         <div class="text-xs">Ккал</div>
     </div>
 </div>
@@ -158,7 +156,7 @@
     function diaryApp() {
         return {
             date: '{{ $date }}',
-            active: '', // breakfast, lunch, dinner, snack, measurements
+            active: null, // breakfast, lunch, dinner, snack, measurements
             showRemainingCalories: false,
             createProductForm: false,
 
