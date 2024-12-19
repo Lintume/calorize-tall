@@ -1,6 +1,6 @@
 # Calorize - Health Tracker Application
 <div align="center">
-  <img src="http://calorize-tall.test/logo.png" alt="logo">
+  <img src="https://i.ibb.co/XL4wz00/calorize300.png" alt="calorize300" border="0">
 </div>
 
 ## Overview
