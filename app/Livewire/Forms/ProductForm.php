@@ -11,14 +11,14 @@ class ProductForm extends Form
     public string $title = '';
 
     #[Validate('required|numeric|max:101')]
-    public float $proteins;
+    public float $proteins = 0;
 
     #[Validate('required|numeric|max:101')]
-    public float $fats;
+    public float $fats = 0;
 
     #[Validate('required|numeric|max:101')]
-    public float $carbohydrates;
+    public float $carbohydrates = 0;
 
     #[Validate('required|numeric|max:950')]
-    public float $calories;
+    public float $calories = 0;
 }

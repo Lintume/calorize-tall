@@ -40,6 +40,8 @@ class ProductCreate extends Component
 
         $product = Auth::user()->products()->create($validated);
 
+        $this->form->reset();
+
         $this->dispatch('productAdded', $product);
     }
 

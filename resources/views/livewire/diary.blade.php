@@ -1,5 +1,15 @@
 @php use Illuminate\Support\Str; @endphp
-<div x-data="diaryApp()" class="mb-10">
+<div x-data="diaryApp()" class="mb-10" @select-product.window="addProduct($event.detail)">
+
+{{--    success message--}}
+    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4"></div>
+
+{{--    errors--}}
+    <div class="text-red-600">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
     <div class="flex flex-wrap mt-8 mb-4">
         <div class="flex w-full">
             <!-- дейтпікер -->
@@ -11,6 +21,8 @@
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                 />
                 <div class="text-red-600">@error('date') {{ $message }} @enderror</div>
+
+{{--                save button--}}
                 <x-primary-button
                     class="ml-4" @click="save">
                     {{ __('Save') }}
@@ -70,7 +82,7 @@
                                             <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
                                                 x-text="prod.calories"></td>
                                             <td class="px-2 py-3 whitespace-nowrap">
-                                                <a href="#" @click.prevent="removeProduct(prod.id)"
+                                                <a href="#" @click.prevent="removeProduct(prod.product_id)"
                                                    class="text-red-500 hover:underline">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </a>
@@ -155,7 +167,6 @@
 <script>
     function diaryApp() {
         return {
-            date: '{{ $date }}',
             active: null, // breakfast, lunch, dinner, snack, measurements
             showRemainingCalories: false,
             createProductForm: false,
@@ -166,6 +177,8 @@
             totalFats: 0,
             totalProteins: 0,
             totalCarbohydrates: 0,
+
+            successMessage: '',
 
             foodIntakes: {
                 breakfast: {
@@ -228,6 +241,33 @@
                 this.$wire.on('productCreateCancelled', () => {
                     this.createProductForm = false;
                 });
+                this.$wire.on('updatedDate', (foodIntakes) => {
+                    this.foodIntakes.breakfast.products = foodIntakes[0];
+                    this.foodIntakes.lunch.products = foodIntakes[1];
+                    this.foodIntakes.dinner.products = foodIntakes[2];
+                    this.foodIntakes.snack.products = foodIntakes[3];
+                    this.calculate();
+
+                    this.measurements.weight.value = foodIntakes[4].kg;
+                    this.measurements.chest.value = foodIntakes[4].chest_cm;
+                    this.measurements.waist.value = foodIntakes[4].waist_cm;
+                    this.measurements.thighs.value = foodIntakes[4].thighs_cm;
+                    this.measurements.wrist.value = foodIntakes[4].wrist_cm;
+                    this.measurements.neck.value = foodIntakes[4].neck_cm;
+                    this.measurements.biceps.value = foodIntakes[4].biceps_cm;
+                });
+
+                this.$wire.on('success', message => {
+                    this.successMessage = message;
+                    setTimeout(() => {
+                        this.successMessage = '';
+                    }, 3000); // Hide after 3 seconds
+                });
+
+                this.$wire.on('productAdded', product => {
+                    this.foodIntakes[this.active].products.push(this.formProductAsFoodIntake(product[0]));
+                    this.createProductForm = false;
+                });
             },
             calculate() {
                 for (let key in this.foodIntakes) {
@@ -253,6 +293,30 @@
                 this.totalProteins = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalProteins, 0);
                 this.totalCarbohydrates = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalCarbohydrates, 0);
             },
+            addProduct(product) {
+                product = JSON.parse(product);
+                if (this.foodIntakes[this.active].products.find(p => p.product_id === product.id)) {
+                    return;
+                }
+                this.foodIntakes[this.active].products.push(this.formProductAsFoodIntake(product));
+            },
+
+            formProductAsFoodIntake(product) {
+                let productCopy = JSON.parse(JSON.stringify(product));
+                product.g = 100;
+                product.product_id = product.id;
+                product.product = productCopy;
+
+                return product;
+            },
+
+            removeProduct(productId) {
+                this.foodIntakes[this.active].products = this.foodIntakes[this.active].products.filter(product => product.product_id !== productId);
+            },
+
+            save() {
+                this.$wire.call('save', this.foodIntakes, this.measurements);
+            }
         }
     }
 </script>
