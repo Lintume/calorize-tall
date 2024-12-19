@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\FoodIntake;
 use App\Models\Measurement;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -141,6 +142,14 @@ class Diary extends Component
             'neck_cm' => $measurements['neck']['value'],
             'biceps_cm' => $measurements['biceps']['value'],
         ]);
+    }
+
+    public function changeDate(int $number): void
+    {
+        $this->date = Carbon::parse($this->date)->addDays($number)->toDateString();
+        $this->setFoodIntakes();
+        $this->setMeasurement();
+        $this->dispatch('updatedDate', $this->breakfast, $this->lunch, $this->dinner, $this->snack, $this->measurement);
     }
 
     public function render()

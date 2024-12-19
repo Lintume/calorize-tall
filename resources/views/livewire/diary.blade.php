@@ -11,23 +11,32 @@
         @endforeach
     </div>
     <div class="flex flex-wrap mt-8 mb-4">
-        <div class="flex w-full">
-            <!-- дейтпікер -->
-            <div class="flex w-full">
-                <input
-                    wire:model.live="date"
-                    type="date"
-                    id="date"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-                <div class="text-red-600">@error('date') {{ $message }} @enderror</div>
+        <div class="flex w-full items-center">
+            <!-- Previous button -->
+            <button wire:click="changeDate(-1)"
+                class="px-4 py-2 rounded-l-md">
+                <i class="fas fa-chevron-left"></i>
+            </button>
 
-{{--                save button--}}
-                <x-primary-button
-                    class="ml-4" @click="save">
-                    {{ __('Save') }}
-                </x-primary-button>
-            </div>
+            <!-- Datepicker -->
+            <input
+                wire:model.live="date"
+                type="date"
+                id="date"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            />
+            <div class="text-red-600">@error('date') {{ $message }} @enderror</div>
+
+            <!-- Next button -->
+            <button wire:click="changeDate(1)"
+                class="px-4 py-2 rounded-r-md">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <!-- Save button -->
+            <x-primary-button class="ml-4" @click="save">
+                {{ __('Save') }}
+            </x-primary-button>
         </div>
     </div>
     <div class="flex flex-col justify-center">
