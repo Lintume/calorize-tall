@@ -16,7 +16,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Growth') }}
+                            {{ __('Height') }}
                         </label>
                         <input type="number" x-model="user.growth_cm"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
