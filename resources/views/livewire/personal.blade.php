@@ -99,7 +99,7 @@
                         <p class="text-sm font-medium text-gray-700">{{ __('Basal metabolic rate (BMR)') }}</p>
                         <p x-text="calculated.BMR" class="text-lg font-bold"></p>
                         <p x-show="error.BMR"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height, sex and birth date.') }}</p>
+                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height and birth date.') }}</p>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-700">{{ __('Normal weight') }}</p>
@@ -112,18 +112,18 @@
                         <p class="text-sm font-medium text-gray-700">{{ __('Calorie consumption per day with activity') }}</p>
                         <p x-text="calculated.kcal_per_day_normal" class="text-lg font-bold"></p>
                         <p x-show="error.kcal_per_day_normal"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height, sex, DOB, activity coefficient') }}</p>
+                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height and DOB') }}</p>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-700">{{ __('Calorie consumption per day minus desirable deficit') }}</p>
                         <p x-text="calculated.kcal_per_day" class="text-lg font-bold"></p>
                         <p x-show="error.kcal_per_day"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height, sex, age, activity coefficient and deficit kcal.') }}</p>
+                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height, DOB and deficit kcal.') }}</p>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-700">{{ __('Weeks to target weight') }}</p>
                         <p x-text="calculated.weeks_to_target" class="text-lg font-bold"></p>
-                        <p x-show="error.weeks_to_target"
+                        <p x-show="error.weeks_to_target"DOB
                            class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, target weight and deficit kcal.') }}</p>
                     </div>
                     <div>
