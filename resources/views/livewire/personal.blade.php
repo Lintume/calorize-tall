@@ -18,7 +18,7 @@
                         <label class="block text-sm font-medium text-gray-700">
                             {{ __('Height') }}
                         </label>
-                        <input type="number" x-model="user.growth_cm"
+                        <input type="number" x-model="user.growth_cm" min="1"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
                     <div>
@@ -55,7 +55,7 @@
                         <label class="block text-sm font-medium text-gray-700">
                             {{ __('Target weight') }}
                         </label>
-                        <input type="number" x-model="user.target_kg"
+                        <input type="number" x-model="user.target_kg" min="1"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                         <label class="block text-sm font-medium text-gray-700">
                             {{ __('Deficit kcal') }}
                         </label>
-                        <input type="number" x-model="user.deficit_kcal"
+                        <input type="number" x-model="user.deficit_kcal" min="1"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                         <p class="text-xs text-gray-500">{{ __('Calories deficit per day') }}</p>
                     </div>

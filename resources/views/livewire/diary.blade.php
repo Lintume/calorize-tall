@@ -78,7 +78,7 @@
                                         <tr>
                                             <td class="px-2 py-4 break-words" x-text="prod.product.title"></td>
                                             <td class="px-2 py-4">
-                                                <input type="number"
+                                                <input type="number" min="0"
                                                        class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                                        x-model="prod.g">
                                             </td>

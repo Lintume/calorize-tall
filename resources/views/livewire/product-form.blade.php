@@ -10,7 +10,7 @@
     <div class="mb-4">
         <label for="proteins" class="block text-sm font-medium text-gray-700">{{ __('Proteins') }}</label>
         <input wire:model="form.proteins"
-            type="number" name="proteins" id="proteins" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+            type="number" min="0" name="proteins" id="proteins" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
         @error('proteins')
         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
@@ -18,7 +18,7 @@
     <div class="mb-4">
         <label for="fats" class="block text-sm font-medium text-gray-700">{{ __('Fats') }}</label>
         <input wire:model="form.fats"
-            type="number" name="fats" id="fats" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+            type="number" min="0" name="fats" id="fats" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
         @error('fats')
         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
@@ -26,7 +26,7 @@
     <div class="mb-4">
         <label for="carbohydrates" class="block text-sm font-medium text-gray-700">{{ __('Carbohydrates') }}</label>
         <input wire:model="form.carbohydrates"
-            type="number" name="carbohydrates" id="carbohydrates" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+            type="number" min="0" name="carbohydrates" id="carbohydrates" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
         @error('carbohydrates')
         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
@@ -34,7 +34,7 @@
     <div class="mb-4">
         <label for="calories" class="block text-sm font-medium text-gray-700">{{ __('Calories') }}</label>
         <input wire:model="form.calories"
-            type="number" name="calories" id="calories" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
+            type="number" min="0" name="calories" id="calories" step="0.01" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" required>
         @error('calories')
         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror

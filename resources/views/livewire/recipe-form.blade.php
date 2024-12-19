@@ -45,7 +45,7 @@
                             <tr>
                                 <td class="px-2 py-4 break-words" x-text="selectedProduct.title"></td>
                                 <td class="px-2 py-4">
-                                    <input type="number"
+                                    <input type="number" min="1"
                                            class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                            x-model="selectedProduct.grams">
                                 </td>
@@ -68,7 +68,7 @@
                         <tr class="bg-gray-50">
                             <td class="px-2 py-4 break-words">{{ __('Total') }}</td>
                             <td class="px-2 py-4">
-                                <input type="number"
+                                <input type="number" min="1"
                                        class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                        x-model="calculated.totalGrams">
                             </td>
