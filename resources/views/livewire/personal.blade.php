@@ -74,7 +74,8 @@
                             <label x-text="measurement.translatable"
                                    class="block text-sm font-medium text-gray-700"></label>
                             <input type="number" x-model="measurement.value" min="1"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                   @focus="if (measurement.value == 0) measurement.value = ''">
                         </div>
                     </template>
                 </div>
