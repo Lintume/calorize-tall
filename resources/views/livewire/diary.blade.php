@@ -172,6 +172,7 @@
         <div x-show="showRemainingCalories" class="font-bold" x-text="remainingCalories"></div>
         <div class="text-xs">Ккал</div>
     </div>
+    <x-loading-screen/>
 </div>
 
 <script>

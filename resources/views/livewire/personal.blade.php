@@ -31,7 +31,7 @@
                             <option value="female">{{ __('Female') }}</option>
                         </select>
                     </div>
-                    <div>
+                    <div class="col-span-2">
                         <label class="block text-sm font-medium text-gray-700">
                             {{ __('Activity coefficient') }}
                         </label>
@@ -58,14 +58,6 @@
                         <input type="number" x-model="user.target_kg"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Deficit kcal') }}
-                        </label>
-                        <input type="number" x-model="user.deficit_kcal"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                        <p class="text-xs text-gray-500">{{ __('Calories deficit per day') }}</p>
-                    </div>
                 </div>
 
                 {{--measurements--}}
@@ -75,7 +67,8 @@
                     <i x-show="active !== 'measurements'" class="fas fa-plus"></i>
                     <i x-show="active === 'measurements'" class="fas fa-minus"></i>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-8 gap-4 mt-4" x-show="active === 'measurements'">
+                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-8 gap-4 mt-4"
+                     x-show="active === 'measurements'">
                     <template x-for="(measurement, index) in measurements" :key="index">
                         <div>
                             <label x-text="measurement.translatable"
@@ -132,17 +125,25 @@
                         <p x-show="error.weeks_to_target"
                            class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, target weight and deficit kcal.') }}</p>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            {{ __('Deficit kcal') }}
+                        </label>
+                        <input type="number" x-model="user.deficit_kcal"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <p class="text-xs text-gray-500">{{ __('Calories deficit per day') }}</p>
+                    </div>
                 </div>
 
                 <div class="flex flex-col justify-end h-full">
-                    <x-primary-button @click="save"
-                                      class="self-end mt-3">
+                    <x-primary-button @click="save" class="self-end mt-3">
                         {{ __('Save') }}
                     </x-primary-button>
                 </div>
             </div>
         </div>
     </div>
+    <x-loading-screen/>
 </div>
 <script>
     function personalApp() {
