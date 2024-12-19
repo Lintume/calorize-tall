@@ -216,7 +216,7 @@
                     value: @json($measurement->thighs_cm ?? ''),
                 },
                 wrist: {
-                    translatable: "{{ __('Wrist') }}",
+                    translatable: "{!! __('Wrist') !!}",
                     value: @json($measurement->wrist_cm ?? ''),
                 },
                 neck: {
