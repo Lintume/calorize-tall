@@ -59,18 +59,27 @@
 
             .links > a {
                 color: #636b6f;
-                padding: 0 20px;
+                padding: 0 25px;
                 font-size: 12px;
                 font-weight: 600;
-                letter-spacing: .1rem;
+                letter-spacing: .2rem;
                 text-decoration: none;
                 text-transform: uppercase;
             }
 
-            @media (max-width: 600px) {
+            .content img {
+                margin-bottom: 50px;
+            }
+
+            .links-middle > a {
+                font-size: 20px;
+            }
+
+            @media (max-width: 900px) {
                 .links-middle > a {
                     display: block;
-                    margin-bottom: 20px; /* Adjust the value to increase the distance */
+                    margin-bottom: 25px; /* Adjust the value to increase the distance */
+                    font-size: 16px;
                 }
             }
         </style>
