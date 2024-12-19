@@ -143,7 +143,8 @@
                         </div>
                     </template>
                     <div class="flex flex-col justify-end h-full">
-                        <x-primary-button class="self-end">
+                        <x-primary-button @click="save"
+                            class="self-end">
                             {{ __('Save') }}
                         </x-primary-button>
                     </div>
