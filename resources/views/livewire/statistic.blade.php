@@ -1,4 +1,6 @@
 <div>
+    @section('title', __('Statistic'))
+
     <div class="flex flex-wrap mt-8 mb-4">
         <div class="flex w-full md:w-1/2 lg:w-1/2 space-x-3">
             <!-- Перший дейтпікер -->

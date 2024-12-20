@@ -13,9 +13,13 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 
     Route::view('/', 'welcome');
 
-    Route::get('dashboard', Statistic::class)
+    Route::get('dashboard', Diary::class)
         ->middleware(['auth', 'verified'])
         ->name('dashboard');
+
+    Route::get('statistic', Statistic::class)
+        ->middleware(['auth', 'verified'])
+        ->name('statistic');
 
     Route::view('profile', 'profile')
         ->middleware(['auth'])

@@ -1,5 +1,7 @@
 <div x-data="personalApp()" class="mb-10">
 
+    @section('title', __('Personal'))
+
     {{--    success message--}}
     <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4"></div>
 

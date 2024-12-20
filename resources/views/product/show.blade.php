@@ -1,4 +1,7 @@
 <x-app-layout>
+
+    @section('title', $product->title . ': ' . __('calories, proteins, fats, and carbohydrates'))
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Product Details') }}
@@ -6,7 +9,7 @@
     </x-slot>
 
     @section('meta')
-        <meta name="description" content="{{ $product->title }} - {{ __('Product details including proteins, fats, carbohydrates, and calories.') }}">
+        <meta name="description" content="{{ $product->title }} - {{ __('calories:') }} {{ number_format($product->calories) }} {{ __('per 100g') }}. {{ __('Proteins:') }} {{ number_format($product->proteins, 2) }}, {{ __('Fats:') }} {{ number_format($product->fats, 2) }}, {{ __('Carbohydrates:') }} {{ number_format($product->carbohydrates, 2) }}. {{__('Detailed information about the product.')}}">
         <meta name="keywords" content="{{ __('Product, Proteins, Fats, Carbohydrates, Calories') }}, {{ $product->title }}">
         <meta property="og:title" content="{{ $product->title }}">
         <meta property="og:description" content="{{ $product->title }} - {{ __('Product details including proteins, fats, carbohydrates, and calories.') }}">
@@ -18,7 +21,7 @@
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-xl font-bold leading-none text-gray-900">{{ $product->title }}</h1>
             <div>
-                <a href="{{ $product->base ? route('product.index') : route('recipe.index') }}">
+                <a href="{{ $product->base ? route('product.index') : route('recipe.index') }}" class="ml-2">
                     <x-secondary-button>
                         {{ __('Show All') }}
                     </x-secondary-button>

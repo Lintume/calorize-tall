@@ -1,4 +1,7 @@
 <div class="flex flex-col justify-center" x-data="recipeApp" @select-product.window="addProduct($event.detail)">
+
+    @section('title', isset($product) ? __('Edit Recipe') : __('Create Recipe'))
+
     <div class="text-red-600">
         @foreach ($errors->all() as $error)
             <div>{{ $error }}</div>
