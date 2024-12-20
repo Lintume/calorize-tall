@@ -37,11 +37,11 @@
                         </label>
                         <select x-model="user.activity_coefficient"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                            <option value="1.2">{{ __('Sedentary') }}</option>
-                            <option value="1.375">{{ __('Lightly active') }}</option>
-                            <option value="1.55">{{ __('Moderately active') }}</option>
-                            <option value="1.725">{{ __('Very active') }}</option>
-                            <option value="1.9">{{ __('Extra active') }}</option>
+                            <option value="1.2">{{ __('Sedentary - little or no exercise') }}</option>
+                            <option value="1.38">{{ __('Lightly Active - exercise/sports 1-3 times/week') }}</option>
+                            <option value="1.55">{{ __('Moderately Active - exercise/sports 3-5 times/week') }}</option>
+                            <option value="1.73">{{ __('Very Active - hard exercise/sports 6-7 times/week') }}</option>
+                            <option value="1.9">{{ __('Extra Active - very hard exercise/sports or physical job') }}</option>
                         </select>
                     </div>
                     <div>
@@ -60,10 +60,10 @@
                     </div>
                 </div>
 
-                {{--measurements--}}
+                {{--last measurements--}}
                 <div @click="active === 'measurements' ? active = null : active = 'measurements'"
                      class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
-                    <div> {{ __('Measurements') }}</div>
+                    <div> {{ __('Last Measurements') }}</div>
                     <i x-show="active !== 'measurements'" class="fas fa-plus"></i>
                     <i x-show="active === 'measurements'" class="fas fa-minus"></i>
                 </div>
@@ -183,36 +183,8 @@
 
             successMessage: '',
 
-            measurements: {
-                weight: {
-                    translatable: "{{ __('Weight') }}",
-                    value: @json($measurement->kg ?? ''),
-                },
-                chest: {
-                    translatable: "{{ __('Chest') }}",
-                    value: @json($measurement->chest_cm ?? ''),
-                },
-                waist: {
-                    translatable: "{{ __('Waist') }}",
-                    value: @json($measurement->waist_cm ?? ''),
-                },
-                thighs: {
-                    translatable: "{{ __('Thighs') }}",
-                    value: @json($measurement->thighs_cm ?? ''),
-                },
-                wrist: {
-                    translatable: "{!! __('Wrist') !!}",
-                    value: @json($measurement->wrist_cm ?? ''),
-                },
-                neck: {
-                    translatable: "{{ __('Neck') }}",
-                    value: @json($measurement->neck_cm ?? ''),
-                },
-                biceps: {
-                    translatable: "{{ __('Biceps') }}",
-                    value: @json($measurement->biceps_cm ?? ''),
-                }
-            },
+            measurements: @json($lastMeasurements),
+
             init() {
                 this.$wire.on('success', message => {
                     this.successMessage = message;
