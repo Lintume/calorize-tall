@@ -26,7 +26,7 @@
                         {{ __('Show All') }}
                     </x-secondary-button>
                 </a>
-                @if($product->user_id === auth()->id())
+                @if(auth()->check() && $product->user_id === auth()->id())
                     <a class="ml-2" href="{{ route('product.edit', $product->id) }}">
                         <x-secondary-button>
                             <i class="fas fa-edit"></i>
