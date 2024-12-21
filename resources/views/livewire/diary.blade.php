@@ -303,7 +303,7 @@
                     }
                 }
                 this.totalCalories = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalCalories, 0);
-                this.remainingCalories = {{ Auth::user()->kcal_per_day }} - this.totalCalories;
+                this.remainingCalories = Math.round({{ Auth::user()->kcal_per_day }} - this.totalCalories);
                 this.totalFats = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalFats, 0);
                 this.totalProteins = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalProteins, 0);
                 this.totalCarbohydrates = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalCarbohydrates, 0);

@@ -29,10 +29,10 @@ new class extends Component {
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-6 sm:-my-px sm:ms-3 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                         {{__('welcome.statistic')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('diary')" :active="request()->routeIs('diary')" wire:navigate>
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{__('welcome.diary')}}
                     </x-nav-link>
 {{--                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"--}}
@@ -151,10 +151,10 @@ new class extends Component {
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+            <x-responsive-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                 {{__('welcome.statistic')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('diary')" :active="request()->routeIs('diary')" wire:navigate>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{__('welcome.diary')}}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"

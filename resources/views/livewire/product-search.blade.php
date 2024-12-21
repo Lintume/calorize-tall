@@ -51,7 +51,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($products as $product)
-                        <tr @click="$dispatch('select-product', '{{ $product }}')"
+                        <tr @click="$dispatch('select-product', '{{  htmlspecialchars($product, ENT_QUOTES, 'UTF-8') }}')"
                             wire:key="{{ $product->id }}"
                             class="cursor-pointer hover:bg-gray-50"
                         >
