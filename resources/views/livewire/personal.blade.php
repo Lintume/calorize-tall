@@ -134,7 +134,8 @@
                         </label>
                         <input type="number" x-model="user.deficit_kcal" min="1"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                        <p class="text-xs text-gray-500">{{ __('Calories deficit per day') }}</p>
+                        <p class="text-xs text-gray-500">{{ __('Calories deficit per day. Recommended: ') }} <span x-show="calculated.kcal_per_day_normal"
+                                x-text="calculated.recommended_deficit_kcal_from + ' - ' + calculated.recommended_deficit_kcal_to"></span>
                     </div>
                 </div>
 
@@ -171,6 +172,8 @@
                 kcal_per_day_normal: 0,
                 kcal_per_day: 0,
                 weeks_to_target: 0,
+                recommended_deficit_kcal_from: 0,
+                recommended_deficit_kcal_to: 0,
             },
 
             error: {
@@ -330,6 +333,10 @@
                         this.calculated.kcal_per_day_normal - this.user.deficit_kcal
                     ).toFixed(0);
                 }
+
+                // Recommended deficit kcal (10-20% from kcal_per_day_normal)
+                this.calculated.recommended_deficit_kcal_from = (this.calculated.kcal_per_day_normal * 0.1).toFixed(0);
+                this.calculated.recommended_deficit_kcal_to = (this.calculated.kcal_per_day_normal * 0.2).toFixed(0);
             },
 
             save() {
