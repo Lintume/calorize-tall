@@ -139,25 +139,26 @@ class Statistic extends Component
 
     function getReducedDates(array $dates): array
     {
-        $reduce = 10;
-        if (count($dates) <= $reduce) {
+        $size = 10;
+        // If the array has less than or equal to the required size, return it as is.
+        if (count($dates) <= $size) {
             return $dates;
         }
+
+        $result = [];
         $totalDates = count($dates);
-        $timeframeSize = ceil($totalDates / $reduce);
-        $selectedDates = [];
+        $interval = ($totalDates - 1) / ($size - 1); // Calculate the approximate interval.
 
-        for ($i = 0; $i < $reduce; $i++) {
-            $index = min($i * $timeframeSize, $totalDates - 1);
-            $selectedDates[] = $dates[$index];
+        for ($i = 0; $i < $size - 1; $i++) {
+            // Pick the date at the calculated index.
+            $index = round($i * $interval);
+            $result[] = $dates[$index];
         }
 
-        // Ensure the last date is included
-        if (end($selectedDates) !== end($dates)) {
-            $selectedDates[$reduce - 1] = end($dates);
-        }
+        // Ensure the last date is included.
+        $result[] = $dates[$totalDates - 1];
 
-        return $selectedDates;
+        return $result;
     }
 
     public function render()
