@@ -174,6 +174,9 @@ new class extends Component {
             <x-responsive-nav-link :href="route('personal')" :active="request()->routeIs('personal')" wire:navigate>
                 {{__('welcome.personal')}}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('blog')" :active="request()->routeIs('blog')" wire:navigate>
+                {{__('Blog')}}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Language Switcher -->

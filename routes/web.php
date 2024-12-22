@@ -50,4 +50,11 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     Route::get('/diary', Diary::class)->middleware(['auth', 'verified'])->name('diary');
 
     Route::get('/personal', Personal::class)->middleware(['auth', 'verified'])->name('personal');
+
+    Route::get('/blog/yak-pravylno-rakhuvaty-kaloriyi-dlya-skhudnennya-praktychnyy-gid', function () {
+        return view('blog.blog-1');
+    })->name('blog-1');
+    Route::get('/blog', function () {
+        return view('blog.index');
+    })->name('blog');
 });
