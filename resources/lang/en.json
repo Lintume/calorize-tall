@@ -27,6 +27,7 @@
     "Proteins:": "Proteins:",
     "Fats:": "Fats:",
     "Carbohydrates:": "Carbohydrates:",
+    "Detailed information about the product.": "Detailed information about the product.",
     "Product, Proteins, Fats, Carbohydrates, Calories": "Product, Proteins, Fats, Carbohydrates, Calories",
     "Product details including proteins, fats, carbohydrates, and calories.": "Product details including proteins, fats, carbohydrates, and calories.",
     "Show All": "Show All",
@@ -34,6 +35,10 @@
     "Fats": "Fats",
     "Carbohydrates": "Carbohydrates",
     "Calories": "Calories",
+    "Blog - useful articles about nutrition and health": "Blog - useful articles about nutrition and health",
+    "Useful articles about healthy eating, weight loss, and fitness. Learn how to count calories correctly, which foods to choose for weight loss, and how the Calorize app can help you reach your goals.": "Useful articles about healthy eating, weight loss, and fitness. Learn how to count calories correctly, which foods to choose for weight loss, and how the Calorize app can help you reach your goals.",
+    "Articles about nutrition, weight loss, health, fitness": "Articles about nutrition, weight loss, health, fitness",
+    "Useful articles about nutrition and health": "Useful articles about nutrition and health",
     "Saved.": "Saved.",
     "You're logged in!": "You're logged in!",
     "Title": "Title",
@@ -45,6 +50,7 @@
     "welcome.language": "Language",
     "Profile": "Profile",
     "Log Out": "Log Out",
+    "Blog": "Blog",
     "Search...": "Search...",
     "No products found.": "No products found.",
     "Start typing Product Name or": "Start typing Product Name or",
@@ -128,7 +134,7 @@
     "Weeks to target weight": "Weeks to target weight",
     "Insufficient data. Please fill weight, target weight and deficit kcal.": "Insufficient data. Please fill weight, target weight and deficit kcal.",
     "Deficit kcal": "Deficit kcal",
-    "Calories deficit per day": "Calories deficit per day",
+    "Calories deficit per day. Recommended: ": "Calories deficit per day. Recommended: ",
     "Reset Password": "Reset Password",
     "Already registered?": "Already registered?",
     "Register": "Register",
@@ -153,6 +159,5 @@
     "to": "to",
     "of": "of",
     "results": "results",
-    "Go to page :page": "Go to page :page",
-    "Detailed information about the product.": "Detailed information about the product."
+    "Go to page :page": "Go to page :page"
 }

@@ -27,6 +27,7 @@
     "Proteins:": "Білки:",
     "Fats:": "Жири:",
     "Carbohydrates:": "Вуглеводи:",
+    "Detailed information about the product.": "Детальна інформація про продукт.",
     "Product, Proteins, Fats, Carbohydrates, Calories": "Продукт, Білки, Жири, Вуглеводи, Калорії",
     "Product details including proteins, fats, carbohydrates, and calories.": "Деталі продукту, включаючи білки, жири, вуглеводи та калорії.",
     "Show All": "Показати Все",
@@ -34,6 +35,10 @@
     "Fats": "Жири",
     "Carbohydrates": "Вуглеводи",
     "Calories": "Калорії",
+    "Blog - useful articles about nutrition and health": "Блог - корисні статті про харчування та здоров'я",
+    "Useful articles about healthy eating, weight loss, and fitness. Learn how to count calories correctly, which foods to choose for weight loss, and how the Calorize app can help you reach your goals.": "Корисні статті про здорове харчування, схуднення та фітнес. Дізнайтеся, як правильно рахувати калорії, які продукти вибрати для схуднення та як програма Calorize може допомогти вам досягти ваших цілей.",
+    "Articles about nutrition, weight loss, health, fitness": "Статті про харчування, схуднення, здоров'я, фітнес",
+    "Useful articles about nutrition and health": "Корисні статті про харчування та здоров'я",
     "Saved.": "Збережено.",
     "You're logged in!": "Ви увійшли!",
     "Title": "Назва",
@@ -45,6 +50,7 @@
     "welcome.language": "Мова",
     "Profile": "Профіль",
     "Log Out": "Вийти",
+    "Blog": "Блог",
     "Search...": "Пошук...",
     "No products found.": "Продукти не знайдено.",
     "Start typing Product Name or": "Почніть вводити назву продукту або",
@@ -128,7 +134,7 @@
     "Weeks to target weight": "Тижні до цільової ваги",
     "Insufficient data. Please fill weight, target weight and deficit kcal.": "Недостатньо даних. Будь ласка, заповніть вагу, цільову вагу та дефіцит ккал.",
     "Deficit kcal": "Дефіцит ккал",
-    "Calories deficit per day": "Дефіцит калорій на день",
+    "Calories deficit per day. Recommended: ": "Дефіцит калорій на добу. Рекомендовано: ",
     "Reset Password": "Скинути Пароль",
     "Already registered?": "Вже зареєстровані?",
     "Register": "Зареєструватися",
@@ -153,6 +159,5 @@
     "to": "до",
     "of": "з",
     "results": "результатів",
-    "Go to page :page": "Перейти на сторінку :page",
-    "Detailed information about the product.": "Детальна інформація про продукт."
+    "Go to page :page": "Перейти на сторінку :page"
 }
