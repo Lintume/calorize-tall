@@ -42,49 +42,45 @@
         <meta property="og:url" content="{{ url()->current() }}">
 
             <script type="application/ld+json">
-                {
-                    "@context": "https://schema.org",
-                    "@type": "ItemList",
-                    "name": "{{ __('Product List') }}",
-                    "description": "{{ __('List of products including nutritional information such as calories, proteins, fats, and carbohydrates.') }}",
-                    "url": "{{ url()->current() }}",
-                    "itemListElement": [
-                    @foreach($products as $index => $product)
-                    {
-                        "@type": "ListItem",
-                        "position": {{ $index + 1 }},
-                        "url": "{{ route('product.show', $product->id) }}",
-                        "name": "{{ $product->title }}",
-                        "additionalProperty": [
-                    {
-                        "@type": "PropertyValue",
-                        "name": "Calories",
-                        "value": "{{ $product->calories }} kcal"
-                    },
-                    {
-                        "@type": "PropertyValue",
-                        "name": "Proteins",
-                        "value": "{{ $product->proteins }} g"
-                    },
-                    {
-                        "@type": "PropertyValue",
-                        "name": "Fats",
-                        "value": "{{ $product->fats }} g"
-                    },
-                    {
-                        "@type": "PropertyValue",
-                        "name": "Carbohydrates",
-                        "value": "{{ $product->carbohydrates }} g"
-                    }
-                ]
-            }@if (!$loop->last)
-                        ,
-                    @endif
-                @endforeach
-                ]
-            }
+                {!! json_encode([
+                    "@context" => "https://schema.org",
+                    "@type" => "ItemList",
+                    "name" => __("Product List"),
+                    "description" => __("Список продуктів із харчовою інформацією про калорії, білки, жири та вуглеводи."),
+                    "url" => url()->current(),
+                    "itemListElement" => $products->map(function ($product, $index) {
+                        return [
+                            "@type" => "ListItem",
+                            "position" => $index + 1,
+                            "url" => route('product.show', $product->id),
+                            "name" => $product->title,
+                            "additionalProperty" => [
+                                [
+                                    "@type" => "PropertyValue",
+                                    "name" => "Calories",
+                                    "value" => "{$product->calories} kcal",
+                                ],
+                                [
+                                    "@type" => "PropertyValue",
+                                    "name" => "Proteins",
+                                    "value" => "{$product->proteins} g",
+                                ],
+                                [
+                                    "@type" => "PropertyValue",
+                                    "name" => "Fats",
+                                    "value" => "{$product->fats} g",
+                                ],
+                                [
+                                    "@type" => "PropertyValue",
+                                    "name" => "Carbohydrates",
+                                    "value" => "{$product->carbohydrates} g",
+                                ],
+                            ],
+                        ];
+                    }),
+                ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
             </script>
-    @endsection
+        @endsection
 
     <div class="flex flex-col shadow justify-between rounded-lg mt-5 bg-white mb-1">
         <div class="p-5 md:p-10">
