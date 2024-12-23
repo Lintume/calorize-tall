@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use Sluggable;
+
     public $fillable = [
         'title',
         'proteins',
@@ -16,6 +19,20 @@ class Product extends Model
         'user_id',
         'total_weight'
     ];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
     public function ingredients()
     {

@@ -35,7 +35,7 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     Route::name('product.')->group(function () {
         Route::get('products', ProductIndex::class)->name('index');
         Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('create');
-        Route::get('/product/{product}', [ProductController::class, 'show'])->name('show');
+        Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('show');
         Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
         Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update');
         Route::get('/edit-product/{product}', [ProductController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit');

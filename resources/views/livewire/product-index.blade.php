@@ -62,7 +62,7 @@
                     return [
                         "@type" => "ListItem",
                         "position" => $index + 1,
-                        "url" => route('product.show', $product->id),
+                        "url" => route('product.show', $product->slug),
                         "name" => $product->title,
                         "additionalProperty" => [
                             [
@@ -132,7 +132,7 @@
                                                 <i class="fas fa-edit text-blue-800"></i>
                                             </a>
                                         @endif
-                                        <a href="{{route('product.show', $product->id) }}"
+                                        <a href="{{route('product.show', $product->slug) }}"
                                            class="hover:underline">
                                             {{ $product->title }}
                                         </a>
