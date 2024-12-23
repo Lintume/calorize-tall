@@ -15,6 +15,21 @@
         <meta property="og:description" content="{{ $product->title }} - {{ __('Product details including proteins, fats, carbohydrates, and calories.') }}">
         <meta property="og:type" content="article">
         <meta property="og:url" content="{{ url()->current() }}">
+
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "NutritionInformation",
+                "name": "{{ $product->title }}",
+                "description": "{{ __('Detailed information about') }} {{ $product->title }}",
+                "calories": "{{ number_format($product->calories) }} kcal",
+                "proteinContent": "{{ number_format($product->proteins, 2) }} g",
+                "fatContent": "{{ number_format($product->fats, 2) }} g",
+                "carbohydrateContent": "{{ number_format($product->carbohydrates, 2) }} g",
+                "servingSize": "100 g",
+                "url": "{{ url()->current() }}"
+            }
+        </script>
     @endsection
 
     <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-8 mx-auto">
