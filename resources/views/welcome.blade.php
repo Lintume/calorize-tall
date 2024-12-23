@@ -107,6 +107,7 @@
                     <a href="{{ route('personal') }}">{{ __('welcome.personal') }}</a>
                     <a href="{{ route('dashboard') }}">{{ __('welcome.statistic') }}</a>
                     <a href="{{ route('product.index') }}">{{ __('welcome.productList') }}</a>
+                    <a href="{{ route('blog') }}">{{ __('Blog') }}</a>
                     <a href="http://pariamonia.in.ua">{{ __('welcome.contacts') }}</a>
                 </div>
             </div>

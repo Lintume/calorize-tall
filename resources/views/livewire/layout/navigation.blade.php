@@ -180,18 +180,16 @@ new class extends Component {
         </div>
 
         <!-- Language Switcher -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ __('welcome.language') }}</div>
-            </div>
-            <div class="mt-3 space-y-1">
+        <div class="py-1 border-t border-gray-200">
+                @if (app()->getLocale() == 'en')
                 <x-responsive-nav-link :href="route('switch-language', 'en')" wire:navigate>
                     English
                 </x-responsive-nav-link>
+                @else
                 <x-responsive-nav-link :href="route('switch-language', 'ua')" wire:navigate>
                     Українська
                 </x-responsive-nav-link>
-            </div>
+                @endif
         </div>
         <!-- Responsive Settings Options -->
         @auth
