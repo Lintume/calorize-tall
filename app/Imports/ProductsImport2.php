@@ -23,6 +23,6 @@ class ProductsImport2 implements ToModel, WithHeadingRow, WithChunkReading
 
     public function chunkSize(): int
     {
-        return 100; // Adjust the chunk size as needed
+        return 10; // Adjust the chunk size as needed
     }
 }
