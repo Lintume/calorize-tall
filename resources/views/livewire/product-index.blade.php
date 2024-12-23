@@ -46,7 +46,7 @@
                     "@context" => "https://schema.org",
                     "@type" => "ItemList",
                     "name" => __("Product List"),
-                    "description" => __("Список продуктів із харчовою інформацією про калорії, білки, жири та вуглеводи."),
+                    "description" => __("List of products including nutritional information such as calories, proteins, fats, and carbohydrates."),
                     "url" => url()->current(),
                     "itemListElement" => $products->map(function ($product, $index) {
                         return [
