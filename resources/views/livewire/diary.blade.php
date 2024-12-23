@@ -4,7 +4,7 @@
     @section('title', __('Diary'))
 
     {{--    success message--}}
-    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4"></div>
+    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4" x-cloak></div>
 
 {{--    errors--}}
     <div class="text-red-600">

@@ -3,7 +3,7 @@
     @section('title', __('Personal'))
 
     {{--    success message--}}
-    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4"></div>
+    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4" x-cloak></div>
 
     {{--    errors--}}
     <div class="text-red-600">
@@ -24,6 +24,13 @@
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            {{ __('Target weight') }}
+                        </label>
+                        <input type="number" x-model="user.target_kg" min="1"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    </div>
+                    <div class="col-span-2">
                         <label class="block text-sm font-medium text-gray-700">
                             {{ __('Sex') }}
                         </label>
@@ -46,18 +53,11 @@
                             <option value="1.9">{{ __('Extra Active - very hard exercise/sports or physical job') }}</option>
                         </select>
                     </div>
-                    <div>
+                    <div class="col-span-2">
                         <label class="block text-sm font-medium text-gray-700">
                             {{ __('Birthday date') }}
                         </label>
                         <input type="date" x-model="user.birthday_date"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Target weight') }}
-                        </label>
-                        <input type="number" x-model="user.target_kg" min="1"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
                 </div>
