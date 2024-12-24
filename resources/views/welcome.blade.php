@@ -18,6 +18,12 @@
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:image" content="{{ asset('path/to/your/image.jpg') }}">
 
+        <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96"/>
+        <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg"/>
+        <link rel="shortcut icon" href="/favicon/favicon.ico"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png"/>
+        <link rel="manifest" href="/favicon/site.webmanifest"/>
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
