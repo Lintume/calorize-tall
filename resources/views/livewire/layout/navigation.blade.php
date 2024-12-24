@@ -181,7 +181,7 @@ new class extends Component {
 
         <!-- Language Switcher -->
         <div class="py-1 border-t border-gray-200">
-                @if (app()->getLocale() == 'en')
+                @if (app()->getLocale() == 'ua')
                 <x-responsive-nav-link :href="route('switch-language', 'en')" wire:navigate>
                     English
                 </x-responsive-nav-link>
