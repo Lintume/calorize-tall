@@ -1,2 +1,3 @@
 User-agent: *
 Disallow:
+Sitemap: https://calorize.com.ua/sitemap.xml
