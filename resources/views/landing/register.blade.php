@@ -17,8 +17,9 @@
                 <img src="/logo.png" alt="Calorize Logo" class="w-28 h-24 object-cover mb-2"
                      style="object-position: top;">
                 <h1 class="text-4xl font-bold">Calorize<br>Контроль калорійності з легкістю</h1>
-                <p class="mt-4 text-lg">Досягайте своїх цілей у харчуванні швидше, використовуючи наш зручний щоденник
-                    калорійності.</p>
+                <p class="mt-4 text-lg">Досягайте своїх цілей у харчуванні швидше, використовуючи наш зручний
+                    <a href="{{ route('diary') }}"> щоденник калорійності.</a>
+                </p>
                 <a href="{{ route('register') }}"
                    class="mt-6 inline-block bg-white text-orange-950 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100">Зареєструватися
                     зараз</a>
@@ -31,7 +32,7 @@
             <h2 class="text-3xl font-bold text-center mb-8">Чому обирають Calorize?</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="feature-item bg-white p-6 rounded-lg shadow">
-                    <a href="{{ route('diary') }}">
+                    <a href="{{ route('personal') }}">
                         <h3 class="text-xl font-semibold mb-2">Розрахунок калорій</h3>
                         <p>Визначте вашу добову норму калорій за кілька секунд, використовуючи наукові формули.</p>
                     </a>
