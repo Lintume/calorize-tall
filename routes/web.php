@@ -57,4 +57,8 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     Route::get('/blog', function () {
         return view('blog.index');
     })->name('blog');
+
+    Route::get('/landing/register', function () {
+        return view('landing.register');
+    })->name('landing.register');
 });

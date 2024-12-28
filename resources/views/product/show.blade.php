@@ -87,4 +87,13 @@
             </ul>
         </div>
     </div>
+    @guest
+        <div class="flex justify-center mt-5">
+            <x-primary-button>
+                <a href="{{ route('landing.register') }}" class="flex items-center justify-center text-lg p-1">
+                    {{ __('Add to the diary') }}
+                </a>
+            </x-primary-button>
+        </div>
+    @endguest
 </x-app-layout>
