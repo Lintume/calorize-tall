@@ -39,7 +39,11 @@ class GenerateSitemap extends Command
             ->add(Url::create('/')->setPriority(1.0)->setChangeFrequency('monthly'))
             ->add(Url::create('/products')->setPriority(0.8)->setChangeFrequency('monthly'))
             ->add(Url::create('/blog')->setPriority(0.8)->setChangeFrequency('monthly'))
-            ->add(Url::create('/blog/yak-pravylno-rakhuvaty-kaloriyi-dlya-skhudnennya-praktychnyy-gid')->setPriority(0.8)->setChangeFrequency('monthly'));
+            ->add(route('blog-1'))
+            ->add(route('blog-2'))
+            ->add(route('blog-3'))
+            ->add(route('blog-4'));
+
 
         // Save the static sitemap
         $staticSitemap->writeToFile(public_path('sitemaps/static_sitemap.xml'));
