@@ -38,7 +38,7 @@ class ProductSearch extends Component
                     $query->orWhere('user_id', $userId);
                 });
         })->search($this->search)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('user_id', 'desc')
             ->simplePaginate(5);
 
         return view('livewire.product-search', [

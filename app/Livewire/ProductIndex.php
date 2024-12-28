@@ -54,7 +54,7 @@ class ProductIndex extends Component
         })
             ->where('base', !$this->isRecipesRequest)
             ->search($this->search)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('user_id', 'desc')
             ->simplePaginate(25);
 
         return view('livewire.product-index', [
