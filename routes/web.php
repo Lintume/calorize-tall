@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 
-    Route::view('/', 'welcome');
+    Route::view('/', 'landing.register');
 
     Route::get('dashboard', Diary::class)
         ->middleware(['auth', 'verified'])
@@ -54,6 +54,15 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     Route::get('/blog/yak-pravylno-rakhuvaty-kaloriyi-dlya-skhudnennya-praktychnyy-gid', function () {
         return view('blog.blog-1');
     })->name('blog-1');
+    Route::get('/blog/5-porad-dlya-efektyvnoho-skhudnennya', function () {
+        return view('blog.blog-2');
+    })->name('blog-2');
+    Route::get('/blog/top-10-produktiv-dlya-zdorovoho-kharchuvannya', function () {
+        return view('blog.blog-3');
+    })->name('blog-3');
+    Route::get('/blog/chomu-voda-vazhlyva-dlya-skhudnennya', function () {
+        return view('blog.blog-4');
+    })->name('blog-4');
     Route::get('/blog', function () {
         return view('blog.index');
     })->name('blog');
