@@ -8,43 +8,58 @@
         <meta name="keywords"
               content="щоденник калорійності, контроль харчування, схуднення, здорове харчування, додаток для підрахунку калорій">
         <meta name="author" content="Calorize">
-        <title>Calorize - Ваш помічник у контролі калорійності</title>
-        <script src="https://cdn.tailwindcss.com"></script>
     @endsection
 
 
-    <header class="bg-amber-700 text-white py-10 rounded-lg mt-5">
+    <header class="bg-amber-700 text-white py-10 px-4 rounded-lg mt-5">
         <div class="container mx-auto text-center">
-            <h1 class="text-4xl font-bold">Calorize<br>Контроль калорійності з легкістю</h1>
-            <p class="mt-4 text-lg">Досягайте своїх цілей у харчуванні швидше, використовуючи наш зручний щоденник
-                калорійності.</p>
-            <a href="{{ route('register') }}"
-               class="mt-6 inline-block bg-white text-orange-950 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100">Зареєструватися
-                зараз</a>
+            <div class="flex flex-col items-center">
+                <img src="/logo.png" alt="Calorize Logo" class="w-28 h-24 object-cover mb-2"
+                     style="object-position: top;">
+                <h1 class="text-4xl font-bold">Calorize<br>Контроль калорійності з легкістю</h1>
+                <p class="mt-4 text-lg">Досягайте своїх цілей у харчуванні швидше, використовуючи наш зручний щоденник
+                    калорійності.</p>
+                <a href="{{ route('register') }}"
+                   class="mt-6 inline-block bg-white text-orange-950 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100">Зареєструватися
+                    зараз</a>
+            </div>
         </div>
     </header>
-
+    {{--    блог--}}
+    {{--    меню завжди вгорі--}}
+    {{--    замість велкам--}}
 
     <div class="py-8">
         <section class="features container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-8">Чому обирають Calorize?</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="feature-item bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Розрахунок калорій</h3>
-                    <p>Визначте вашу добову норму калорій за кілька секунд, використовуючи наукові формули.</p>
+                    <a href="{{ route('diary') }}">
+                        <h3 class="text-xl font-semibold mb-2">Розрахунок калорій</h3>
+                        <p>Визначте вашу добову норму калорій за кілька секунд, використовуючи наукові формули.</p>
+                    </a>
                 </div>
                 <div class="feature-item bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Велика база продуктів</h3>
-                    <p>Шукайте серед тисяч продуктів із детальною інформацією про калорії, білки, жири та вуглеводи.</p>
+                    <a href="{{ route('product.index') }}">
+                        <h3 class="text-xl font-semibold mb-2">Велика база продуктів</h3>
+                        <p>Шукайте серед тисяч продуктів із детальною інформацією про калорії, білки, жири та
+                            вуглеводи.</p>
+                    </a>
                 </div>
                 <div class="feature-item bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Графіки прогресу</h3>
-                    <p>Слідкуйте за своєю вагою та БЖУ за допомогою зручних графіків.</p>
+                    <a href="{{ route('statistic') }}">
+                        <h3 class="text-xl font-semibold mb-2">Графіки прогресу</h3>
+                        <p>Слідкуйте за своєю вагою та БЖУ за допомогою зручних графіків.</p>
+                    </a>
                 </div>
+                </a>
                 <div class="feature-item bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Власні рецепти</h3>
-                    <p>Створюйте власні рецепти та автоматично розраховуйте їх калорійність.</p>
+                    <a href="{{ route('recipe.index') }}">
+                        <h3 class="text-xl font-semibold mb-2">Власні рецепти</h3>
+                        <p>Створюйте власні рецепти та автоматично розраховуйте їх калорійність.</p>
+                    </a>
                 </div>
+                </a>
             </div>
         </section>
 
@@ -55,7 +70,7 @@
                     ефективно.</p>
                 <a href={{ route('register') }}
                    class="bg-orange-950 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700">Створити
-                    обліковий запис</a>
+                обліковий запис</a>
             </div>
         </section>
 
