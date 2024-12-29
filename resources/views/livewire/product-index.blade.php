@@ -156,46 +156,47 @@
                 </div>
                 <!-- Pagination -->
                 <div class="mt-4">
-{{--                    <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">--}}
-{{--            <span>--}}
-{{--                --}}{{-- Previous Page Link --}}
-{{--                @if ($products->onFirstPage())--}}
-{{--                    <span--}}
-{{--                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:text-gray-600 dark:bg-gray-800 dark:border-gray-600">--}}
-{{--                        {!! __('pagination.previous') !!}--}}
-{{--                    </span>--}}
-{{--                @else--}}
-{{--                    <a href="{{ $products->previousPageUrl() }}">--}}
-{{--                    <button type="button" dusk="previousPage"--}}
-{{--                            wire:loading.attr="disabled"--}}
-{{--                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">--}}
-{{--                                {!! __('pagination.previous') !!}--}}
-{{--                        </button>--}}
-{{--                    </a>--}}
-{{--                @endif--}}
-{{--            </span>--}}
+                    {{--                    <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">--}}
+                    {{--            <span>--}}
+                    {{--                --}}{{-- Previous Page Link --}}
+                    {{--                @if ($products->onFirstPage())--}}
+                    {{--                    <span--}}
+                    {{--                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:text-gray-600 dark:bg-gray-800 dark:border-gray-600">--}}
+                    {{--                        {!! __('pagination.previous') !!}--}}
+                    {{--                    </span>--}}
+                    {{--                @else--}}
+                    {{--                    <a href="{{ $products->previousPageUrl() }}">--}}
+                    {{--                    <button type="button" dusk="previousPage"--}}
+                    {{--                            wire:loading.attr="disabled"--}}
+                    {{--                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">--}}
+                    {{--                                {!! __('pagination.previous') !!}--}}
+                    {{--                        </button>--}}
+                    {{--                    </a>--}}
+                    {{--                @endif--}}
+                    {{--            </span>--}}
 
-{{--                        <span>--}}
-{{--                --}}{{-- Next Page Link --}}
-{{--                            @if ($products->hasMorePages())--}}
-{{--                                <a href="{{ $products->nextPageUrl() }}">--}}
-{{--                                    <button type="button" dusk="nextPage"--}}
-{{--                                            wire:loading.attr="disabled"--}}
-{{--                                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">--}}
-{{--                                {!! __('pagination.next') !!}--}}
-{{--                        </button>--}}
-{{--                                    </a>--}}
-{{--                            @else--}}
-{{--                                <span--}}
-{{--                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md">--}}
-{{--                        {!! __('pagination.next') !!}--}}
-{{--                    </span>--}}
-{{--                            @endif--}}
-{{--            </span>--}}
-{{--                    </nav>--}}
-                                        {{ $products->links() }}
+                    {{--                        <span>--}}
+                    {{--                --}}{{-- Next Page Link --}}
+                    {{--                            @if ($products->hasMorePages())--}}
+                    {{--                                <a href="{{ $products->nextPageUrl() }}">--}}
+                    {{--                                    <button type="button" dusk="nextPage"--}}
+                    {{--                                            wire:loading.attr="disabled"--}}
+                    {{--                                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">--}}
+                    {{--                                {!! __('pagination.next') !!}--}}
+                    {{--                        </button>--}}
+                    {{--                                    </a>--}}
+                    {{--                            @else--}}
+                    {{--                                <span--}}
+                    {{--                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md">--}}
+                    {{--                        {!! __('pagination.next') !!}--}}
+                    {{--                    </span>--}}
+                    {{--                            @endif--}}
+                    {{--            </span>--}}
+                    {{--                    </nav>--}}
+                    {{ $products->links() }}
                 </div>
             @endif
         </div>
     </div>
+    <x-loading-screen/>
 </div>

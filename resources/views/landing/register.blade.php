@@ -67,7 +67,7 @@
                 <p class="text-lg mb-6">Calorize допоможе вам стати найкращою версією себе. Легко, зручно та
                     ефективно.</p>
                 <a href={{ route('register') }}
-                   class="bg-orange-950 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700">Створити
+                   class="bg-orange-950 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-amber-700">Створити
                 обліковий запис</a>
             </div>
         </section>
