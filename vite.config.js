@@ -8,6 +8,7 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    publicDir: 'public',
     build: {
         minify: true,
     },

@@ -1,5 +1,17 @@
 @import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
+@font-face {
+    font-family: 'namu-pro';
+    src: url('/fonts/NAMU-Pro.woff2') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.font-namu-pro {
+    font-family: 'namu-pro', sans-serif;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -35,7 +35,7 @@
         </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex flex-col">
+        <div class="min-h-screen bg-gray-100 flex flex-col font-namu-pro">
             <livewire:layout.navigation/>
 
             <!-- Page Heading -->
