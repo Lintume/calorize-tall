@@ -18,12 +18,12 @@ new class extends Component {
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="shrink-0 flex items-center mr-3">
                     <a href="{{ route('dashboard') }}" wire:navigate>
-                        <x-application-logo class="w-10 fill-current text-gray-500"/>
+                        <x-application-logo class="w-8 md:w-10 fill-current text-gray-500 py-2"/>
                     </a>
                 </div>
 
@@ -35,18 +35,20 @@ new class extends Component {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{__('welcome.diary')}}
                     </x-nav-link>
-{{--                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"--}}
-{{--                                wire:navigate>--}}
-{{--                        {{__('welcome.createProduct')}}--}}
-{{--                    </x-nav-link>--}}
-                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')" wire:navigate>
+                    {{--                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"--}}
+                    {{--                                wire:navigate>--}}
+                    {{--                        {{__('welcome.createProduct')}}--}}
+                    {{--                    </x-nav-link>--}}
+                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')"
+                                wire:navigate>
                         {{__('welcome.productList')}}
                     </x-nav-link>
-{{--                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"--}}
-{{--                                wire:navigate>--}}
-{{--                        {{__('welcome.createRecipe')}}--}}
-{{--                    </x-nav-link>--}}
-                    <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')" wire:navigate>
+                    {{--                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"--}}
+                    {{--                                wire:navigate>--}}
+                    {{--                        {{__('welcome.createRecipe')}}--}}
+                    {{--                    </x-nav-link>--}}
+                    <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')"
+                                wire:navigate>
                         {{__('welcome.recipes')}}
                     </x-nav-link>
                 </div>
@@ -84,8 +86,8 @@ new class extends Component {
                 </div>
 
                 <!-- Settings Dropdown -->
-                    <div class="hidden sm:flex sm:items-center">
-                        @auth
+                <div class="hidden sm:flex sm:items-center">
+                    @auth
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button
@@ -121,30 +123,66 @@ new class extends Component {
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
-                        @else
-                            <x-nav-link :href="route('login')" wire:navigate>
-                                {{ __('auth.login') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('register')" wire:navigate>
-                                {{ __('auth.register') }}
-                            </x-nav-link>
-                        @endauth
-                    </div>
+                    @else
+                        <x-nav-link :href="route('login')" wire:navigate>
+                            {{ __('auth.login') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('register')" wire:navigate>
+                            {{ __('auth.register') }}
+                        </x-nav-link>
+                    @endauth
+                </div>
             </div>
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M4 6h16M4 12h16M4 18h16"/>
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                              stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                <button x-cloak
+                        @click="open = ! open"
+                        class="
+            inline-flex items-center justify-center p-2
+            rounded-md
+            text-amber-700
+            hover:bg-amber-100
+            hover:text-amber-900
+            transition
+            duration-150
+            ease-in-out
+        "
+                >
+                    <svg
+                        class="h-6 w-6 transform transition-transform duration-300"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        :class="{ 'rotate-180': open }"
+                    >
+                        <!-- Гамбургер -->
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"
+                            :class="[
+                    open ? 'opacity-0 scale-75' : 'opacity-100 scale-100',
+                    'transition-all duration-300 origin-center'
+                ]"
+                        />
+                        <!-- Хрестик -->
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                            :class="[
+                    open ? 'opacity-100 scale-100' : 'opacity-0 scale-75',
+                    'transition-all duration-300 origin-center'
+                ]"
+                        />
                     </svg>
                 </button>
             </div>
+
+
         </div>
     </div>
 
@@ -161,14 +199,16 @@ new class extends Component {
                                    wire:navigate>
                 {{__('welcome.createProduct')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')" wire:navigate>
+            <x-responsive-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')"
+                                   wire:navigate>
                 {{__('welcome.productList')}}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"
                                    wire:navigate>
                 {{__('welcome.createRecipe')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')" wire:navigate>
+            <x-responsive-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')"
+                                   wire:navigate>
                 {{__('welcome.recipes')}}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('personal')" :active="request()->routeIs('personal')" wire:navigate>
@@ -181,15 +221,15 @@ new class extends Component {
 
         <!-- Language Switcher -->
         <div class="py-1 border-t border-gray-200">
-                @if (app()->getLocale() == 'ua')
+            @if (app()->getLocale() == 'ua')
                 <x-responsive-nav-link :href="route('switch-language', 'en')" wire:navigate>
                     English
                 </x-responsive-nav-link>
-                @else
+            @else
                 <x-responsive-nav-link :href="route('switch-language', 'ua')" wire:navigate>
                     Українська
                 </x-responsive-nav-link>
-                @endif
+            @endif
         </div>
         <!-- Responsive Settings Options -->
         @auth

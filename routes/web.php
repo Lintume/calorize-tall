@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 
-    Route::view('/', 'landing.register');
+    Route::view('/', 'pages.register');
 
     Route::get('dashboard', Diary::class)
         ->middleware(['auth', 'verified'])
@@ -66,4 +66,12 @@ Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
     Route::get('/blog', function () {
         return view('blog.index');
     })->name('blog');
+
+    Route::get('/about', function () {
+        return view('pages.about');
+    })->name('about');
+
+    Route::get('/privacy', function () {
+        return view('pages.privacy');
+    })->name('privacy');
 });

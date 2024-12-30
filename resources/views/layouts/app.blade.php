@@ -17,6 +17,14 @@
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png"/>
         <link rel="manifest" href="/favicon/site.webmanifest"/>
 
+        <!-- Підключення шрифту Inter із різною товщиною -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -35,7 +43,7 @@
         </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex flex-col font-namu-pro">
+        <div class="min-h-screen bg-neutral-50 flex flex-col">
             <livewire:layout.navigation/>
 
             <!-- Page Heading -->
@@ -58,11 +66,38 @@
 
             <!-- Footer -->
             <footer class="bg-white shadow mt-auto">
-                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center">
-                    <p class="text-gray-500 text-sm">
-                        &copy; {{ date('Y') }} <a href="https://www.linkedin.com/in/lialia-sakhno/">{{__('Lialia') }}</a> & <a href="https://www.linkedin.com/in/ulianasakhnoqa/">{{__('Uliana') }}</a>
-                        {{__('Sakhno') }}. {{__('All rights reserved.') }}
-                    </p>
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8
+                flex flex-col md:flex-row items-center md:justify-between text-center">
+
+                    <!-- Текст копірайту -->
+                    <div>
+                        <p class="text-gray-500 text-sm">
+                            &copy; {{ date('Y') }}
+                            <a href="https://www.linkedin.com/in/lialia-sakhno/" class="hover:text-gray-700">
+                                {{ __('Lialia') }}
+                            </a> &
+                            <a href="https://www.linkedin.com/in/ulianasakhnoqa/" class="hover:text-gray-700">
+                                {{ __('Uliana') }}
+                            </a>
+                            {{ __('Sakhno') }}. {{ __('All rights reserved.') }}
+                        </p>
+                    </div>
+
+                    <!-- Посилання -->
+                    <div class="mt-3 md:mt-0">
+                        <ul class="flex justify-center space-x-4 text-sm text-gray-500">
+                            <li>
+                                <a href="{{ route('about') }}" class="hover:text-gray-700">
+                                    {{ __('About us') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('privacy') }}" class="hover:text-gray-700">
+                                    {{ __('Privacy Policy') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </footer>
         </div>
