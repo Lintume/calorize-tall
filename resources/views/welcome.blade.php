@@ -94,7 +94,7 @@
         <div class="flex-center position-ref full-height">
             <div class="top-right links">
                 @if (app()->getLocale() == 'en')
-                    <a href="{{ route('switch-language', 'ua') }}">Українська</a>
+                    <a href="{{ route('switch-language', 'uk') }}">Українська</a>
                 @else
                     <a href="{{ route('switch-language', 'en') }}">English</a>
                 @endif

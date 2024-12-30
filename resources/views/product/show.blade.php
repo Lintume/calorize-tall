@@ -56,7 +56,7 @@
                     <p class="text-sm font-medium text-gray-900">
                         {{ __('Proteins') }}
                     </p>
-                    <p class="text-sm text-green-500">
+                    <p class="text-sm text-green-900">
                         {{ number_format($product->proteins, 2) }}
                     </p>
                 </li>
@@ -64,7 +64,7 @@
                     <p class="text-sm font-medium text-gray-900">
                         {{ __('Fats') }}
                     </p>
-                    <p class="text-sm text-red-500">
+                    <p class="text-sm text-red-900">
                         {{ number_format($product->fats, 2) }}
                     </p>
                 </li>
@@ -72,7 +72,7 @@
                     <p class="text-sm font-medium text-gray-900">
                         {{ __('Carbohydrates') }}
                     </p>
-                    <p class="text-sm text-blue-500">
+                    <p class="text-sm text-blue-900">
                         {{ number_format($product->carbohydrates, 2) }}
                     </p>
                 </li>

@@ -78,7 +78,7 @@ new class extends Component {
                                 English
                             </x-dropdown-link>
 
-                            <x-dropdown-link :href="route('switch-language', 'ua')" wire:navigate>
+                            <x-dropdown-link :href="route('switch-language', 'uk')" wire:navigate>
                                 Українська
                             </x-dropdown-link>
                         </x-slot>
@@ -137,6 +137,7 @@ new class extends Component {
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button x-cloak
+                        aria-label="{{ __('Open main menu') }}"
                         @click="open = ! open"
                         class="
             inline-flex items-center justify-center p-2
@@ -221,12 +222,12 @@ new class extends Component {
 
         <!-- Language Switcher -->
         <div class="py-1 border-t border-gray-200">
-            @if (app()->getLocale() == 'ua')
+            @if (app()->getLocale() == 'uk')
                 <x-responsive-nav-link :href="route('switch-language', 'en')" wire:navigate>
                     English
                 </x-responsive-nav-link>
             @else
-                <x-responsive-nav-link :href="route('switch-language', 'ua')" wire:navigate>
+                <x-responsive-nav-link :href="route('switch-language', 'uk')" wire:navigate>
                     Українська
                 </x-responsive-nav-link>
             @endif
