@@ -32,7 +32,7 @@
                 <!-- Короткий опис -->
                 <p class="mt-4 text-lg max-w-xl mx-auto">
                     Досягайте своїх цілей у харчуванні швидше, використовуючи наш зручний
-                    <a href="{{ route('diary') }}" class="underline hover:text-amber-300">щоденник калорійності</a>.
+                    <a href="{{ route('register') }}" class="underline hover:text-amber-300">щоденник калорійності</a>.
                 </p>
 
                 <!-- Кнопка дії -->

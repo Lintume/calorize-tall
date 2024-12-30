@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
 
-    Route::view('/', 'pages.register');
+    Route::view('/', 'pages.landing');
 
     Route::get('dashboard', Diary::class)
         ->middleware(['auth', 'verified'])
