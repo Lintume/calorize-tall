@@ -8,7 +8,7 @@
         @yield('meta')
 
         <title>
-            {{ config('app.name', 'Laravel') }}@hasSection('title'){{ ': ' }}@endif @yield('title', '')
+            @yield('title', config('app.name'))
         </title>
 
         <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96"/>
