@@ -46,6 +46,16 @@
                 flex: 1;
             }
         </style>
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LXEJPCRR0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-3LXEJPCRR0');
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-neutral-50 flex flex-col">
