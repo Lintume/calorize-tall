@@ -1,21 +1,20 @@
 <x-app-layout>
 
-    @section('title', 'Calorize - Ваш помічник у контролі калорійності')
+    @section('title', __('Calorize - Your assistant in calorie control'))
 
     @section('meta')
         <meta name="description"
-              content="Ведіть щоденник калорійності легко та ефективно за допомогою нашого додатка. Контролюйте харчування, досягайте своїх цілей і слідкуйте за прогресом.">
+              content="{{ __('Keep a calorie diary easily and effectively with our app. Control your diet, achieve your goals, and track your progress.') }}">
         <meta name="keywords"
-              content="щоденник калорійності, контроль харчування, схуднення, здорове харчування, додаток для підрахунку калорій">
+              content="{{ __('calorie diary, diet control, weight loss, healthy eating, calorie counting app') }}">
         <meta name="author" content="Calorize">
     @endsection
 
-
-    <!-- Головний хедер -->
+    <!-- Main Header -->
     <header class="bg-amber-700 text-white py-10 px-4">
         <div class="container mx-auto text-center">
             <div class="flex flex-col items-center">
-                <!-- Логотип -->
+                <!-- Logo -->
                 <img
                     src="/logo.png"
                     alt="Calorize Logo"
@@ -23,89 +22,88 @@
                     style="object-position: top;"
                 />
 
-                <!-- Заголовок H1 -->
+                <!-- H1 Title -->
                 <h1 class="text-4xl md:text-5xl font-bold leading-tight">
                     Calorize<br>
-                    Контроль калорійності з легкістю
+                    {{ __('Calorie control made easy') }}
                 </h1>
 
-                <!-- Короткий опис -->
+                <!-- Short Description -->
                 <p class="mt-4 text-lg max-w-xl mx-auto">
-                    Досягайте своїх цілей у харчуванні швидше, використовуючи наш зручний
-                    <a href="{{ route('register') }}" class="underline hover:text-amber-300">щоденник калорійності</a>.
+                    {{ __('Reach your dietary goals faster using our handy') }}
+                    <a href="{{ route('register') }}" class="underline hover:text-amber-300">{{ __('calorie diary') }}</a>.
                 </p>
 
-                <!-- Кнопка дії -->
+                <!-- Action Button -->
                 <a
                     href="{{ route('register') }}"
                     class="mt-6 inline-block bg-white text-amber-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-amber-100 transition-colors"
                 >
-                    Зареєструватися зараз
+                    {{ __('Register now') }}
                 </a>
             </div>
         </div>
     </header>
 
 
-    <!-- Основний контент -->
+    <!-- Main Content -->
     <div class="py-12">
 
-        <!-- Секція переваг (Why Calorize?) -->
+        <!-- Why Calorize Section -->
         <section class="container mx-auto px-4 py-8 bg-amber-50 rounded-md">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
-                Чому обирають Calorize?
+                {{ __('Why choose Calorize?') }}
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <!-- Картка 1: Розрахунок калорій -->
+                <!-- Card 1: Calorie Calculation -->
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                     <a href="{{ route('personal') }}" class="block">
-                        <!-- Заголовок із іконкою -->
                         <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
                             <i class="fa-solid fa-calculator text-2xl text-amber-700"></i>
-                            <span>Розрахунок калорій</span>
+                            <span>{{ __('Calorie calculation') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            Визначте вашу добову норму калорій за кілька секунд, використовуючи наукові формули.
+                            {{ __('Determine your daily calorie norm in seconds using scientific formulas.') }}
                         </p>
                     </a>
                 </div>
 
-                <!-- Картка 2: Велика база продуктів -->
+                <!-- Card 2: Large Product Database -->
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                     <a href="{{ route('product.index') }}" class="block">
                         <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
                             <i class="fa-solid fa-apple-whole text-2xl text-amber-700"></i>
-                            <span>Велика база продуктів</span>
+                            <span>{{ __('Large product database') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            Шукайте серед тисяч продуктів із детальною інформацією про калорії, білки, жири та вуглеводи.
+                            {{ __('Search thousands of products with detailed information about calories, proteins, fats, and carbohydrates.') }}
                         </p>
                     </a>
                 </div>
 
-                <!-- Картка 3: Графіки прогресу -->
+                <!-- Card 3: Progress Charts -->
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                     <a href="{{ route('statistic') }}" class="block">
                         <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
                             <i class="fa-solid fa-chart-line text-2xl text-amber-700"></i>
-                            <span>Графіки прогресу</span>
+                            <span>{{ __('Progress charts') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            Слідкуйте за своєю вагою та БЖУ за допомогою зручних графіків.
+                            {{ __('Monitor your weight and macronutrients with convenient charts.') }}
                         </p>
                     </a>
                 </div>
 
-                <!-- Картка 4: Власні рецепти -->
+                <!-- Card 4: Custom Recipes -->
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                     <a href="{{ route('recipe.index') }}" class="block">
                         <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
                             <i class="fa-solid fa-utensils text-2xl text-amber-700"></i>
-                            <span>Власні рецепти</span>
+                            <span>{{ __('Custom recipes') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            Створюйте власні рецепти та автоматично розраховуйте їх калорійність.
+                            {{ __('Create your own recipes and automatically calculate their calories.') }}
                         </p>
                     </a>
                 </div>
@@ -113,20 +111,20 @@
             </div>
         </section>
 
-        <!-- Проміжна CTA-секція -->
+        <!-- CTA Section -->
         <section class="bg-amber-100 py-12 mt-12 rounded-lg">
             <div class="container mx-auto text-center px-4">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                    Почніть свій шлях до здорового харчування вже сьогодні!
+                    {{ __('Start your journey to healthy eating today!') }}
                 </h2>
                 <p class="text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
-                    Calorize допоможе вам стати найкращою версією себе. Легко, зручно та ефективно.
+                    {{ __('Calorize helps you become the best version of yourself. Simple, convenient, and effective.') }}
                 </p>
                 <a
                     href="{{ route('register') }}"
                     class="bg-amber-700 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-amber-800 transition-colors"
                 >
-                    Створити обліковий запис
+                    {{ __('Create an account') }}
                 </a>
             </div>
         </section>
@@ -134,27 +132,25 @@
         <!-- Відгуки -->
         <section class="container mx-auto py-12 px-4">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
-                Відгуки наших користувачів
+                {{ __('Reviews from our users') }}
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Відгук 1 -->
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                     <p class="italic text-gray-700">
-                        «Calorize став моїм незамінним помічником у схудненні. Тепер я легко контролюю
-                        своє харчування та бачу результати!»
+                        {{ __('“Calorize has become my indispensable assistant in losing weight. Now I can easily control my diet and see results!”') }}
                     </p>
                     <p class="text-right font-semibold mt-4 text-gray-800">
-                        – Ольга, 29 років
+                        – {{ __('Olha, 29 years old') }}
                     </p>
                 </div>
                 <!-- Відгук 2 -->
                 <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
                     <p class="italic text-gray-700">
-                        «Нарешті додаток, який враховує всі мої потреби. Зручний інтерфейс,
-                        величезна база продуктів і мотивація триматися плану!»
+                        {{ __('“Finally, an app that meets all my needs. Convenient interface, a huge product database, and the motivation to stick to my plan!”') }}
                     </p>
                     <p class="text-right font-semibold mt-4 text-gray-800">
-                        – Дмитро, 35 років
+                        – {{ __('Dmytro, 35 years old') }}
                     </p>
                 </div>
             </div>
@@ -163,73 +159,71 @@
         <!-- Блог (карусель) -->
         <section class="container mx-auto px-4">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
-                Наш блог
+                {{ __('Our Blog') }}
             </h2>
             <div class="relative">
-                <!-- Врахуйте, що flex-скрол карусель зручніший на десктопі,
-                     але для мобільних варто або зробити свайп, або використовувати Glide/Swiper -->
                 <div class="carousel flex overflow-x-auto space-x-4">
                     <!-- Картка блогу 1 -->
                     <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
                         <h3 class="text-xl font-semibold mb-2">
-                            5 порад для ефективного схуднення
+                            {{ __('5 tips for effective weight loss') }}
                         </h3>
                         <p class="text-gray-600">
-                            Дізнайтеся, як досягти своєї ідеальної ваги без шкоди для здоров'я.
+                            {{ __('Learn how to achieve your ideal weight without harming your health.') }}
                         </p>
                         <a
                             href="{{ route('blog-2') }}"
                             class="text-amber-700 hover:underline mt-4 inline-block font-medium"
                         >
-                            Читати більше
+                            {{ __('Read more') }}
                         </a>
                     </div>
 
                     <!-- Картка блогу 2 -->
                     <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
                         <h3 class="text-xl font-semibold mb-2">
-                            Як правильно рахувати калорії?
+                            {{ __('How to count calories correctly?') }}
                         </h3>
                         <p class="text-gray-600">
-                            Крок за кроком: дізнайтеся, як підрахунок калорій може змінити ваше життя.
+                            {{ __('Step by step: Learn how calorie counting can change your life.') }}
                         </p>
                         <a
                             href="{{ route('blog-1') }}"
                             class="text-amber-700 hover:underline mt-4 inline-block font-medium"
                         >
-                            Читати більше
+                            {{ __('Read more') }}
                         </a>
                     </div>
 
                     <!-- Картка блогу 3 -->
                     <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
                         <h3 class="text-xl font-semibold mb-2">
-                            ТОП-10 продуктів для здорового харчування
+                            {{ __('Top 10 healthy foods') }}
                         </h3>
                         <p class="text-gray-600">
-                            Перелік продуктів, які допоможуть вам залишатися здоровими та активними.
+                            {{ __('A list of foods that will help you stay healthy and active.') }}
                         </p>
                         <a
                             href="{{ route('blog-3') }}"
                             class="text-amber-700 hover:underline mt-4 inline-block font-medium"
                         >
-                            Читати більше
+                            {{ __('Read more') }}
                         </a>
                     </div>
 
                     <!-- Картка блогу 4 -->
                     <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
                         <h3 class="text-xl font-semibold mb-2">
-                            Чому вода важлива для схуднення?
+                            {{ __('Why is water important for weight loss?') }}
                         </h3>
                         <p class="text-gray-600">
-                            Дізнайтеся, чому вода — ваш найкращий союзник у контролі ваги.
+                            {{ __('Find out why water is your best ally in weight management.') }}
                         </p>
                         <a
                             href="{{ route('blog-4') }}"
                             class="text-amber-700 hover:underline mt-4 inline-block font-medium"
                         >
-                            Читати більше
+                            {{ __('Read more') }}
                         </a>
                     </div>
                 </div>

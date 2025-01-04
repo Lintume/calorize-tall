@@ -33,7 +33,7 @@
     @endsection
 
     <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-8 mx-auto">
-        <div class="flex items-center justif`y-between mb-4">
+        <div class="flex items-center justify-between mb-4">
             <h1 class="text-xl font-bold leading-none text-gray-900">{{ $product->title }}</h1>
             <div>
                 <a href="{{ $product->base ? route('product.index') : route('recipe.index') }}" class="ml-2">

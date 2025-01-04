@@ -1,66 +1,72 @@
 <x-app-layout>
 
-    @section('title', '5 порад для ефективного схуднення')
+    @section('title', __('5 Tips for Effective Weight Loss'))
 
     @section('meta')
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Дізнайтеся 5 найефективніших порад для схуднення. Від створення дефіциту калорій до вибору правильних продуктів.">
-        <meta name="keywords" content="поради для схуднення, як схуднути, калорії, контроль ваги, харчування">
-        <meta name="author" content="Калорайз">
+        <meta name="description" content="{{ __('Learn the 5 most effective tips for weight loss, from creating a calorie deficit to choosing the right foods.') }}">
+        <meta name="keywords" content="{{ __('weight loss tips, how to lose weight, calories, weight control, nutrition') }}">
+        <meta name="author" content="Calorize">
     @endsection
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <h1 class="text-2xl font-bold">5 порад для ефективного схуднення</h1>
-        </h2>
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">{{ __('5 Tips for Effective Weight Loss') }}</h1>
+            <a href="{{ route('blog') }}" class="bg-gray-200 text-gray-800 font-semibold px-4 py-2 rounded-lg hover:bg-gray-300 transition">
+                {{ __('Back to Blog') }}
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
-                <img src="https://i.ibb.co/VWVvQ9z/c3cff601-8932-40a8-a68e-86bb16da78e0.webp" alt="5 порад для схуднення" class="w-full h-auto mb-8">
+                <img src="https://i.ibb.co/VWVvQ9z/c3cff601-8932-40a8-a68e-86bb16da78e0.webp" alt="{{ __('5 Tips for Weight Loss') }}" class="w-full h-auto mb-8">
+
                 <section class="my-8">
-                    <h2 class="text-xl font-semibold mb-4">1. Створіть дефіцит калорій</h2>
-                    <p class="mb-4">Основний принцип схуднення — споживати менше калорій, ніж витрачає ваше тіло. Використовуйте формулу TDEE (добовий енергетичний баланс), щоб визначити, скільки калорій вам потрібно, і створіть дефіцит у 10-20% від цього числа.</p>
+                    <h2 class="text-xl font-semibold mb-4">{{ __('1. Create a Calorie Deficit') }}</h2>
+                    <p class="mb-4">{{ __('The main principle of weight loss is to consume fewer calories than your body burns. Use the TDEE (Total Daily Energy Expenditure) formula to determine how many calories you need and create a deficit of 10-20% from that number.') }}</p>
                 </section>
 
                 <section class="my-8">
-                    <h2 class="text-xl font-semibold mb-4">2. Зосередьтеся на високоякісних продуктах</h2>
-                    <p class="mb-4">Вибирайте продукти з високим вмістом білка, корисними жирами та складними вуглеводами. Наприклад:</p>
+                    <h2 class="text-xl font-semibold mb-4">{{ __('2. Focus on High-Quality Foods') }}</h2>
+                    <p class="mb-4">{{ __('Choose foods rich in protein, healthy fats, and complex carbohydrates. For example:') }}</p>
                     <ul class="list-disc list-inside mb-4">
-                        <li><strong>Білки:</strong> курка, риба, яйця, сир.</li>
-                        <li><strong>Жири:</strong> авокадо, горіхи, оливкова олія.</li>
-                        <li><strong>Вуглеводи:</strong> гречка, вівсянка, овочі.</li>
+                        <li><strong>{{ __('Proteins:') }}</strong> {{ __('chicken, fish, eggs, cheese.') }}</li>
+                        <li><strong>{{ __('Fats:') }}</strong> {{ __('avocado, nuts, olive oil.') }}</li>
+                        <li><strong>{{ __('Carbohydrates:') }}</strong> {{ __('buckwheat, oats, vegetables.') }}</li>
                     </ul>
                 </section>
 
                 <section class="my-8">
-                    <h2 class="text-xl font-semibold mb-4">3. Пийте більше води</h2>
-                    <p class="mb-4">Вода допомагає підтримувати обмін речовин, очищує організм і знижує відчуття голоду. Спробуйте випивати 1,5-2 літри води на день.</p>
+                    <h2 class="text-xl font-semibold mb-4">{{ __('3. Drink More Water') }}</h2>
+                    <p class="mb-4">{{ __('Water helps maintain metabolism, cleanse the body, and reduce hunger. Try to drink 1.5-2 liters of water per day.') }}</p>
                 </section>
 
                 <section class="my-8">
-                    <h2 class="text-xl font-semibold mb-4">4. Фізична активність — ваш союзник</h2>
-                    <p class="mb-4">Регулярні фізичні навантаження допомагають не лише спалювати калорії, але й підтримують м’язову масу. Навіть щоденні прогулянки на 30 хвилин принесуть результати.</p>
+                    <h2 class="text-xl font-semibold mb-4">{{ __('4. Physical Activity is Your Ally') }}</h2>
+                    <p class="mb-4">{{ __('Regular physical activity helps not only burn calories but also maintain muscle mass. Even daily 30-minute walks will yield results.') }}</p>
                 </section>
 
                 <section class="my-8">
-                    <h2 class="text-xl font-semibold mb-4">5. Ведіть харчовий щоденник</h2>
-                    <p class="mb-4">Записуйте все, що їсте, щоб контролювати кількість калорій. Використовуйте додаток <a href="{{ route('register') }}" class="text-blue-500 underline">Calorize</a> для простого та зручного ведення щоденника.</p>
+                    <h2 class="text-xl font-semibold mb-4">{{ __('5. Keep a Food Diary') }}</h2>
+                    <p class="mb-4">{{ __('Record everything you eat to control calorie intake. Use the') }} <a href="{{ route('register') }}" class="text-blue-500 underline">{{ __('Calorize') }}</a> {{ __('app for simple and convenient food diary management.') }}</p>
                 </section>
 
                 <section class="mb-8">
-                    <h2 class="text-xl font-semibold mb-4">Як Calorize допоможе?</h2>
+                    <h2 class="text-xl font-semibold mb-4">{{ __('How Can Calorize Help?') }}</h2>
                     <ul class="list-disc list-inside mb-4">
-                        <li><strong>Розрахунок калорій:</strong> визначте свою норму калорій за кілька секунд.</li>
-                        <li><strong>Контроль харчування:</strong> додайте страви та продукти до щоденника.</li>
-                        <li><strong>Графіки прогресу:</strong> слідкуйте за змінами у вазі.</li>
+                        <li><strong>{{ __('Calorie Calculation:') }}</strong> {{ __('determine your calorie norm in seconds.') }}</li>
+                        <li><strong>{{ __('Nutrition Control:') }}</strong> {{ __('add meals and foods to your diary.') }}</li>
+                        <li><strong>{{ __('Progress Graphs:') }}</strong> {{ __('track changes in your weight.') }}</li>
                     </ul>
                 </section>
-                <a href="{{ route('register') }}" class="bg-amber-500 text-white font-semibold px-4 py-2 rounded-lg">Зареєструватися зараз</a>
+
+                <a href="{{ route('register') }}" class="bg-amber-500 text-white font-semibold px-4 py-2 rounded-lg">{{ __('Register Now') }}</a>
 
             </div>
         </div>
     </div>
+
 </x-app-layout>

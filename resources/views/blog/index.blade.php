@@ -21,8 +21,27 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
                 <ul class="space-y-4">
                     <li class="p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition duration-300">
-                        <a href="{{ route('blog-1') }}" class="text-blue-500 underline text-lg font-semibold hover:text-blue-700">
-                            Як правильно рахувати калорії для схуднення — практичний гід
+                        <a href="{{ route('blog-1') }}"
+                           class="text-blue-500 underline text-lg font-semibold hover:text-blue-700">
+                            {{ __('How to Count Calories for Weight Loss — A Practical Guide') }}
+                        </a>
+                    </li>
+                    <li class="p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition duration-300">
+                        <a href="{{ route('blog-2') }}"
+                           class="text-blue-500 underline text-lg font-semibold hover:text-blue-700">
+                            {{ __('5 Tips for Effective Weight Loss') }}
+                        </a>
+                    </li>
+                    <li class="p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition duration-300">
+                        <a href="{{ route('blog-3') }}"
+                           class="text-blue-500 underline text-lg font-semibold hover:text-blue-700">
+                            {{ __('TOP 10 Foods for Healthy Eating') }}
+                        </a>
+                    </li>
+                    <li class="p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition duration-300">
+                        <a href="{{ route('blog-3') }}"
+                           class="text-blue-500 underline text-lg font-semibold hover:text-blue-700">
+                            {{ __('Why Water is Important for Weight Loss?') }}
                         </a>
                     </li>
                 </ul>
