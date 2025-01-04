@@ -74,13 +74,13 @@ new class extends Component {
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('switch-language', 'en')" wire:navigate>
+                            <a href="{{ LaravelLocalization::getLocalizedURL('en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 English
-                            </x-dropdown-link>
+                            </a>
 
-                            <x-dropdown-link :href="route('switch-language', 'uk')" wire:navigate>
+                            <a href="{{ LaravelLocalization::getLocalizedURL('uk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 Українська
-                            </x-dropdown-link>
+                            </a>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -223,11 +223,11 @@ new class extends Component {
         <!-- Language Switcher -->
         <div class="py-1 border-t border-gray-200">
             @if (app()->getLocale() == 'uk')
-                <x-responsive-nav-link :href="route('switch-language', 'en')" wire:navigate>
+                <x-responsive-nav-link :href="LaravelLocalization::getLocalizedURL('en')" wire:navigate>
                     English
                 </x-responsive-nav-link>
             @else
-                <x-responsive-nav-link :href="route('switch-language', 'uk')" wire:navigate>
+                <x-responsive-nav-link :href="LaravelLocalization::getLocalizedURL('uk')" wire:navigate>
                     Українська
                 </x-responsive-nav-link>
             @endif
