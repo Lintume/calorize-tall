@@ -25,7 +25,7 @@
                 <!-- H1 Title -->
                 <h1 class="text-4xl md:text-5xl font-bold leading-tight">
                     Calorize<br>
-                    {{ __('Calorie control made easy') }}
+                    {{ __('Your Companion for Healthy Eating') }}
                 </h1>
 
                 <!-- Short Description -->
