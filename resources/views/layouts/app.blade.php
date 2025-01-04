@@ -16,6 +16,8 @@
         <link rel="shortcut icon" href="/favicon/favicon.ico"/>
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png"/>
         <link rel="manifest" href="/favicon/site.webmanifest"/>
+        <link rel="alternate" hreflang="uk" href="{{ LaravelLocalization::getLocalizedURL('uk') }}" />
+        <link rel="alternate" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en') }}" />
 
         <!-- Підключення шрифту Inter із різною товщиною -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
