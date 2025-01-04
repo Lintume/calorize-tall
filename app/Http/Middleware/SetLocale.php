@@ -10,9 +10,20 @@ class SetLocale
 {
     public function handle($request, Closure $next)
     {
-        $locale = $request->query('lang', Session::get('locale', config('app.locale')));
-        Session::put('locale', $locale);
-        App::setLocale($locale);
+        // Перевіряємо, чи є локаль у сесії
+        if (Session::has('locale')) {
+            App::setLocale(Session::get('locale'));
+        } else {
+            // Визначаємо локаль із браузера
+            $browserLocale = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
+
+            // Встановлюємо локаль: 'uk' для української або 'en' для інших
+            $locale = $browserLocale === 'uk' ? 'uk' : 'en';
+
+            // Зберігаємо локаль у сесії
+            Session::put('locale', $locale);
+            App::setLocale($locale);
+        }
 
         return $next($request);
     }
