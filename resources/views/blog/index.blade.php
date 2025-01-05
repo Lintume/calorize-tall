@@ -39,7 +39,7 @@
                         </a>
                     </li>
                     <li class="p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition duration-300">
-                        <a href="{{ route('blog-3') }}"
+                        <a href="{{ route('blog-4') }}"
                            class="text-blue-500 underline text-lg font-semibold hover:text-blue-700">
                             {{ __('Why Water is Important for Weight Loss?') }}
                         </a>

@@ -24,7 +24,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
-                <img src="https://i.ibb.co/VWVvQ9z/c3cff601-8932-40a8-a68e-86bb16da78e0.webp" alt="{{ __('How to count calories for weight loss') }}" class="w-full h-auto mb-8">
+                <img src="/blog/blog-1.webp" alt="{{ __('How to count calories for weight loss') }}" class="w-full h-auto mb-8">
 
                 <section class="my-8">
                     <h2 class="text-xl font-semibold mb-4">{{ __('What are Calories and Why Are They Important?') }}</h2>

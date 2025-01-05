@@ -40,7 +40,7 @@
                 </h1>
                 <!-- Heading -->
                 <h1 class="
-                    text-5xl
+                    text-4xl
                     md:text-6xl
                     font-bold
                     leading-tight
@@ -48,13 +48,12 @@
                     relative
                     z-10
                 " data-aos="fade-up" data-aos-delay="200">
-
                     {{ __('The Easiest Way to Master Your Diet') }}
                 </h1>
 
                 <!-- Short Description -->
                 <p class="mt-2 text-lg max-w-2xl mx-auto font-sans relative z-10" data-aos="fade-up" data-aos-delay="400">
-                    {{ __('Discover a whole new level of simplicity in tracking your nutrition. With an impressive database of over 85,000 items—from supermarket staples to homemade Ukrainian recipes—Calorize has you covered.') }}
+                    {{ __('Every journey begins with a single step. Calorize is your map to healthier and more mindful eating. Start today, and we’ll guide you every step of the way.') }}
                 </p>
 
                 <!-- Call-to-Action Button -->
@@ -103,9 +102,10 @@
             " data-aos="fade-up">
                 {{ __('Why Choose Calorize?') }}
             </h2>
+            <p class="text-lg max-w-3xl mx-auto text-center mb-8 text-gray-800">
+                {{ __('Imagine having a personal assistant that simplifies your journey. No stress, no complications—just straightforward guidance to help you reach your goals.') }}
+            </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                <!-- Cards -->
-                <!-- Card 1 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="100">
                     <a href="{{ route('personal') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
@@ -113,12 +113,10 @@
                             <span>{{ __('Intuitive Daily Diary') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Log your meals in seconds without any hassle. We’ve streamlined the process so you can focus on your goals—not on tedious data entry.') }}
+                            {{ __('Logging meals feels as easy as flipping through a journal. Like having a friend that tracks your progress with care.') }}
                         </p>
                     </a>
                 </div>
-
-                <!-- Card 2 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="200">
                     <a href="{{ route('product.index') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
@@ -126,12 +124,10 @@
                             <span>{{ __('85,000+ Products') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Access the largest collection of items—from everyday supermarket brands to iconic Ukrainian dishes. Track calories, proteins, fats, and carbs with ease.') }}
+                            {{ __('A massive database—from supermarket staples to grandma’s recipes. Everything you need is just a click away.') }}
                         </p>
                     </a>
                 </div>
-
-                <!-- Card 3 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="300">
                     <a href="{{ route('recipe.index') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
@@ -143,8 +139,6 @@
                         </p>
                     </a>
                 </div>
-
-                <!-- Card 4 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="400">
                     <a href="{{ route('statistic') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
@@ -156,7 +150,6 @@
                         </p>
                     </a>
                 </div>
-
             </div>
         </section>
 
@@ -167,7 +160,7 @@
                     {{ __('Take Control of Your Diet Today!') }}
                 </h2>
                 <p class="text-lg max-w-3xl mx-auto mb-8 leading-relaxed text-gray-800">
-                    {{ __('Join thousands of users who’ve transformed their eating habits. Whether you aim to lose weight, gain muscle, or simply eat healthier—Calorize is your partner every step of the way.') }}
+                    {{ __('Your best self is just around the corner. Imagine how confident you’ll feel after just one month of progress.') }}
                 </p>
                 <a
                     href="{{ route('register') }}"
@@ -183,24 +176,33 @@
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-amber-900" data-aos="fade-up">
                 {{ __('Reviews from our users') }}
             </h2>
+            <p class="text-lg max-w-3xl mx-auto text-center mb-8 text-gray-800">
+                {{ __('Every review tells a story of transformation. Here are a few journeys that started with just one step: joining Calorize.') }}
+            </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="200">
                 <!-- Review 1 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-                    <p class="italic text-gray-700 leading-relaxed">
-                        {{ __('“Calorize has become my indispensable assistant in losing weight. Now I can easily control my diet and see results!”') }}
-                    </p>
-                    <p class="text-right font-semibold mt-4 text-amber-800">
-                        – {{ __('Olha, 29 years old') }}
-                    </p>
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow flex items-center space-x-4">
+                    <img src="/images/reviews/avatar_woman_optimized.png" alt="{{ __('Olha avatar') }}" class="w-16 h-16 rounded-full shadow-md">
+                    <div>
+                        <p class="italic text-gray-700 leading-relaxed">
+                            {{ __('“Calorize is like a compass for my health. It shows me the right direction and keeps me on track.”') }}
+                        </p>
+                        <p class="text-right font-semibold mt-4 text-amber-800">
+                            – {{ __('Olha, 29 years old') }}
+                        </p>
+                    </div>
                 </div>
                 <!-- Review 2 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-                    <p class="italic text-gray-700 leading-relaxed">
-                        {{ __('“Finally, an app that meets all my needs. Convenient interface, a huge product database, and the motivation to stick to my plan!”') }}
-                    </p>
-                    <p class="text-right font-semibold mt-4 text-amber-800">
-                        – {{ __('Dmytro, 35 years old') }}
-                    </p>
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow flex items-center space-x-4">
+                    <img src="/images/reviews/avatar_man_optimized.png" alt="{{ __('Dmytro avatar') }}" class="w-16 h-16 rounded-full shadow-md">
+                    <div>
+                        <p class="italic text-gray-700 leading-relaxed">
+                            {{ __('“Finally, an app that meets all my needs. Convenient interface, a huge product database, and the motivation to stick to my plan!”') }}
+                        </p>
+                        <p class="text-right font-semibold mt-4 text-amber-800">
+                            – {{ __('Dmytro, 35 years old') }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -213,66 +215,103 @@
             <div class="relative">
                 <div class="carousel flex overflow-x-auto space-x-6 pb-3" data-aos="fade-up" data-aos-delay="200">
                     <!-- Blog Card 1 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
-                            {{ __('5 tips for effective weight loss') }}
-                        </h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            {{ __('Learn how to achieve your ideal weight without harming your health.') }}
-                        </p>
-                        <a
-                            href="{{ route('blog-2') }}"
-                            class="text-amber-700 hover:underline mt-4 inline-block font-medium"
-                        >
-                            {{ __('Read more') }}
-                        </a>
+                    <div class="bg-white rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <img
+                            src="/blog/blog-1.webp"
+                            alt="{{ __('5 tips for effective weight loss') }}"
+                            class="w-full h-40 object-cover rounded-t-xl"
+                        />
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4 text-amber-800">
+                                {{ __('5 tips for effective weight loss') }}
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                {{ __('Learn how to achieve your ideal weight without harming your health.') }}
+                            </p>
+                            <a
+                                href="{{ route('blog-2') }}"
+                                class="text-amber-700 hover:underline mt-4 inline-block font-medium"
+                            >
+                                {{ __('Read more') }}
+                            </a>
+                        </div>
                     </div>
                     <!-- Blog Card 2 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
-                            {{ __('How to count calories correctly?') }}
-                        </h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            {{ __('Step by step: Learn how calorie counting can change your life.') }}
-                        </p>
-                        <a
-                            href="{{ route('blog-1') }}"
-                            class="text-amber-700 hover:underline mt-4 inline-block font-medium"
-                        >
-                            {{ __('Read more') }}
-                        </a>
+                    <div class="bg-white rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <img
+                            src="/blog/blog-2.webp"
+                            alt="{{ __('How to count calories correctly?') }}"
+                            class="w-full h-40 object-cover rounded-t-xl"
+                        />
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4 text-amber-800">
+                                {{ __('How to count calories correctly?') }}
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                {{ __('Step by step: Learn how calorie counting can change your life.') }}
+                            </p>
+                            <a
+                                href="{{ route('blog-1') }}"
+                                class="text-amber-700 hover:underline mt-4 inline-block font-medium"
+                            >
+                                {{ __('Read more') }}
+                            </a>
+                        </div>
                     </div>
                     <!-- Blog Card 3 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
-                            {{ __('Top 10 healthy foods') }}
-                        </h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            {{ __('A list of foods that will help you stay healthy and active.') }}
-                        </p>
-                        <a
-                            href="{{ route('blog-3') }}"
-                            class="text-amber-700 hover:underline mt-4 inline-block font-medium"
-                        >
-                            {{ __('Read more') }}
-                        </a>
+                    <div class="bg-white rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <img
+                            src="/blog/blog-3.webp"
+                            alt="{{ __('Top 10 healthy foods') }}"
+                            class="w-full h-40 object-cover rounded-t-xl"
+                        />
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4 text-amber-800">
+                                {{ __('Top 10 healthy foods') }}
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                {{ __('A list of foods that will help you stay healthy and active.') }}
+                            </p>
+                            <a
+                                href="{{ route('blog-3') }}"
+                                class="text-amber-700 hover:underline mt-4 inline-block font-medium"
+                            >
+                                {{ __('Read more') }}
+                            </a>
+                        </div>
                     </div>
                     <!-- Blog Card 4 -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
-                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
-                            {{ __('Why is water important for weight loss?') }}
-                        </h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            {{ __('Find out why water is your best ally in weight management.') }}
-                        </p>
-                        <a
-                            href="{{ route('blog-4') }}"
-                            class="text-amber-700 hover:underline mt-4 inline-block font-medium"
-                        >
-                            {{ __('Read more') }}
-                        </a>
+                    <div class="bg-white rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <img
+                            src="/blog/blog-4.webp"
+                            alt="{{ __('Why is water important for weight loss?') }}"
+                            class="w-full h-40 object-cover rounded-t-xl"
+                        />
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4 text-amber-800">
+                                {{ __('Why is water important for weight loss?') }}
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                {{ __('Find out why water is your best ally in weight management.') }}
+                            </p>
+                            <a
+                                href="{{ route('blog-4') }}"
+                                class="text-amber-700 hover:underline mt-4 inline-block font-medium"
+                            >
+                                {{ __('Read more') }}
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <!-- View All Articles Button -->
+            <div class="text-center mt-8">
+                <a
+                    href="{{ route('blog') }}"
+                    class="bg-amber-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-amber-800 transition-colors"
+                >
+                    {{ __('View All Articles') }}
+                </a>
             </div>
         </section>
 
