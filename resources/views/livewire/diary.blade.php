@@ -1,10 +1,10 @@
 @php use Illuminate\Support\Str; @endphp
-<div x-data="diaryApp()" class="mb-10" @select-product.window="addProduct($event.detail)">
+<div x-data="diaryApp()" class="mb-10" @select-product.window="addProduct($event.detail)" x-cloak>
 
     @section('title', __('Diary'))
 
     {{--    success message--}}
-    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4" x-cloak></div>
+    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4"></div>
 
 {{--    errors--}}
     <div class="text-red-600">
