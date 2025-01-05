@@ -8,6 +8,7 @@ use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use App\Livewire\UpdateRecipe;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
@@ -25,11 +26,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::view('profile', 'profile')
         ->middleware(['auth'])
         ->name('profile');
-
-    Route::get('switch-language/{lang}', function ($lang) {
-        session(['locale' => $lang]);
-        return redirect()->back();
-    })->name('switch-language');
 
     require __DIR__ . '/auth.php';
 
@@ -75,4 +71,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/privacy', function () {
         return view('pages.privacy');
     })->name('privacy');
+
+    Livewire::setUpdateRoute(function ($handle) { return Route::post('/livewire/update', $handle); });
 });
+
