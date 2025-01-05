@@ -8,8 +8,9 @@ use App\Livewire\ProductIndex;
 use App\Livewire\Statistic;
 use App\Livewire\UpdateRecipe;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-Route::middleware([\App\Http\Middleware\SetLocale::class])->group(function () {
+Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
 
     Route::view('/', 'pages.landing');
 
