@@ -1,4 +1,4 @@
-<div class="flex flex-col justify-center" x-data="recipeApp" @select-product.window="addProduct($event.detail)">
+<div class="flex flex-col justify-center" x-data="recipeApp" @select-product.window="addProduct($event.detail)" x-cloak>
 
     @section('title', isset($product) ? __('Edit Recipe') : __('Create Recipe'))
 
@@ -69,7 +69,17 @@
                             </tr>
                         </template>
                         <tr class="bg-gray-50">
-                            <td class="px-2 py-4 break-words">{{ __('Total') }}</td>
+                            <td class="px-2 py-4 flex items-center space-x-2">
+                                <span>{{ __('Total') }}</span>
+                                <!-- Tooltip Icon -->
+                                <div class="relative group">
+                                    <i class="fas fa-info-circle text-gray-400 cursor-pointer hover:text-gray-600"></i>
+                                    <!-- Tooltip Content -->
+                                    <div class="absolute left-1/2 -translate-x-1/2 mt-2 ml-4 w-64 bg-white text-gray-700 text-sm rounded-lg shadow-lg px-4 py-2 hidden group-hover:block z-10">
+                                        {{ __('Enter the total weight of the finished dish after cooking or adding water. Ensure to re-weigh the dish after any thermal processing or liquid addition to get accurate results.') }}
+                                    </div>
+                                </div>
+                            </td>
                             <td class="px-2 py-4">
                                 <input type="number" min="1"
                                        class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -83,19 +93,6 @@
                                 x-text="calculated.totalCarbohydrates"></td>
                             <td class="px-2 py-3 text-center whitespace-nowrap hidden sm:table-cell"
                                 x-text="calculated.totalCalories"></td>
-                            <td class="px-2 py-3 whitespace-nowrap"></td>
-                        </tr>
-                        <tr class="bg-gray-100">
-                            <td class="px-2 py-4 break-words">{{ __('Kcal per 100 gram') }}</td>
-                            <td class="px-2 py-4 hidden sm:table-cell"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                x-text="calculated.proteinsPer100g"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                x-text="calculated.fatsPer100g"></td>
-                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                x-text="calculated.carbohydratesPer100g"></td>
-                            <td class="px-2 py-3 text-center font-extrabold whitespace-nowrap"
-                                x-text="calculated.kcalPer100g"></td>
                             <td class="px-2 py-3 whitespace-nowrap"></td>
                         </tr>
                     </tbody>

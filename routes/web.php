@@ -72,6 +72,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         return view('pages.privacy');
     })->name('privacy');
 
-    Livewire::setUpdateRoute(function ($handle) { return Route::post('/livewire/update', $handle); });
+    Livewire::setUpdateRoute(function ($handle) {
+        return Route::post('/livewire/update', $handle);
+    });
 });
 
