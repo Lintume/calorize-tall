@@ -1,109 +1,149 @@
 <x-app-layout>
 
-    @section('title', __('Calorize - Your assistant in calorie control'))
+    @section('title', __('Calorize - Your Ultimate Path to Healthy Eating'))
 
     @section('meta')
         <meta name="description"
-              content="{{ __('Keep a calorie diary easily and effectively with our app. Control your diet, achieve your goals, and track your progress.') }}">
+              content="{{ __('Calorize is your intuitive daily calorie diary with an extensive product database (85,000+ items) from Ukrainian supermarkets and local dishes. Achieve your goals easily.') }}">
         <meta name="keywords"
-              content="{{ __('calorie diary, diet control, weight loss, healthy eating, calorie counting app') }}">
+              content="{{ __('calorie diary, diet control, weight loss, healthy eating, calorie counting app, Ukrainian cuisine, large product database') }}">
         <meta name="author" content="Calorize">
     @endsection
 
-    <!-- Main Header -->
-    <header class="bg-amber-700 text-white py-10 px-4">
+    <!-- Main Header with Gradient -->
+    <header class="
+        text-black
+        py-16
+        px-4
+        overflow-hidden
+        relative"
+            data-aos="fade-up" data-aos-duration="1000">
         <div class="container mx-auto text-center">
             <div class="flex flex-col items-center">
+
                 <!-- Logo -->
                 <img
                     src="/logo.png"
                     alt="Calorize Logo"
-                    class="w-28 h-24 object-cover mb-3"
+                    class="w-28 h-24 object-cover mb-4 z-10 relative"
                     style="object-position: top;"
+                    data-aos="zoom-in"
                 />
 
-                <!-- H1 Title -->
-                <h1 class="text-4xl md:text-5xl font-bold leading-tight">
-                    Calorize<br>
-                    {{ __('Your Companion for Healthy Eating') }}
+                <h1 class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-pink-800 mb-3">
+                    Calorize
+                </h1>
+                <!-- Heading -->
+                <h1 class="
+                    text-5xl
+                    md:text-6xl
+                    font-bold
+                    leading-tight
+                    mb-4
+                    relative
+                    z-10
+                " data-aos="fade-up" data-aos-delay="200">
+
+                    {{ __('The Easiest Way to Master Your Diet') }}
                 </h1>
 
                 <!-- Short Description -->
-                <p class="mt-4 text-lg max-w-xl mx-auto">
-                    {{ __('Reach your dietary goals faster using our handy') }}
-                    <a href="{{ route('register') }}" class="underline hover:text-amber-300">{{ __('calorie diary') }}</a>.
+                <p class="mt-2 text-lg max-w-2xl mx-auto font-sans relative z-10" data-aos="fade-up" data-aos-delay="400">
+                    {{ __('Discover a whole new level of simplicity in tracking your nutrition. With an impressive database of over 85,000 items—from supermarket staples to homemade Ukrainian recipes—Calorize has you covered.') }}
                 </p>
 
-                <!-- Action Button -->
+                <!-- Call-to-Action Button -->
                 <a
                     href="{{ route('register') }}"
-                    class="mt-6 inline-block bg-white text-amber-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-amber-100 transition-colors"
+                    class="
+                        mt-8
+                        inline-block
+                        bg-white
+                        text-amber-700
+                        font-semibold
+                        px-8
+                        py-3
+                        rounded-full
+                        shadow-lg
+                        hover:bg-amber-100
+                        transition-colors
+                        relative
+                        z-10
+                    "
+                    data-aos="fade-up" data-aos-delay="600"
                 >
-                    {{ __('Register now') }}
+                    {{ __('Register Now') }}
                 </a>
             </div>
         </div>
     </header>
 
-
     <!-- Main Content -->
-    <div class="py-12">
+    <div class="font-sans">
 
-        <!-- Why Calorize Section -->
-        <section class="container mx-auto px-4 py-8 bg-amber-50 rounded-md">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
-                {{ __('Why choose Calorize?') }}
+        <!-- Why Choose Calorize -->
+        <section class="container mx-auto px-4 py-8 bg-amber-50 rounded-lg shadow-lg">
+            <h2 class="
+                text-4xl
+                md:text-5xl
+                font-fancy-heading
+                font-bold
+                text-center
+                mb-12
+                text-amber-900
+            " data-aos="fade-up">
+                {{ __('Why Choose Calorize?') }}
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
 
-                <!-- Card 1: Calorie Calculation -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="100">
                     <a href="{{ route('personal') }}" class="block">
-                        <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
-                            <i class="fa-solid fa-calculator text-2xl text-amber-700"></i>
-                            <span>{{ __('Calorie calculation') }}</span>
+                        <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
+                            <i class="fa-solid fa-calendar-check text-2xl"></i>
+                            <span>{{ __('Intuitive Daily Diary') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Determine your daily calorie norm in seconds using scientific formulas.') }}
+                            {{ __('Log your meals in seconds without any hassle. We’ve streamlined the process so you can focus on your goals—not on tedious data entry.') }}
                         </p>
                     </a>
                 </div>
 
-                <!-- Card 2: Large Product Database -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="200">
                     <a href="{{ route('product.index') }}" class="block">
-                        <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
-                            <i class="fa-solid fa-apple-whole text-2xl text-amber-700"></i>
-                            <span>{{ __('Large product database') }}</span>
+                        <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
+                            <i class="fa-solid fa-apple-whole text-2xl"></i>
+                            <span>{{ __('85,000+ Products') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Search thousands of products with detailed information about calories, proteins, fats, and carbohydrates.') }}
+                            {{ __('Access the largest collection of items—from everyday supermarket brands to iconic Ukrainian dishes. Track calories, proteins, fats, and carbs with ease.') }}
                         </p>
                     </a>
                 </div>
 
-                <!-- Card 3: Progress Charts -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-                    <a href="{{ route('statistic') }}" class="block">
-                        <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
-                            <i class="fa-solid fa-chart-line text-2xl text-amber-700"></i>
-                            <span>{{ __('Progress charts') }}</span>
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            {{ __('Monitor your weight and macronutrients with convenient charts.') }}
-                        </p>
-                    </a>
-                </div>
-
-                <!-- Card 4: Custom Recipes -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="300">
                     <a href="{{ route('recipe.index') }}" class="block">
-                        <h3 class="text-xl font-semibold mb-2 flex items-center space-x-4">
-                            <i class="fa-solid fa-utensils text-2xl text-amber-700"></i>
-                            <span>{{ __('Custom recipes') }}</span>
+                        <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
+                            <i class="fa-solid fa-utensils text-2xl"></i>
+                            <span>{{ __('Surgical Recipe Precision') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Create your own recipes and automatically calculate their calories.') }}
+                            {{ __('Create or combine your own recipes with pinpoint accuracy. Include existing recipes as ingredients, account for cooking methods, and let Calorize handle the math.') }}
+                        </p>
+                    </a>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="400">
+                    <a href="{{ route('statistic') }}" class="block">
+                        <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
+                            <i class="fa-solid fa-chart-line text-2xl"></i>
+                            <span>{{ __('Visual Progress Tracking') }}</span>
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            {{ __('Stay motivated with clear graphs that display your progress. Monitor weight changes, macros, and more—all in a single dashboard.') }}
                         </p>
                     </a>
                 </div>
@@ -111,64 +151,64 @@
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section class="bg-amber-100 py-12 mt-12 rounded-lg">
+        <!-- Call to Action -->
+        <section class="bg-gradient-to-r from-red-100 to-yellow-100 py-14 mt-12 rounded-lg shadow-md" data-aos="zoom-in">
             <div class="container mx-auto text-center px-4">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                    {{ __('Start your journey to healthy eating today!') }}
+                <h2 class="text-4xl md:text-5xl font-fancy-heading font-bold mb-6 text-amber-900">
+                    {{ __('Take Control of Your Diet Today!') }}
                 </h2>
-                <p class="text-lg max-w-2xl mx-auto mb-6 leading-relaxed">
-                    {{ __('Calorize helps you become the best version of yourself. Simple, convenient, and effective.') }}
+                <p class="text-lg max-w-3xl mx-auto mb-8 leading-relaxed text-gray-800">
+                    {{ __('Join thousands of users who’ve transformed their eating habits. Whether you aim to lose weight, gain muscle, or simply eat healthier—Calorize is your partner every step of the way.') }}
                 </p>
                 <a
                     href="{{ route('register') }}"
-                    class="bg-amber-700 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-amber-800 transition-colors"
+                    class="bg-amber-700 text-white font-semibold px-8 py-3 rounded-full shadow-xl hover:bg-amber-800 transition-colors"
                 >
-                    {{ __('Create an account') }}
+                    {{ __('Create My Account') }}
                 </a>
             </div>
         </section>
 
-        <!-- Відгуки -->
-        <section class="container mx-auto py-12 px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
+        <!-- Reviews Section -->
+        <section class="container mx-auto py-12 px-4 bg-amber-50 rounded-lg shadow-lg mt-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-amber-900" data-aos="fade-up">
                 {{ __('Reviews from our users') }}
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Відгук 1 -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-                    <p class="italic text-gray-700">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="200">
+                <!-- Review 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
+                    <p class="italic text-gray-700 leading-relaxed">
                         {{ __('“Calorize has become my indispensable assistant in losing weight. Now I can easily control my diet and see results!”') }}
                     </p>
-                    <p class="text-right font-semibold mt-4 text-gray-800">
+                    <p class="text-right font-semibold mt-4 text-amber-800">
                         – {{ __('Olha, 29 years old') }}
                     </p>
                 </div>
-                <!-- Відгук 2 -->
-                <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-                    <p class="italic text-gray-700">
+                <!-- Review 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
+                    <p class="italic text-gray-700 leading-relaxed">
                         {{ __('“Finally, an app that meets all my needs. Convenient interface, a huge product database, and the motivation to stick to my plan!”') }}
                     </p>
-                    <p class="text-right font-semibold mt-4 text-gray-800">
+                    <p class="text-right font-semibold mt-4 text-amber-800">
                         – {{ __('Dmytro, 35 years old') }}
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- Блог (карусель) -->
-        <section class="container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">
+        <!-- Blog Section -->
+        <section class="container mx-auto py-16 px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-amber-900" data-aos="fade-up">
                 {{ __('Our Blog') }}
             </h2>
             <div class="relative">
-                <div class="carousel flex overflow-x-auto space-x-4">
-                    <!-- Картка блогу 1 -->
-                    <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
-                        <h3 class="text-xl font-semibold mb-2">
+                <div class="carousel flex overflow-x-auto space-x-6 pb-3" data-aos="fade-up" data-aos-delay="200">
+                    <!-- Blog Card 1 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
                             {{ __('5 tips for effective weight loss') }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600 leading-relaxed">
                             {{ __('Learn how to achieve your ideal weight without harming your health.') }}
                         </p>
                         <a
@@ -178,13 +218,12 @@
                             {{ __('Read more') }}
                         </a>
                     </div>
-
-                    <!-- Картка блогу 2 -->
-                    <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
-                        <h3 class="text-xl font-semibold mb-2">
+                    <!-- Blog Card 2 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
                             {{ __('How to count calories correctly?') }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600 leading-relaxed">
                             {{ __('Step by step: Learn how calorie counting can change your life.') }}
                         </p>
                         <a
@@ -194,13 +233,12 @@
                             {{ __('Read more') }}
                         </a>
                     </div>
-
-                    <!-- Картка блогу 3 -->
-                    <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
-                        <h3 class="text-xl font-semibold mb-2">
+                    <!-- Blog Card 3 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
                             {{ __('Top 10 healthy foods') }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600 leading-relaxed">
                             {{ __('A list of foods that will help you stay healthy and active.') }}
                         </p>
                         <a
@@ -210,13 +248,12 @@
                             {{ __('Read more') }}
                         </a>
                     </div>
-
-                    <!-- Картка блогу 4 -->
-                    <div class="bg-white p-6 rounded-lg shadow w-[300px] flex-shrink-0 hover:shadow-lg transition-shadow">
-                        <h3 class="text-xl font-semibold mb-2">
+                    <!-- Blog Card 4 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg w-[300px] flex-shrink-0 hover:shadow-2xl transition-shadow">
+                        <h3 class="text-xl font-semibold mb-4 text-amber-800">
                             {{ __('Why is water important for weight loss?') }}
                         </h3>
-                        <p class="text-gray-600">
+                        <p class="text-gray-600 leading-relaxed">
                             {{ __('Find out why water is your best ally in weight management.') }}
                         </p>
                         <a
@@ -229,6 +266,7 @@
                 </div>
             </div>
         </section>
+
 
     </div>
 

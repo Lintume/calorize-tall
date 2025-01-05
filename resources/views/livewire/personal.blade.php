@@ -1,4 +1,4 @@
-<div x-data="personalApp()" class="mb-10">
+<div x-data="personalApp()" class="mb-10" x-cloak>
 
     @section('title', __('Personal'))
 

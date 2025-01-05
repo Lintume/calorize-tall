@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        @yield('meta')
-
         <title>
             @yield('title', config('app.name'))
         </title>
@@ -58,6 +56,8 @@
 
             gtag('config', 'G-3LXEJPCRR0');
         </script>
+
+        @yield('meta')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-neutral-50 flex flex-col">
