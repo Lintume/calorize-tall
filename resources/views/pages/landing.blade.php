@@ -18,6 +18,11 @@
         overflow-hidden
         relative"
             data-aos="fade-up" data-aos-duration="1000">
+
+        <!-- Decorative Floating Shapes -->
+        <div class="absolute -top-10 -left-20 w-48 h-48 bg-amber-300 rounded-full opacity-30 animate-float"></div>
+        <div class="absolute top-20 right-20 w-32 h-32 bg-pink-200 rounded-full opacity-30 animate-float"></div>
+
         <div class="container mx-auto text-center">
             <div class="flex flex-col items-center">
 
@@ -25,7 +30,7 @@
                 <img
                     src="/logo.png"
                     alt="Calorize Logo"
-                    class="w-28 h-24 object-cover mb-4 z-10 relative"
+                    class="w-64 h-56 object-cover mb-4 z-10 relative"
                     style="object-position: top;"
                     data-aos="zoom-in"
                 />
@@ -79,7 +84,11 @@
     </header>
 
     <!-- Main Content -->
-    <div class="font-sans">
+    <div class="font-sans relative">
+
+        <!-- Decorative Floating Shapes for Section -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-pink-300 rounded-full opacity-20 animate-float"></div>
+        <div class="absolute bottom-0 right-0 w-48 h-48 bg-amber-400 rounded-full opacity-30 animate-float"></div>
 
         <!-- Why Choose Calorize -->
         <section class="container mx-auto px-4 py-8 bg-amber-50 rounded-lg shadow-lg">
@@ -95,7 +104,7 @@
                 {{ __('Why Choose Calorize?') }}
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-
+                <!-- Cards -->
                 <!-- Card 1 -->
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="100">
                     <a href="{{ route('personal') }}" class="block">
@@ -266,7 +275,6 @@
                 </div>
             </div>
         </section>
-
 
     </div>
 
