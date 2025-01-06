@@ -96,7 +96,8 @@
                             <td class="px-2 py-3 whitespace-nowrap"></td>
                         </tr>
                         <tr class="bg-gray-100">
-                            <td class="px-2 py-4 break-words">{{ __('Kcal per 100 gram') }}</td>
+                            <td class="px-2 py-4 break-words sm:hidden">{{ __('Kcal per 100 gram') }}</td>
+                            <td class="px-2 py-4 break-words hidden sm:table-cell">{{ __('Per 100 gram') }}</td>
                             <td class="px-2 py-4 hidden sm:table-cell"></td>
                             <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
                                 x-text="calculated.proteinsPer100g"></td>
