@@ -165,16 +165,23 @@
             </div>
         </div>
     </div>
-    <div @click="showRemainingCalories = !showRemainingCalories"
-         :class="{
-        'bg-green-600': showRemainingCalories && remainingCalories >= 0,
-        'bg-red-600': showRemainingCalories && remainingCalories < 0,
-        'bg-yellow-600': !showRemainingCalories
-        }"
-         class="fixed bottom-0 right-0 mb-4 mr-4 w-20 h-20  rounded-full z-50 flex flex-col items-center justify-center bg-opacity-75 text-white">
-        <div x-show="!showRemainingCalories" class="font-bold" x-text="totalCalories"></div>
-        <div x-show="showRemainingCalories" class="font-bold" x-text="remainingCalories"></div>
-        <div class="text-xs">Ккал</div>
+    <div @click="toggleRemainingCalories">
+        <div @mouseover="showTooltip = true" @mouseleave="showTooltip = false"
+             :class="{
+            'bg-green-600': showRemainingCalories && remainingCalories >= 0,
+            'bg-red-600': showRemainingCalories && remainingCalories < 0,
+            'bg-yellow-600': !showRemainingCalories
+         }"
+             class="fixed bottom-0 right-0 mb-4 mr-4 w-20 h-20 rounded-full z-50 flex flex-col items-center justify-center bg-opacity-75 text-white">
+            <div x-show="!showRemainingCalories" class="font-bold" x-text="totalCalories"></div>
+            <div x-show="showRemainingCalories" class="font-bold" x-text="remainingCalories"></div>
+            <div class="text-xs">{{ __('Kcal') }}</div>
+        </div>
+        <div x-show="showTooltip" class="absolute bottom-24 right-0 mb-4 mr-4 w-48 p-2 bg-gray-800 text-white rounded shadow-lg">
+            <div class="flex justify-between items-center">
+                <span>{{ __('Click circle to see remaining calories') }}</span>
+            </div>
+        </div>
     </div>
     <x-loading-screen/>
 </div>
@@ -188,6 +195,7 @@
 
             totalCalories: 0,
             remainingCalories: 0,
+            showTooltip: false,
 
             totalFats: 0,
             totalProteins: 0,
@@ -283,6 +291,13 @@
                     this.foodIntakes[this.active].products.push(this.formProductAsFoodIntake(product[0]));
                     this.createProductForm = false;
                 });
+
+                const lastShown = localStorage.getItem('tooltipLastShown');
+                const now = new Date();
+                if (!lastShown || (now - new Date(lastShown)) > 30 * 24 * 60 * 60 * 1000) {
+                    this.showTooltip = true;
+                    localStorage.setItem('tooltipLastShown', now);
+                }
             },
             calculate() {
                 for (let key in this.foodIntakes) {
@@ -331,6 +346,11 @@
 
             save() {
                 this.$wire.call('save', this.foodIntakes, this.measurements);
+            },
+
+            toggleRemainingCalories() {
+                this.showRemainingCalories = !this.showRemainingCalories;
+                this.showTooltip = false;
             }
         }
     }

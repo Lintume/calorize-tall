@@ -141,7 +141,7 @@
                            class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height and DOB') }}</p>
                     </div>
                     <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Calorie consumption per day minus desirable deficit') }}</p>
+                        <p class="text-sm font-medium text-gray-700">{{ __('Your daily calorie limit based on desirable deficit') }}</p>
                         <p x-text="calculated.kcal_per_day" class="text-lg font-bold"></p>
                         <p x-show="error.kcal_per_day"
                            class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height, DOB and deficit kcal.') }}</p>
