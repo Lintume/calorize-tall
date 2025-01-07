@@ -90,12 +90,36 @@
                         <p x-text="calculated.BMI" class="text-lg font-bold"></p>
                         <p x-show="error.BMI"
                            class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight and growth.') }}</p>
+                        <p x-show="!error.BMI && calculated.BMI < 18.5" class="text-xs text-gray-500">{{ __('Underweight') }}</p>
+                        <p x-show="!error.BMI && calculated.BMI >= 18.5 && calculated.BMI < 24.9" class="text-xs text-gray-500">{{ __('Normal weight') }}</p>
+                        <p x-show="!error.BMI && calculated.BMI >= 25 && calculated.BMI < 29.9" class="text-xs text-gray-500">{{ __('Overweight') }}</p>
+                        <p x-show="!error.BMI && calculated.BMI >= 30 && calculated.BMI < 34.9" class="text-xs text-gray-500">{{ __('Obesity I') }}</p>
+                        <p x-show="!error.BMI && calculated.BMI >= 35 && calculated.BMI < 39.9" class="text-xs text-gray-500">{{ __('Obesity II') }}</p>
+                        <p x-show="!error.BMI && calculated.BMI >= 40" class="text-xs text-gray-500">{{ __('Obesity III') }}</p>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-700">{{ __('Fat percent') }}</p>
                         <p x-text="calculated.fat_percent + '%'" class="text-lg font-bold"></p>
                         <p x-show="error.fat_percent"
                            class="text-red-600 text-xs">{{ __('Insufficient data. Please fill waist, neck, hips (for women), height and birth date.') }}</p>
+                        <template x-if="!error.fat_percent && user.sex === 'male'">
+                            <div>
+                                <p x-show="calculated.fat_percent < 6" class="text-xs text-gray-500">{{ __('Essential fat') }}</p>
+                                <p x-show="calculated.fat_percent >= 6 && calculated.fat_percent < 14" class="text-xs text-gray-500">{{ __('Athletes') }}</p>
+                                <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 18" class="text-xs text-gray-500">{{ __('Fitness') }}</p>
+                                <p x-show="calculated.fat_percent >= 18 && calculated.fat_percent < 25" class="text-xs text-gray-500">{{ __('Average') }}</p>
+                                <p x-show="calculated.fat_percent >= 25" class="text-xs text-gray-500">{{ __('Obese') }}</p>
+                            </div>
+                        </template>
+                        <template x-if="!error.fat_percent && user.sex === 'female'">
+                            <div>
+                                <p x-show="calculated.fat_percent < 14" class="text-xs text-gray-500">{{ __('Essential fat') }}</p>
+                                <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 21" class="text-xs text-gray-500">{{ __('Athletes') }}</p>
+                                <p x-show="calculated.fat_percent >= 21 && calculated.fat_percent < 25" class="text-xs text-gray-500">{{ __('Fitness') }}</p>
+                                <p x-show="calculated.fat_percent >= 25 && calculated.fat_percent < 32" class="text-xs text-gray-500">{{ __('Average') }}</p>
+                                <p x-show="calculated.fat_percent >= 32" class="text-xs text-gray-500">{{ __('Obese') }}</p>
+                            </div>
+                        </template>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-700">{{ __('Basal metabolic rate (BMR)') }}</p>
