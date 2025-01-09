@@ -63,7 +63,7 @@
 
                 <section class="my-8">
                     <h2 class="text-xl font-semibold mb-4">{{ __('How to contact us?') }}</h2>
-                    <p class="mb-4">{{ __('If you have questions about this privacy policy or your data, contact us at:') }} <a href="mailto:lintume@gmail.com" class="text-blue-500 underline">lintume@gmail.com</a>.</p>
+                    <p class="mb-4">{{ __('If you have questions about this privacy policy or your data, contact us at:') }} <a href="hey@calorize.com.ua" class="text-blue-500 underline">hey@calorize.com.ua</a>.</p>
                 </section>
 
                 <section class="my-8">

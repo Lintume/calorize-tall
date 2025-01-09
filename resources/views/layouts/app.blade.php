@@ -90,7 +90,7 @@
                     <div>
                         <p class="text-gray-500 text-sm">
                             &copy; {{ date('Y') }}
-                            <a href="https://www.linkedin.com/in/lialia-sakhno/" class="hover:text-gray-700">
+                            <a href="hey@calorize.com.ua" class="hover:text-gray-700">
                                 {{ __('Lialia') }}
                             </a> &
                             <a href="https://www.linkedin.com/in/ulianasakhnoqa/" class="hover:text-gray-700">
