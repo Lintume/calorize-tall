@@ -47,12 +47,21 @@ class Product extends Model
         }
         return $query
             ->where(function ($query) use ($search) {
+                // FULLTEXT пошук
                 $query->whereRaw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", [$search])
-                    ->orWhere('title', 'LIKE', '%' . $search . '%'); // Додаємо частковий збіг
+                    ->orWhere('title', 'LIKE', '%' . $search . '%'); // Частковий збіг
+
+                // Якщо запит є числом, шукаємо в числових полях
+                if (is_numeric($search)) {
+                    $query->orWhere('proteins', $search)
+                        ->orWhere('fats', $search)
+                        ->orWhere('carbohydrates', $search)
+                        ->orWhere('calories', $search);
+                }
             })
             ->orderByRaw("
             CASE
-                WHEN title = ? THEN 1   -- Повний збіг має найвищий пріоритет
+                WHEN title = ? THEN 1   -- Повний збіг
                 WHEN title LIKE ? THEN 2 -- Частковий збіг
                 ELSE 3                  -- Інші результати
             END", [$search, '%' . $search . '%'])
