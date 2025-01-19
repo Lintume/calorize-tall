@@ -92,6 +92,13 @@ Calorize is a comprehensive health tracker application designed to help users ma
     php artisan translatable:export uk,en
     ```
 
+13.**Create dump DB on prod**:
+    ```sh
+    ssh root@185.67.0.147
+    mysqldump -u root -p calorize > /var/www/calorize-tall/19_01_25_calorize.sql
+
+    ```
+
 ## Usage
 
 ### Authentication
