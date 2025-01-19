@@ -55,6 +55,9 @@ class ProductIndex extends Component
             ->where('base', !$this->isRecipesRequest)
             ->search($this->search)
             ->orderBy('user_id', 'desc')
+            ->when(!$this->search && !$this->isRecipesRequest, function ($query) { // Randomize products only when no search query is provided
+                $query->orderByRaw('rand()');
+            })
             ->simplePaginate(25);
 
         return view('livewire.product-index', [

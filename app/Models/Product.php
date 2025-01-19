@@ -42,12 +42,21 @@ class Product extends Model
 
     public function scopeSearch($query, $search)
     {
-        return $query->where(function ($query) use ($search) {
-            $query->where('title', 'like', '%' . $search . '%')
-                ->orWhere('proteins', 'like', '%' . $search . '%')
-                ->orWhere('fats', 'like', '%' . $search . '%')
-                ->orWhere('carbohydrates', 'like', '%' . $search . '%')
-                ->orWhere('calories', 'like', '%' . $search . '%');
-        });
+        if (empty($search)) {
+            return $query;
+        }
+        return $query
+            ->where(function ($query) use ($search) {
+                $query->whereRaw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", [$search])
+                    ->orWhere('title', 'LIKE', '%' . $search . '%'); // Додаємо частковий збіг
+            })
+            ->orderByRaw("
+            CASE
+                WHEN title = ? THEN 1   -- Повний збіг має найвищий пріоритет
+                WHEN title LIKE ? THEN 2 -- Частковий збіг
+                ELSE 3                  -- Інші результати
+            END", [$search, '%' . $search . '%'])
+            ->orderByRaw("LENGTH(title) ASC") // Найкоротші тайтли мають пріоритет
+            ->orderByRaw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE) DESC", [$search]); // Релевантність
     }
 }
