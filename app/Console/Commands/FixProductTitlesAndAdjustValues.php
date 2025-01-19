@@ -16,7 +16,7 @@ class FixProductTitlesAndAdjustValues extends Command
         $openAi = \OpenAI::client(env('OPENAI_API_KEY'));
 
         $batchSize = 50; // Number of products to process at once
-        Product::chunk($batchSize, function ($products) use ($openAi) {
+        Product::where('id', '>', 10801)->chunk($batchSize, function ($products) use ($openAi) {
             $titles = $products->pluck('title')->toArray();
             $this->info('Processing IDs: ' . $products->first()->id . ' - ' . $products->last()->id);
 
@@ -32,6 +32,7 @@ class FixProductTitlesAndAdjustValues extends Command
 - If a title is already correct, leave it unchanged.
 - If you are unsure about a correction - skip it, correct only very obvious mistakes.
 - Replace Russian-origin words with their correct Ukrainian counterparts. Example: \'Напиток\' -> \'Напій\', \'Масло сливочное\' -> \'Вершкове масло\'.
+- Always capitalize the first letter of the fist word of the title.
 
 Return the corrected array of titles. Be sure that the number of titles and order of titles in the array remain the same.
 
