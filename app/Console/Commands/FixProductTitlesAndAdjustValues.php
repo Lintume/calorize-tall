@@ -17,7 +17,7 @@ class FixProductTitlesAndAdjustValues extends Command
         $openAi = \OpenAI::client(env('OPENAI_API_KEY'));
 
         $batchSize = 50; // Number of products to process at once
-        Product::where('id', '>', 33701)->chunk($batchSize, function ($products) use ($openAi) {
+        Product::where('id', '>', 49600)->chunk($batchSize, function ($products) use ($openAi) {
             $titles = $products->pluck('title')->toArray();
             $this->info('Processing IDs: ' . $products->first()->id . ' - ' . $products->last()->id);
 
