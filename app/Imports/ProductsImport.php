@@ -2,23 +2,39 @@
 
 namespace App\Imports;
 
-use App\Models\Product;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\ToArray;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class ProductsImport implements ToModel, WithHeadingRow
+class ProductsImport implements ToArray, WithHeadingRow, WithChunkReading
 {
-    public function model(array $row)
+    public function array(array $rows)
     {
-        return new Product([
-            'title' => $row['title'],
-            'proteins' => $row['proteins'],
-            'fats' => $row['fats'],
-            'carbohydrates' => $row['carbohydrates'],
-            'calories' => $row['calories'],
-            'base' => $row['base'] ?? null,
-            'user_id' => null,
-            'total_weight' => $row['total_weight'] ?? null,
-        ]);
+        $data = [];
+        $now = now();
+
+        foreach ($rows as $row) {
+            $data[] = [
+                'title' => $row['title'],
+                'slug' => $row['slug'],
+                'proteins' => $row['proteins'],
+                'fats' => $row['fats'],
+                'carbohydrates' => $row['carbohydrates'],
+                'calories' => $row['calories'],
+                'base' => $row['base'] ?? null,
+                'user_id' => null,
+                'total_weight' => $row['total_weight'] ?? null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        DB::table('products')->insert($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }
