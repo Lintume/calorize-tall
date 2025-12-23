@@ -1,0 +1,249 @@
+# Calorize - Health & Nutrition Tracker
+
+## Project Overview
+
+Calorize is a Ukrainian health tracker application for managing calorie intake, weight tracking, body measurements, and custom recipe creation. Built with the TALL stack, it features an extensive product database (85,000+ items) tailored to Ukrainian supermarkets and local cuisine.
+
+**Live Application**: A production health/fitness app with real users
+**Target Audience**: Ukrainian-speaking users focused on healthy eating and weight management
+
+---
+
+## Tech Stack
+
+### Backend
+- **PHP 8.2+** with **Laravel 11**
+- **Livewire 3** for reactive components
+- **Volt** for single-file Livewire components (when applicable)
+- **MySQL** with FULLTEXT search indexes
+- **OpenAI PHP** for AI features (planned)
+- **Maatwebsite Excel** for product imports
+- **Laravel Localization** (mcamara/laravel-localization) for i18n
+
+### Frontend
+- **Tailwind CSS 3** with `@tailwindcss/forms` plugin
+- **Alpine.js** for reactive UI behavior
+- **Vite 5** for asset bundling
+- **FontAwesome 6** for icons
+- **Chart.js** for statistics visualization
+- **AOS (Animate On Scroll)** for landing page animations
+- **Inter** font family
+
+### Testing
+- **PHPUnit 11** for feature and unit tests
+- **Symfony Panther** for browser testing
+
+### Dev Tools
+- **Laravel Pint** for code formatting
+- **Laravel Debugbar** for debugging
+- **Laravel Pail** for log tailing
+
+---
+
+## Architecture & Conventions
+
+### Directory Structure
+```
+app/
+├── Console/Commands/     # Artisan commands (data parsing, seeding, sitemap)
+├── Http/Controllers/     # Traditional controllers (Product CRUD)
+├── Livewire/             # Livewire components
+│   ├── Actions/          # Reusable Livewire actions
+│   ├── Forms/            # Form objects
+│   └── *.php             # Page components (Diary, Personal, Statistic, etc.)
+├── Models/               # Eloquent models
+├── Policies/             # Authorization policies
+└── View/Components/      # Blade components
+
+resources/views/
+├── components/           # Reusable Blade components
+├── layouts/              # App and guest layouts
+├── livewire/             # Livewire component views
+├── pages/                # Static pages (landing, about, privacy)
+├── blog/                 # Blog article views
+└── product/              # Product CRUD views
+```
+
+### Naming Conventions
+
+**Files & Classes**:
+- Livewire components: PascalCase (`ProductSearch.php`)
+- Blade views: kebab-case (`product-search.blade.php`)
+- Models: Singular PascalCase (`Product`, `FoodIntake`)
+- Controllers: PascalCase with Controller suffix (`ProductController`)
+- Migrations: snake_case with timestamps
+
+**Database**:
+- Tables: snake_case plural (`products`, `food_intake`, `measurements`)
+- Pivot tables: `singular_to_singular` format (`product_to_products`)
+- Foreign keys: `singular_id` format (`user_id`, `product_id`)
+
+### Livewire Patterns
+
+1. **Component Structure**:
+   - Use `#[Validate]` attributes for validation
+   - Dispatch events using `$this->dispatch('event-name', $data)`
+   - Use `mount()` for initialization
+   - Use `updated{Property}()` for reactive updates
+
+2. **Alpine.js Integration**:
+   - Complex client-side state in Alpine.js `x-data` objects
+   - Bridge with Livewire using `$wire` and `@select-product.window`
+   - Use `x-cloak` to prevent FOUC
+
+3. **View Pattern**:
+   ```blade
+   <div x-data="componentName()" @event.window="handler($event.detail)">
+       {{-- Content --}}
+   </div>
+   <script>
+   function componentName() {
+       return {
+           // State and methods
+           init() { /* initialization */ }
+       }
+   }
+   </script>
+   ```
+
+### Localization
+
+**Languages**: Ukrainian (uk) and English (en)
+
+**Translation Files**:
+- `resources/lang/uk.json` / `en.json` - JSON translations for UI strings
+- `resources/lang/uk/*.php` / `en/*.php` - PHP translations for pagination, etc.
+
+**Usage**:
+- Always wrap user-facing text: `{{ __('Text to translate') }}`
+- Use `LaravelLocalization::getLocalizedURL()` for hreflang tags
+- Routes are prefixed with locale: `/{locale}/dashboard`
+
+**Exporting translations**:
+```bash
+php artisan translatable:export uk,en
+```
+
+### Styling Conventions
+
+**Tailwind Classes** (ordered):
+1. Layout: `flex`, `grid`, `block`, positioning
+2. Sizing: `w-`, `h-`, `max-w-`
+3. Spacing: `m-`, `p-`, `space-`
+4. Typography: `text-`, `font-`
+5. Colors: `bg-`, `text-`, `border-`
+6. Effects: `shadow-`, `rounded-`, `hover:`
+
+**Color Palette**:
+- Primary: amber-700, amber-800 (buttons, accents)
+- Background: neutral-50, amber-50
+- Text: gray-700, gray-800, gray-500
+- Accents: green-600 (success), red-600 (error), yellow-600 (warning)
+- Macros: green-500 (proteins), red-500 (fats), yellow-500 (carbs)
+
+**Components**:
+- Use `<x-primary-button>`, `<x-secondary-button>` for buttons
+- Use `<x-input-error>` for form validation errors
+- Use `<x-loading-screen>` for loading states
+
+### Models
+
+**Product Model**:
+- Has sluggable trait (auto-generates slug from title)
+- `base` column: true for base products, false for user recipes
+- `user_id`: null for global products, set for user-created items
+- FULLTEXT search on `title` column
+- Self-referential `ingredients()` relationship for recipes
+
+**User Model**:
+- Has `foodIntakes()` relationship
+- `kcal_per_day` attribute for calorie limit
+- Authentication via Laravel Breeze
+
+**FoodIntake Model**:
+- Links users to products with date and meal type
+- `type_food_intake`: 1=breakfast, 2=lunch, 3=dinner, 4=snack
+- Stores calculated macros (proteins, fats, carbs, calories)
+
+**Measurement Model**:
+- Daily body measurements per user
+- Fields: kg, chest_cm, waist_cm, thighs_cm, wrist_cm, neck_cm, biceps_cm
+
+### Form Validation
+
+Use Livewire's attribute-based validation:
+```php
+#[Validate('required|string|max:255')]
+public string $title;
+
+#[Validate('nullable|numeric|min:0|max:100000')]
+public ?float $proteins = null;
+```
+
+For complex validation, use `Validator::make()` in methods.
+
+### Authorization
+
+- Use Laravel Policies for model authorization
+- Check ownership: `$product->user_id === Auth::id()` or `$product->base === false`
+- Middleware: `['auth', 'verified']` for protected routes
+
+---
+
+## Common Tasks
+
+### Running the Dev Environment
+```bash
+composer dev  # Starts server, queue, pail, and vite concurrently
+```
+
+### Database Commands
+```bash
+php artisan migrate
+php artisan parse:products          # Import from table.xlsx
+php artisan db:seed --class=SeedMeasurements  # Seed test measurements
+```
+
+### Sitemap Generation
+```bash
+php artisan sitemap:generate
+```
+
+### Code Formatting
+```bash
+./vendor/bin/pint
+```
+
+### Testing
+```bash
+php artisan test
+./vendor/bin/phpunit --filter=TestName
+```
+
+---
+
+## Important Notes
+
+1. **Calorie Calculations**: All nutritional values are per 100g. When displaying for a portion, multiply by (grams/100).
+
+2. **Recipe Weight**: Recipes have `total_weight` for cooked/prepared weight. Nutritional values are recalculated based on final weight.
+
+3. **Date Handling**: Diary entries are keyed by date. Use `Carbon::parse($date)->toDateString()` for consistency.
+
+4. **Product Search**: Uses MySQL FULLTEXT with fallback to LIKE for partial matches. Results ordered by relevance and title length.
+
+5. **Session State**: Alpine.js handles most UI state. Livewire handles data persistence and server communication.
+
+6. **SEO**: Each page should have `@section('title')` and `@section('meta')` for proper SEO tags.
+
+---
+
+## Code Style Preferences
+
+- Prefer early returns over nested conditionals
+- Use type hints and return types on all methods
+- Keep Livewire components focused (one responsibility)
+- Extract complex calculations to dedicated methods
+- Use meaningful variable names in Ukrainian-context (products = продукти)
+- Comment complex business logic in English for international contributors
+

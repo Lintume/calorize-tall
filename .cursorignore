@@ -1,0 +1,57 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Build outputs
+public/build/
+public/hot
+
+# Laravel generated files
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+storage/debugbar/
+bootstrap/cache/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Compiled files
+*.lock
+composer.lock
+package-lock.json
+
+# Test coverage
+coverage/
+.phpunit.result.cache
+
+# Drivers (browser testing)
+drivers/
+
+# Large data files
+*.xlsx
+*.xls
+*.csv
+
+# Sitemaps (generated)
+public/sitemaps/
+
+# Fonts (binary)
+public/fonts/
+
+# Images (large)
+public/images/
+public/blog/
+public/favicon/
+public/screenshots/
+
