@@ -51,43 +51,31 @@
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
 
+        @php
+            $at = '@';
+            $schemaItems = $products->values()->map(function ($product, $index) use ($at) {
+                return [
+                    "{$at}type" => "ListItem",
+                    "position" => $index + 1,
+                    "url" => route('product.show', $product->slug),
+                    "name" => $product->title,
+                    "additionalProperty" => [
+                        ["{$at}type" => "PropertyValue", "name" => "Calories", "value" => "{$product->calories} kcal"],
+                        ["{$at}type" => "PropertyValue", "name" => "Proteins", "value" => "{$product->proteins} g"],
+                        ["{$at}type" => "PropertyValue", "name" => "Fats", "value" => "{$product->fats} g"],
+                        ["{$at}type" => "PropertyValue", "name" => "Carbohydrates", "value" => "{$product->carbohydrates} g"],
+                    ],
+                ];
+            });
+        @endphp
         <script type="application/ld+json">
             {!! json_encode([
-                "@context" => "https://schema.org",
-                "@type" => "ItemList",
+                "{$at}context" => "https://schema.org",
+                "{$at}type" => "ItemList",
                 "name" => __("Product List"),
                 "description" => __("List of products including nutritional information such as calories, proteins, fats, and carbohydrates."),
                 "url" => url()->current(),
-                "itemListElement" => $products->map(function ($product, $index) {
-                    return [
-                        "@type" => "ListItem",
-                        "position" => $index + 1,
-                        "url" => route('product.show', $product->slug),
-                        "name" => $product->title,
-                        "additionalProperty" => [
-                            [
-                                "@type" => "PropertyValue",
-                                "name" => "Calories",
-                                "value" => "{$product->calories} kcal",
-                            ],
-                            [
-                                "@type" => "PropertyValue",
-                                "name" => "Proteins",
-                                "value" => "{$product->proteins} g",
-                            ],
-                            [
-                                "@type" => "PropertyValue",
-                                "name" => "Fats",
-                                "value" => "{$product->fats} g",
-                            ],
-                            [
-                                "@type" => "PropertyValue",
-                                "name" => "Carbohydrates",
-                                "value" => "{$product->carbohydrates} g",
-                            ],
-                        ],
-                    ];
-                }),
+                "itemListElement" => $schemaItems,
             ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
         </script>
     @endsection
