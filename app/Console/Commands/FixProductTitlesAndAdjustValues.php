@@ -19,7 +19,7 @@ class FixProductTitlesAndAdjustValues extends Command
         $batchSize = 50; // Number of products to process at once
         Product::where('id', '>', 49551)->chunk($batchSize, function ($products) use ($openAi) {
             $titles = $products->pluck('title')->toArray();
-            $this->info('Processing IDs: ' . $products->first()->id . ' - ' . $products->last()->id);
+            $this->info('Processing IDs: '.$products->first()->id.' - '.$products->last()->id);
 
             $response = $openAi->chat()->create([
                 'model' => 'gpt-4o',
@@ -59,7 +59,7 @@ Examples of valid corrections:
             foreach ($products as $index => $product) {
                 $originalTitle = $product->title;
 
-                if (!empty($fixedTitles[$index]) && $fixedTitles[$index] !== $product->title) {
+                if (! empty($fixedTitles[$index]) && $fixedTitles[$index] !== $product->title) {
                     $product->title = $fixedTitles[$index];
                     $this->info("Updated title for product ID {$product->id}: '{$originalTitle}' -> '{$product->title}'");
                 }

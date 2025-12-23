@@ -4,10 +4,10 @@ namespace App\Imports;
 
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToArray;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ProductsImport implements ToArray, WithHeadingRow, WithChunkReading
+class ProductsImport implements ToArray, WithChunkReading, WithHeadingRow
 {
     public function array(array $rows)
     {

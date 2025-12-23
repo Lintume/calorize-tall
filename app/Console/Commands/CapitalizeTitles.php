@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Product;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CapitalizeTitles extends Command
@@ -17,7 +16,7 @@ class CapitalizeTitles extends Command
     {
         $batchSize = 50; // Number of products to process at once
         Product::chunk($batchSize, function ($products) {
-            $this->info('Processing IDs: ' . $products->first()->id . ' - ' . $products->last()->id);
+            $this->info('Processing IDs: '.$products->first()->id.' - '.$products->last()->id);
 
             foreach ($products as $product) {
                 $originalTitle = $product->title;
@@ -29,7 +28,7 @@ class CapitalizeTitles extends Command
 
                 $product->update(['title' => $capitalizedTitle]);
 
-                $this->info('Updated title: ' . $originalTitle . ' -> ' . $capitalizedTitle);
+                $this->info('Updated title: '.$originalTitle.' -> '.$capitalizedTitle);
             }
         });
     }

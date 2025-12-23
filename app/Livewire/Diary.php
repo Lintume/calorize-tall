@@ -42,6 +42,7 @@ class Diary extends Component
             $this->validate();
         } catch (ValidationException $e) {
             $this->reset('date');
+
             return;
         }
         $this->setFoodIntakes();
@@ -60,10 +61,10 @@ class Diary extends Component
     private function setMeasurement(): void
     {
         $this->measurement = Measurement::where('user_id', Auth::id())->where('date', $this->date)->first();
-        if (!$this->measurement) {
+        if (! $this->measurement) {
             Measurement::insert([
                 'date' => $this->date,
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
             $this->measurement = Measurement::where('user_id', Auth::id())->where('date', $this->date)->first();
         }
@@ -124,7 +125,7 @@ class Diary extends Component
                     'carbohydrates' => $item['carbohydrates'],
                     'calories' => $item['calories'],
                     'type_food_intake' => $count,
-                    'date' => $this->date
+                    'date' => $this->date,
                 ]);
             }
             $count++;

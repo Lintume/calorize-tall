@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use Carbon\Carbon;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -31,7 +31,7 @@ class Statistic extends Component
 
     public array $data = [
         'dates' => [],
-        'measurements' => []
+        'measurements' => [],
     ];
 
     #[Validate('nullable|in:subWeek,subMonth,subYear')]
@@ -50,9 +50,10 @@ class Statistic extends Component
             ->orderBy('date', 'ASC')
             ->where($this->currentTab, '!=', 0)
             ->first();
-        if (!$firstMeasurement) {
+        if (! $firstMeasurement) {
             $this->startDate = Carbon::now()->subWeek()->toDateString();
             $this->endDate = Carbon::now()->toDateString();
+
             return;
         }
         $firstAvailableDate = $firstMeasurement->date;
@@ -65,10 +66,11 @@ class Statistic extends Component
     public function updated($field)
     {
         try {
-        $this->validate();
+            $this->validate();
         } catch (ValidationException $e) {
             $this->reset('currentTab');
             $this->reset('timeRange');
+
             return;
         }
         if ($field === 'timeRange') {
@@ -87,6 +89,7 @@ class Statistic extends Component
             $this->validate();
         } catch (ValidationException $e) {
             $this->reset('currentTab');
+
             return;
         }
 
@@ -123,7 +126,7 @@ class Statistic extends Component
 
     public function setTimeRange($timeRange): void
     {
-        if(!$timeRange) {
+        if (! $timeRange) {
             return;
         }
         $this->startDate = Carbon::now()->{$timeRange}()->toDateString();
@@ -137,7 +140,7 @@ class Statistic extends Component
         $this->dispatch('chartDataUpdated', $this->data['dates'], $this->data['measurements']);
     }
 
-    function getReducedDates(array $dates): array
+    public function getReducedDates(array $dates): array
     {
         $size = 10;
         // If the array has less than or equal to the required size, return it as is.

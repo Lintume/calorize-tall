@@ -19,6 +19,6 @@ class Measurement extends Model
         'mood',
         'hunger',
         'kpdn',
-        'sleep'
+        'sleep',
     ];
 }

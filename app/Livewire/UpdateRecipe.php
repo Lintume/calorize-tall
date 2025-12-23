@@ -14,7 +14,7 @@ use Livewire\WithPagination;
 
 class UpdateRecipe extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithoutUrlPagination, WithPagination;
 
     public Product $product;
 
@@ -37,6 +37,7 @@ class UpdateRecipe extends Component
             $this->resetPage();
         } catch (ValidationException $e) {
             $this->reset($field);
+
             return;
         }
     }
@@ -82,7 +83,7 @@ class UpdateRecipe extends Component
                 }
 
                 $selectedProdsSync[$ingredient['id']] = [
-                    'g' => $ingredient['grams']
+                    'g' => $ingredient['grams'],
                 ];
             }
             $this->product->ingredients()->sync($selectedProdsSync);

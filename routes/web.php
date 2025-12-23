@@ -27,11 +27,11 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         ->middleware(['auth'])
         ->name('profile');
 
-    require __DIR__ . '/auth.php';
+    require __DIR__.'/auth.php';
 
     Route::name('product.')->group(function () {
         Route::get('products', ProductIndex::class)->name('index');
-        Route::get('/create-product',  [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('create');
+        Route::get('/create-product', [ProductController::class, 'create'])->middleware(['auth', 'verified'])->name('create');
         Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('show');
         Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('store');
         Route::put('/product/{product}', [ProductController::class, 'update'])->middleware(['auth', 'verified'])->name('update');
@@ -76,4 +76,3 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
         return Route::post('/livewire/update', $handle);
     });
 });
-

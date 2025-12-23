@@ -16,6 +16,7 @@ class GenerateSitemap extends Command
      * @var string
      */
     protected $signature = 'sitemap:generate';
+
     protected $description = 'Generate multiple sitemaps with a sitemap index for both languages';
 
     public function handle()
@@ -24,7 +25,7 @@ class GenerateSitemap extends Command
 
         // Ensure the "sitemaps" directory exists
         $sitemapPath = public_path('sitemaps');
-        if (!file_exists($sitemapPath)) {
+        if (! file_exists($sitemapPath)) {
             mkdir($sitemapPath, 0755, true); // Create directory if it doesn't exist
             $this->info("Created directory: {$sitemapPath}");
         }

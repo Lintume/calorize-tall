@@ -30,6 +30,7 @@ class ProductIndex extends Component
             $this->resetPage();
         } catch (ValidationException $e) {
             $this->reset($field);
+
             return;
         }
     }
@@ -52,10 +53,10 @@ class ProductIndex extends Component
                     $query->orWhere('user_id', $userId);
                 });
         })
-            ->where('base', !$this->isRecipesRequest)
+            ->where('base', ! $this->isRecipesRequest)
             ->search($this->search)
             ->orderBy('user_id', 'desc')
-            ->when(!$this->search && !$this->isRecipesRequest, function ($query) { // Randomize products only when no search query is provided
+            ->when(! $this->search && ! $this->isRecipesRequest, function ($query) { // Randomize products only when no search query is provided
                 $query->orderByRaw('rand()');
             })
             ->simplePaginate(25);

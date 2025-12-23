@@ -20,7 +20,7 @@ class ProductPolicy
      */
     public function view(?User $user, Product $product): bool
     {
-        if (!$product->user_id) {
+        if (! $product->user_id) {
             return true;
         } else {
             return $product->user_id === $user->id;

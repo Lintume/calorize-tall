@@ -28,7 +28,7 @@ class SluggifyProducts extends Command
     {
         Product::chunk(100, function ($products) {
             foreach ($products as $product) {
-                if (!$product->slug) {
+                if (! $product->slug) {
                     $product->slug = null; // It's necessary to set the slug to null to trigger the sluggable package
                     $product->save();
                     $this->info("Slug generated for product ID {$product->id}: {$product->slug}");

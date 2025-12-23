@@ -59,7 +59,7 @@ class CreateRecipe extends Component
                 DB::table('product_to_products')->insert([
                     'related_product_id' => $product->id,
                     'product_id' => $ingredient['id'],
-                    'g' => $ingredient['grams']
+                    'g' => $ingredient['grams'],
                 ]);
             }
         });

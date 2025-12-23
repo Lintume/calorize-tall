@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Imports\ProductsImport;
 use Illuminate\Console\Command;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class parseProducts extends Command
 {
@@ -53,7 +53,7 @@ class parseProducts extends Command
 
         $this->info('All products have been deleted.');
 
-        Excel::import(new ProductsImport(), 'products.xlsx');
+        Excel::import(new ProductsImport, 'products.xlsx');
 
         $this->info('All products have been parsed.');
     }

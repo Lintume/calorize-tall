@@ -12,7 +12,7 @@ use Livewire\WithPagination;
 
 class ProductSearch extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithoutUrlPagination, WithPagination;
 
     #[Validate('nullable|string|max:100')]
     public ?string $search = null;
@@ -25,6 +25,7 @@ class ProductSearch extends Component
             $this->dispatch('search-updated', $this->search);
         } catch (ValidationException $e) {
             $this->reset($field);
+
             return;
         }
     }

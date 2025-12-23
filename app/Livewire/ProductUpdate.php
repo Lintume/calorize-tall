@@ -37,6 +37,7 @@ class ProductUpdate extends Component
 
         if ($productExists) {
             $this->addError('title', __('Product already exists'));
+
             return;
         }
 

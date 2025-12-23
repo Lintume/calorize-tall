@@ -35,6 +35,7 @@ class ProductCreate extends Component
 
         if ($productExists) {
             $this->addError('title', __('Product already exists'));
+
             return;
         }
 

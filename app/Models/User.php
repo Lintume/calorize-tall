@@ -37,12 +37,12 @@ class User extends Authenticatable
         'activity_coefficient',
         'birthday_date',
         'target_kg',
-        'deficit_kcal'
+        'deficit_kcal',
     ];
 
     public $appends = [
 
-        ];
+    ];
 
     /**
      * The attributes that should be hidden for arrays.

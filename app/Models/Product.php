@@ -17,21 +17,19 @@ class Product extends Model
         'calories',
         'base',
         'user_id',
-        'total_weight'
+        'total_weight',
     ];
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
         return [
             'slug' => [
                 'source' => 'title',
-                'onUpdate' => true
-            ]
+                'onUpdate' => true,
+            ],
         ];
     }
 
@@ -45,11 +43,12 @@ class Product extends Model
         if (empty($search)) {
             return $query;
         }
+
         return $query
             ->where(function ($query) use ($search) {
                 // FULLTEXT пошук
-                $query->whereRaw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", [$search])
-                    ->orWhere('title', 'LIKE', '%' . $search . '%'); // Частковий збіг
+                $query->whereRaw('MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)', [$search])
+                    ->orWhere('title', 'LIKE', '%'.$search.'%'); // Частковий збіг
 
                 // Якщо запит є числом, шукаємо в числових полях
                 if (is_numeric($search)) {
@@ -59,13 +58,13 @@ class Product extends Model
                         ->orWhere('calories', $search);
                 }
             })
-            ->orderByRaw("
+            ->orderByRaw('
             CASE
                 WHEN title = ? THEN 1   -- Повний збіг
                 WHEN title LIKE ? THEN 2 -- Частковий збіг
                 ELSE 3                  -- Інші результати
-            END", [$search, '%' . $search . '%'])
-            ->orderByRaw("LENGTH(title) ASC") // Найкоротші тайтли мають пріоритет
-            ->orderByRaw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE) DESC", [$search]); // Релевантність
+            END', [$search, '%'.$search.'%'])
+            ->orderByRaw('LENGTH(title) ASC') // Найкоротші тайтли мають пріоритет
+            ->orderByRaw('MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE) DESC', [$search]); // Релевантність
     }
 }

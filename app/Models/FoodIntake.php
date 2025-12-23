@@ -17,7 +17,7 @@ class FoodIntake extends Model
         'carbohydrates',
         'calories',
         'type_food_intake',
-        'date'
+        'date',
     ];
 
     public function product()
