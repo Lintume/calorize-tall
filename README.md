@@ -72,8 +72,8 @@ Calorize is a comprehensive health tracker application designed to help users ma
     php artisan db:seed --class=SeedMeasurements
     ```
 
-9. **Parse products from `table.xlsx` file** (optional):
-   Ensure the `table.xlsx` file is placed in the root directory before running this command.
+9. **Parse products from `products.xlsx` file** (optional):
+   Ensure the `products.xlsx` file is placed in the root directory before running this command.
     ```sh
     php artisan parse:products
     ```

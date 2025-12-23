@@ -12,31 +12,31 @@ Calorize is a Ukrainian health tracker application for managing calorie intake, 
 ## Tech Stack
 
 ### Backend
-- **PHP 8.2+** with **Laravel 11**
-- **Livewire 3** for reactive components
-- **Volt** for single-file Livewire components (when applicable)
+- **PHP 8.2+** with **Laravel 12**
+- **Livewire 3.7** for reactive components
+- **Volt 1.10** for single-file Livewire components (when applicable)
 - **MySQL** with FULLTEXT search indexes
-- **OpenAI PHP** for AI features (planned)
-- **Maatwebsite Excel** for product imports
-- **Laravel Localization** (mcamara/laravel-localization) for i18n
+- **OpenAI PHP 0.18** for AI features (planned)
+- **Maatwebsite Excel 3.1** for product imports
+- **Laravel Localization 2.3** (mcamara/laravel-localization) for i18n
 
 ### Frontend
-- **Tailwind CSS 3** with `@tailwindcss/forms` plugin
+- **Tailwind CSS 3.4** with `@tailwindcss/forms` plugin
 - **Alpine.js** for reactive UI behavior
-- **Vite 5** for asset bundling
-- **FontAwesome 6** for icons
-- **Chart.js** for statistics visualization
+- **Vite 5.4** for asset bundling
+- **FontAwesome 6.7** for icons
+- **Chart.js 4.5** for statistics visualization
 - **AOS (Animate On Scroll)** for landing page animations
 - **Inter** font family
 
 ### Testing
-- **PHPUnit 11** for feature and unit tests
-- **Symfony Panther** for browser testing
+- **PHPUnit 11.5** for feature and unit tests
+- **Symfony Panther 2.3** for browser testing
 
 ### Dev Tools
-- **Laravel Pint** for code formatting
-- **Laravel Debugbar** for debugging
-- **Laravel Pail** for log tailing
+- **Laravel Pint 1.26** for code formatting
+- **Laravel Debugbar 3.16** for debugging
+- **Laravel Pail 1.2** for log tailing
 
 ---
 
@@ -200,7 +200,7 @@ composer dev  # Starts server, queue, pail, and vite concurrently
 ### Database Commands
 ```bash
 php artisan migrate
-php artisan parse:products          # Import from table.xlsx
+php artisan parse:products          # Import from products.xlsx
 php artisan db:seed --class=SeedMeasurements  # Seed test measurements
 ```
 

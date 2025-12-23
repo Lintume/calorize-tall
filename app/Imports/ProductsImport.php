@@ -11,11 +11,14 @@ class ProductsImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new Product([
-            'title' => $row['nazva'],
-            'proteins' => $row['bilki'],
-            'fats' => $row['ziri'],
-            'carbohydrates' => $row['vuglevodi'],
-            'calories' => $row['kaloriinist'],
+            'title' => $row['title'],
+            'proteins' => $row['proteins'],
+            'fats' => $row['fats'],
+            'carbohydrates' => $row['carbohydrates'],
+            'calories' => $row['calories'],
+            'base' => $row['base'] ?? null,
+            'user_id' => null,
+            'total_weight' => $row['total_weight'] ?? null,
         ]);
     }
 }

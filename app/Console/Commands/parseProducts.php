@@ -53,7 +53,7 @@ class parseProducts extends Command
 
         $this->info('All products have been deleted.');
 
-        Excel::import(new ProductsImport(), 'table.xlsx');
+        Excel::import(new ProductsImport(), 'products.xlsx');
 
         $this->info('All products have been parsed.');
     }

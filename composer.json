@@ -7,30 +7,30 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "cviebrock/eloquent-sluggable": "^11.0",
-        "laravel/framework": "^11.31",
-        "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.4",
-        "livewire/volt": "^1.0",
+        "cviebrock/eloquent-sluggable": "^12.0",
+        "laravel/framework": "^12.0",
+        "laravel/tinker": "^2.10",
+        "livewire/livewire": "^3.7",
+        "livewire/volt": "^1.10",
         "maatwebsite/excel": "^3.1",
-        "mcamara/laravel-localization": "^2.2",
-        "openai-php/laravel": "^0.10.2",
+        "mcamara/laravel-localization": "^2.3",
+        "openai-php/laravel": "^0.18",
         "spatie/laravel-sitemap": "^7.3",
-        "symfony/http-client": "^7.2"
+        "symfony/http-client": "^7.4"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.14",
+        "barryvdh/laravel-debugbar": "^3.16",
         "dbrekelmans/bdi": "^1.4",
         "fakerphp/faker": "^1.23",
-        "kkomelin/laravel-translatable-string-exporter": "^1.22",
-        "laravel/breeze": "^2.2",
-        "laravel/pail": "^1.1",
-        "laravel/pint": "^1.13",
-        "laravel/sail": "^1.26",
+        "kkomelin/laravel-translatable-string-exporter": "^1.25",
+        "laravel/breeze": "^2.3",
+        "laravel/pail": "^1.2",
+        "laravel/pint": "^1.26",
+        "laravel/sail": "^1.51",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0.1",
-        "symfony/panther": "^2.1"
+        "nunomaduro/collision": "^8.8",
+        "phpunit/phpunit": "^11.5",
+        "symfony/panther": "^2.3"
     },
     "autoload": {
         "psr-4": {
