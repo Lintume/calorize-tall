@@ -1,0 +1,28 @@
+# Laravel Sail Development Environment
+
+This project uses Laravel Sail for local development with Docker.
+
+## Important: Container Commands
+
+Always run the following commands through the Sail container:
+
+- **Composer**: Use `./vendor/bin/sail composer` instead of `composer`
+- **Artisan**: Use `./vendor/bin/sail artisan` instead of `php artisan`
+- **PHP**: Use `./vendor/bin/sail php` instead of `php`
+- **NPM**: Use `./vendor/bin/sail npm` instead of `npm`
+
+### Examples
+
+```bash
+# Install dependencies
+./vendor/bin/sail composer install
+./vendor/bin/sail composer require package-name
+
+# Run artisan commands
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan make:model ModelName
+
+# Run tests
+./vendor/bin/sail test
+```
+
