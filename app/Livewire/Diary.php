@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -45,6 +46,16 @@ class Diary extends Component
 
             return;
         }
+        $this->setFoodIntakes();
+        $this->setMeasurement();
+    }
+
+    /**
+     * Refresh diary data when AI chat makes changes
+     */
+    #[On('diary-updated')]
+    public function refreshDiary(): void
+    {
         $this->setFoodIntakes();
         $this->setMeasurement();
         $this->dispatch('updatedDate', $this->breakfast, $this->lunch, $this->dinner, $this->snack, $this->measurement);

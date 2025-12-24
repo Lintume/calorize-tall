@@ -47,7 +47,7 @@
                 @foreach(['breakfast', 'lunch', 'dinner', 'snack'] as $intake)
 
                     {{--food intake label--}}
-                    <div @click="(active === '{{ $intake }}') ? (active = null) : (active = '{{ $intake }}')"
+                    <div @click="setActiveMeal('{{ $intake }}')"
                          class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
                         <div class="flex items-center">
                             <div class="text-xl" x-text="foodIntakes.{{ $intake }}.translatable"></div>
@@ -184,6 +184,9 @@
         </div>
     </div>
     <x-loading-screen/>
+
+    {{-- AI Chat Assistant --}}
+    <livewire:diary-chat :date="$date" />
 </div>
 
 <script>
@@ -278,6 +281,9 @@
                     this.measurements.wrist.value = foodIntakes[4].wrist_cm;
                     this.measurements.neck.value = foodIntakes[4].neck_cm;
                     this.measurements.biceps.value = foodIntakes[4].biceps_cm;
+
+                    // Notify the chat component about the date change
+                    Livewire.dispatch('date-changed', { date: this.$wire.date });
                 });
 
                 this.$wire.on('success', message => {
@@ -351,6 +357,17 @@
             toggleRemainingCalories() {
                 this.showRemainingCalories = !this.showRemainingCalories;
                 this.showTooltip = false;
+            },
+
+            refreshDiary() {
+                // Reload the current date's food intakes from the server
+                this.$wire.refreshDiary();
+            },
+
+            setActiveMeal(meal) {
+                this.active = (this.active === meal) ? null : meal;
+                // Notify the chat component about the active meal
+                Livewire.dispatch('meal-selected', { meal: this.active });
             }
         }
     }
