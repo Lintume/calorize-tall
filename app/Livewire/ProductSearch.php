@@ -33,13 +33,18 @@ class ProductSearch extends Component
     public function render()
     {
         $userId = Auth::id();
-        $products = Product::where(function ($query) use ($userId) {
-            $query->whereNull('user_id')
-                ->when($userId, function ($query) use ($userId) {
-                    $query->orWhere('user_id', $userId);
-                });
-        })->search($this->search)
-            ->orderBy('user_id', 'desc')
+
+        // Use Meilisearch via Scout for smart search
+        // Build filter: show public products OR user's own products
+        $filter = $userId
+            ? 'user_id IS NULL OR user_id = ' . $userId
+            : 'user_id IS NULL';
+
+        $products = Product::search($this->search)
+            ->options([
+                'filter' => $filter,
+                'sort' => ['user_id:desc'],
+            ])
             ->simplePaginate(5);
 
         return view('livewire.product-search', [
