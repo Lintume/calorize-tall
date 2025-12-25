@@ -124,14 +124,14 @@
                     <template x-if="typeof msg !== 'undefined' && msg.role === 'user'">
                         <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-br-md"
                              style="background-color: #d97706; color: white;">
-                            <span x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
+                            <span class="whitespace-pre-line break-words" x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
                         </div>
                     </template>
                     <!-- Assistant message -->
                     <template x-if="typeof msg !== 'undefined' && msg.role === 'assistant'">
                         <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-bl-md shadow-sm border"
                              :class="(typeof msg !== 'undefined' && msg.error) ? 'border-red-200 bg-red-50 text-red-700' : 'border-gray-100 bg-white text-gray-800'">
-                            <span x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
+                            <span class="whitespace-pre-line break-words" x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
                         </div>
                     </template>
                 </div>
