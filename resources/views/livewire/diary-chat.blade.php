@@ -224,14 +224,18 @@ function diaryChat() {
         mediaRecorder: null,
         audioChunks: [],
 
+        scrollToBottom() {
+            this.$nextTick(() => {
+                if (this.$refs.messagesContainer) {
+                    this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
+                }
+            });
+        },
+
         init() {
             // Auto-scroll to bottom when messages change
             this.$watch('$wire.messages', () => {
-                this.$nextTick(() => {
-                    if (this.$refs.messagesContainer) {
-                        this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
-                    }
-                });
+                this.scrollToBottom();
             });
 
             // Focus input when panel opens
@@ -305,8 +309,19 @@ function diaryChat() {
         send() {
             if (!this.input.trim() || this.$wire.isProcessing) return;
 
-            this.$wire.sendMessage(this.input);
+            const messageText = this.input;
             this.input = '';
+
+            // Scroll immediately so the bottom area (where "Thinking..." appears) is visible.
+            // Then repeat a few times to catch Livewire's wire:loading toggle timing.
+            this.scrollToBottom();
+
+            this.$wire.sendMessage(messageText);
+
+            setTimeout(() => this.scrollToBottom(), 0);
+            setTimeout(() => this.scrollToBottom(), 50);
+            setTimeout(() => this.scrollToBottom(), 150);
+            setTimeout(() => this.scrollToBottom(), 300);
         },
 
         onTranscriptionReady(text) {
