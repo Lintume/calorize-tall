@@ -26,3 +26,13 @@ Always run the following commands through the Sail container:
 ./vendor/bin/sail test
 ```
 
+## Frontend Build Process
+
+After making changes to frontend files (CSS, JavaScript, Blade templates, or any assets), always run:
+
+```bash
+./vendor/bin/sail npm run build
+```
+
+**Exception**: Skip running `npm run build` if `./vendor/bin/sail npm run dev` is already running in the Cursor terminal, as the dev server will automatically rebuild on changes.
+

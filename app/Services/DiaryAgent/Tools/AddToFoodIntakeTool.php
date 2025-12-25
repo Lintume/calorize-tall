@@ -26,7 +26,7 @@ class AddToFoodIntakeTool extends Tool
     {
         $this
             ->as('addToFoodIntake')
-            ->for('Add ONE product to a meal. Call this tool multiple times for multiple products. Use default grams if user did not specify amount.')
+            ->for('Add ONE DISTINCT product to a meal with TOTAL grams. If the user says "2 eggs"/"два яйця", call this tool ONCE with grams = 2 * 60 = 120 (don’t call it twice). Use sensible defaults when user didn’t specify grams.')
             ->withNumberParameter('productId', 'Product ID from searchProduct result')
             ->withNumberParameter('grams', 'Amount in grams (use sensible defaults: apple=150, egg=60, tea=250, bread slice=30, candy=10)')
             ->withEnumParameter(
@@ -67,13 +67,53 @@ class AddToFoodIntakeTool extends Tool
             ]);
         }
 
+        // Normalize grams to a non-negative int (DB column is unsignedInteger)
+        $gramsInt = (int) max(0, round($grams));
+
+        // Safety net: if the assistant accidentally calls addToFoodIntake multiple times
+        // for the same product/meal/date in quick succession, merge into the latest row
+        // instead of creating duplicates.
+        $recentExisting = FoodIntake::query()
+            ->where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->where('type_food_intake', $mealTypeValue)
+            ->where('date', $date)
+            ->where('created_at', '>=', now()->subSeconds(90))
+            ->latest('id')
+            ->first();
+
+        if ($recentExisting) {
+            $newTotalGrams = (int) max(0, $recentExisting->g + $gramsInt);
+
+            $multiplier = $newTotalGrams / 100;
+            $recentExisting->update([
+                'g' => $newTotalGrams,
+                'proteins' => round($product->proteins * $multiplier, 1),
+                'fats' => round($product->fats * $multiplier, 1),
+                'carbohydrates' => round($product->carbohydrates * $multiplier, 1),
+                'calories' => round($product->calories * $multiplier),
+            ]);
+
+            return json_encode([
+                'success' => true,
+                'message' => "Updated {$product->title} in {$mealType} to {$newTotalGrams}g",
+                'foodIntake' => [
+                    'id' => $recentExisting->id,
+                    'productTitle' => $product->title,
+                    'grams' => $newTotalGrams,
+                    'calories' => $recentExisting->calories,
+                ],
+                'merged' => true,
+            ]);
+        }
+
         // Calculate nutritional values based on grams
-        $multiplier = $grams / 100;
+        $multiplier = $gramsInt / 100;
 
         $foodIntake = FoodIntake::create([
             'product_id' => $productId,
             'user_id' => $userId,
-            'g' => $grams,
+            'g' => $gramsInt,
             'proteins' => round($product->proteins * $multiplier, 1),
             'fats' => round($product->fats * $multiplier, 1),
             'carbohydrates' => round($product->carbohydrates * $multiplier, 1),
@@ -84,11 +124,11 @@ class AddToFoodIntakeTool extends Tool
 
         return json_encode([
             'success' => true,
-            'message' => "Added {$grams}g of {$product->title} to {$mealType}",
+            'message' => "Added {$gramsInt}g of {$product->title} to {$mealType}",
             'foodIntake' => [
                 'id' => $foodIntake->id,
                 'productTitle' => $product->title,
-                'grams' => $grams,
+                'grams' => $gramsInt,
                 'calories' => $foodIntake->calories,
             ],
         ]);
