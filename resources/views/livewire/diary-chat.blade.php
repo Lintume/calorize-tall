@@ -15,9 +15,9 @@
         class="w-20 h-20 rounded-full flex flex-col items-center justify-center text-white cursor-pointer transition-all duration-200"
         :class="{
             'animate-pulse': $wire.isProcessing,
-            'bg-amber-600': true
+            'bg-sky-600': true
         }"
-        style="background-color: rgba(217, 119, 6, 0.75);"
+        style="background-color: rgba(2, 132, 199, 0.75);"
     >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -72,7 +72,7 @@
             style="min-height: 200px;"
         >
             <!-- Welcome message if empty -->
-            <template x-if="$wire.messages.length === 0">
+            <template x-if="localMessages.length === 0">
                 <div class="py-4 px-2">
                     <div class="text-center mb-4">
                         <div class="text-3xl mb-2">🤖</div>
@@ -118,7 +118,7 @@
             </template>
 
             <!-- Message list -->
-            <template x-for="(msg, index) in $wire.messages" :key="index">
+            <template x-for="(msg, index) in localMessages" :key="index">
                 <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
                     <!-- User message -->
                     <template x-if="msg.role === 'user'">
@@ -223,6 +223,7 @@ function diaryChat() {
         input: '',
         mediaRecorder: null,
         audioChunks: [],
+        localMessages: [],
 
         scrollToBottom() {
             this.$nextTick(() => {
@@ -232,9 +233,20 @@ function diaryChat() {
             });
         },
 
+        cloneMessages(messages) {
+            // Important: avoid referencing Livewire's reactive array directly,
+            // otherwise optimistic pushes will mutate $wire.messages and cause duplicates.
+            return JSON.parse(JSON.stringify(messages ?? []));
+        },
+
         init() {
+            // Keep a local (optimistic) copy so user messages show immediately,
+            // even while the Livewire request is in-flight.
+            this.localMessages = this.cloneMessages(this.$wire.messages);
+
             // Auto-scroll to bottom when messages change
-            this.$watch('$wire.messages', () => {
+            this.$watch('$wire.messages', (value) => {
+                this.localMessages = this.cloneMessages(value);
                 this.scrollToBottom();
             });
 
@@ -311,6 +323,14 @@ function diaryChat() {
 
             const messageText = this.input;
             this.input = '';
+
+            // Optimistically show the user's message immediately
+            this.localMessages = this.localMessages ?? [];
+            this.localMessages.push({
+                role: 'user',
+                content: messageText,
+                timestamp: new Date().toISOString(),
+            });
 
             // Scroll immediately so the bottom area (where "Thinking..." appears) is visible.
             // Then repeat a few times to catch Livewire's wire:loading toggle timing.
