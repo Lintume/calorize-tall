@@ -3,6 +3,7 @@
 namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\Product;
+use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class CreateProductTool extends Tool
@@ -27,10 +28,21 @@ class CreateProductTool extends Tool
         float $fats,
         float $carbohydrates
     ): string {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
+            'tool' => 'createProduct',
+            'args' => DiaryAgentLogger::payload([
+                'name' => $name,
+                'calories' => $calories,
+                'proteins' => $proteins,
+                'fats' => $fats,
+                'carbohydrates' => $carbohydrates,
+            ]),
+        ]);
+
         $userId = auth()->id();
 
         if (! $userId) {
-            return json_encode([
+            return $this->toolResult('createProduct', [
                 'success' => false,
                 'message' => 'User must be authenticated to create products.',
             ]);
@@ -46,7 +58,7 @@ class CreateProductTool extends Tool
             'user_id' => $userId,
         ]);
 
-        return json_encode([
+        return $this->toolResult('createProduct', [
             'success' => true,
             'message' => "Created new product: {$name}",
             'product' => [
@@ -58,6 +70,16 @@ class CreateProductTool extends Tool
                 'carbohydrates' => $product->carbohydrates,
             ],
         ]);
+    }
+
+    private function toolResult(string $tool, array $payload): string
+    {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
+            'tool' => $tool,
+            'result' => DiaryAgentLogger::payload($payload),
+        ]);
+
+        return json_encode($payload);
     }
 }
 

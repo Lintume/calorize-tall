@@ -3,6 +3,7 @@
 namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
+use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class GetFoodIntakeTool extends Tool
@@ -37,10 +38,18 @@ class GetFoodIntakeTool extends Tool
 
     public function __invoke(string $date, string $mealType): string
     {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
+            'tool' => 'getFoodIntake',
+            'args' => DiaryAgentLogger::payload([
+                'date' => $date,
+                'mealType' => $mealType,
+            ]),
+        ]);
+
         $userId = auth()->id();
 
         if (! $userId) {
-            return json_encode([
+            return $this->toolResult('getFoodIntake', [
                 'success' => false,
                 'message' => 'User must be authenticated.',
             ]);
@@ -49,7 +58,7 @@ class GetFoodIntakeTool extends Tool
         $mealTypeValue = self::MEAL_TYPES[strtolower($mealType)] ?? null;
 
         if ($mealTypeValue === null) {
-            return json_encode([
+            return $this->toolResult('getFoodIntake', [
                 'success' => false,
                 'message' => "Invalid meal type: {$mealType}",
             ]);
@@ -62,7 +71,7 @@ class GetFoodIntakeTool extends Tool
             ->get();
 
         if ($intakes->isEmpty()) {
-            return json_encode([
+            return $this->toolResult('getFoodIntake', [
                 'success' => true,
                 'message' => "No items found in {$mealType} for {$date}",
                 'items' => [],
@@ -82,12 +91,22 @@ class GetFoodIntakeTool extends Tool
             ];
         });
 
-        return json_encode([
+        return $this->toolResult('getFoodIntake', [
             'success' => true,
             'date' => $date,
             'mealType' => $mealType,
             'items' => $items->toArray(),
         ]);
+    }
+
+    private function toolResult(string $tool, array $payload): string
+    {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
+            'tool' => $tool,
+            'result' => DiaryAgentLogger::payload($payload),
+        ]);
+
+        return json_encode($payload);
     }
 }
 

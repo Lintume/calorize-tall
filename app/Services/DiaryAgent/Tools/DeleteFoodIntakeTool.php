@@ -3,6 +3,7 @@
 namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
+use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class DeleteFoodIntakeTool extends Tool
@@ -18,10 +19,17 @@ class DeleteFoodIntakeTool extends Tool
 
     public function __invoke(int $foodIntakeId): string
     {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
+            'tool' => 'deleteFoodIntake',
+            'args' => DiaryAgentLogger::payload([
+                'foodIntakeId' => $foodIntakeId,
+            ]),
+        ]);
+
         $userId = auth()->id();
 
         if (! $userId) {
-            return json_encode([
+            return $this->toolResult('deleteFoodIntake', [
                 'success' => false,
                 'message' => 'User must be authenticated.',
             ]);
@@ -33,7 +41,7 @@ class DeleteFoodIntakeTool extends Tool
             ->first();
 
         if (! $foodIntake) {
-            return json_encode([
+            return $this->toolResult('deleteFoodIntake', [
                 'success' => false,
                 'message' => "Food intake with ID {$foodIntakeId} not found or access denied.",
             ]);
@@ -44,7 +52,7 @@ class DeleteFoodIntakeTool extends Tool
 
         $foodIntake->delete();
 
-        return json_encode([
+        return $this->toolResult('deleteFoodIntake', [
             'success' => true,
             'message' => "Deleted {$grams}g of {$productTitle} from diary",
             'deleted' => [
@@ -53,6 +61,16 @@ class DeleteFoodIntakeTool extends Tool
                 'grams' => $grams,
             ],
         ]);
+    }
+
+    private function toolResult(string $tool, array $payload): string
+    {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
+            'tool' => $tool,
+            'result' => DiaryAgentLogger::payload($payload),
+        ]);
+
+        return json_encode($payload);
     }
 }
 

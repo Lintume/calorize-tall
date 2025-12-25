@@ -119,19 +119,19 @@
 
             <!-- Message list -->
             <template x-for="(msg, index) in localMessages" :key="index">
-                <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
+                <div :class="(typeof msg !== 'undefined' && msg.role === 'user') ? 'flex justify-end' : 'flex justify-start'">
                     <!-- User message -->
-                    <template x-if="msg.role === 'user'">
+                    <template x-if="typeof msg !== 'undefined' && msg.role === 'user'">
                         <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-br-md"
                              style="background-color: #d97706; color: white;">
-                            <span x-text="msg.content"></span>
+                            <span x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
                         </div>
                     </template>
                     <!-- Assistant message -->
-                    <template x-if="msg.role === 'assistant'">
+                    <template x-if="typeof msg !== 'undefined' && msg.role === 'assistant'">
                         <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-bl-md shadow-sm border"
-                             :class="msg.error ? 'border-red-200 bg-red-50 text-red-700' : 'border-gray-100 bg-white text-gray-800'">
-                            <span x-text="msg.content"></span>
+                             :class="(typeof msg !== 'undefined' && msg.error) ? 'border-red-200 bg-red-50 text-red-700' : 'border-gray-100 bg-white text-gray-800'">
+                            <span x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
                         </div>
                     </template>
                 </div>
@@ -270,10 +270,29 @@ function diaryChat() {
 
         async startRecording() {
             try {
+                // getUserMedia is only available in a secure context (HTTPS or localhost)
+                if (typeof window !== 'undefined' && window.isSecureContext === false) {
+                    alert("Voice recording requires HTTPS (or localhost). Please open the app via https:// or on localhost.");
+                    return;
+                }
+
+                if (!navigator?.mediaDevices?.getUserMedia) {
+                    alert("Your browser/environment doesn't support microphone access (navigator.mediaDevices.getUserMedia is unavailable). Try Chrome/Safari and make sure you're on HTTPS (or localhost).");
+                    return;
+                }
+
+                if (typeof MediaRecorder === 'undefined') {
+                    alert("Your browser doesn't support audio recording (MediaRecorder API is unavailable). Try a modern browser like Chrome.");
+                    return;
+                }
+
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                this.mediaRecorder = new MediaRecorder(stream, {
-                    mimeType: 'audio/webm;codecs=opus'
-                });
+                const preferredMimeType = 'audio/webm;codecs=opus';
+                const options = (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported?.(preferredMimeType))
+                    ? { mimeType: preferredMimeType }
+                    : {};
+
+                this.mediaRecorder = new MediaRecorder(stream, options);
                 this.audioChunks = [];
 
                 this.mediaRecorder.ondataavailable = (event) => {
@@ -295,7 +314,7 @@ function diaryChat() {
                 this.recording = true;
             } catch (error) {
                 console.error('Error starting recording:', error);
-                alert('{{ __('Could not access microphone. Please check permissions.') }}');
+                alert("{{ __('Could not access microphone. Please check permissions.') }}");
             }
         },
 

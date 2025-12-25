@@ -127,6 +127,15 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        // Dedicated logs for LLM agent debugging (prompts/tool calls/responses)
+        'diary_agent' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/diary-agent.log'),
+            'level' => env('DIARY_AGENT_LOG_LEVEL', 'debug'),
+            'days' => env('DIARY_AGENT_LOG_DAYS', 7),
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];

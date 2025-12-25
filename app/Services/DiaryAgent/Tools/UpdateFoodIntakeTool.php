@@ -3,6 +3,7 @@
 namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
+use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class UpdateFoodIntakeTool extends Tool
@@ -19,10 +20,18 @@ class UpdateFoodIntakeTool extends Tool
 
     public function __invoke(int $foodIntakeId, float $grams): string
     {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
+            'tool' => 'updateFoodIntake',
+            'args' => DiaryAgentLogger::payload([
+                'foodIntakeId' => $foodIntakeId,
+                'grams' => $grams,
+            ]),
+        ]);
+
         $userId = auth()->id();
 
         if (! $userId) {
-            return json_encode([
+            return $this->toolResult('updateFoodIntake', [
                 'success' => false,
                 'message' => 'User must be authenticated.',
             ]);
@@ -34,7 +43,7 @@ class UpdateFoodIntakeTool extends Tool
             ->first();
 
         if (! $foodIntake) {
-            return json_encode([
+            return $this->toolResult('updateFoodIntake', [
                 'success' => false,
                 'message' => "Food intake with ID {$foodIntakeId} not found or access denied.",
             ]);
@@ -54,7 +63,7 @@ class UpdateFoodIntakeTool extends Tool
             'calories' => round($product->calories * $multiplier),
         ]);
 
-        return json_encode([
+        return $this->toolResult('updateFoodIntake', [
             'success' => true,
             'message' => "Updated {$product->title}: {$oldGrams}g → {$grams}g",
             'foodIntake' => [
@@ -65,6 +74,16 @@ class UpdateFoodIntakeTool extends Tool
                 'calories' => $foodIntake->calories,
             ],
         ]);
+    }
+
+    private function toolResult(string $tool, array $payload): string
+    {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
+            'tool' => $tool,
+            'result' => DiaryAgentLogger::payload($payload),
+        ]);
+
+        return json_encode($payload);
     }
 }
 

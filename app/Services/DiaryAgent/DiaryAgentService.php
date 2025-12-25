@@ -8,6 +8,10 @@ use App\Services\DiaryAgent\Tools\DeleteFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\GetFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\SearchProductTool;
 use App\Services\DiaryAgent\Tools\UpdateFoodIntakeTool;
+use App\Models\FoodIntake;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
 use Prism\Prism\Facades\Tool;
@@ -19,7 +23,11 @@ class DiaryAgentService
      */
     public function process(string $command, array $context): DiaryAgentResult
     {
-        $systemPrompt = $this->buildSystemPrompt($context);
+        $requestId = (string) Str::uuid();
+        $startedAt = microtime(true);
+        DiaryAgentLogger::setRequestId($requestId);
+
+        $systemPrompt = $this->buildSystemPrompt($context, $command);
 
         $tools = [
             Tool::make(SearchProductTool::class),
@@ -33,16 +41,44 @@ class DiaryAgentService
         // Build messages array with conversation history
         $messages = $this->buildMessages($context['messages'] ?? [], $command);
 
-        $response = Prism::text()
-            ->using(Provider::OpenAI, 'gpt-4o-mini')
-            ->withSystemPrompt($systemPrompt)
-            ->withMessages($messages)
-            ->withTools($tools)
-            ->withMaxSteps(10)
-            ->asText();
+        DiaryAgentLogger::log('info', 'DiaryAgent request', [
+            'userId' => Auth::id(),
+            'date' => $context['date'] ?? null,
+            'activeMeal' => $context['activeMeal'] ?? null,
+            'locale' => app()->getLocale(),
+            'model' => 'gpt-4o-mini',
+            'command' => DiaryAgentLogger::payload($command),
+            'systemPrompt' => DiaryAgentLogger::payload($systemPrompt),
+            'messages' => DiaryAgentLogger::payload($this->messagesToArrayForLogging($messages)),
+        ]);
+
+        try {
+            $response = Prism::text()
+                ->using(Provider::OpenAI, 'gpt-4o-mini')
+                ->withSystemPrompt($systemPrompt)
+                ->withMessages($messages)
+                ->withTools($tools)
+                ->withMaxSteps(10)
+                ->asText();
+        } catch (\Throwable $e) {
+            DiaryAgentLogger::log('error', 'DiaryAgent LLM call failed', [
+                'error' => $e->getMessage(),
+                'exception' => get_class($e),
+            ]);
+            throw $e;
+        }
 
         // Parse the response and extract actions performed
         $actions = $this->parseToolCalls($response);
+
+        $durationMs = (int) round((microtime(true) - $startedAt) * 1000);
+
+        DiaryAgentLogger::log('info', 'DiaryAgent response', [
+            'durationMs' => $durationMs,
+            'text' => DiaryAgentLogger::payload($response->text ?? null),
+            'toolCalls' => DiaryAgentLogger::payload($this->extractToolCallsForLogging($response)),
+            'actions' => DiaryAgentLogger::payload($actions),
+        ]);
 
         return new DiaryAgentResult(
             message: $response->text,
@@ -76,7 +112,7 @@ class DiaryAgentService
     /**
      * Build the system prompt with context
      */
-    private function buildSystemPrompt(array $context): string
+    private function buildSystemPrompt(array $context, string $command): string
     {
         $date = $context['date'] ?? now()->toDateString();
         $activeMeal = $context['activeMeal'] ?? null;
@@ -97,6 +133,14 @@ class DiaryAgentService
             ? "The user currently has '{$activeMeal}' selected in their diary. Use this meal."
             : "No specific meal is selected. Based on current time ({$currentTime}), the likely meal is: {$suggestedMeal}. USE THIS MEAL BY DEFAULT without asking the user.";
 
+        $recentDiaryMemory = $this->buildRecentDiaryMemoryBlock(
+            command: $command,
+            date: $date,
+            candidateDays: 7,
+            frequencyDays: 30,
+            maxCandidates: 5
+        );
+
         return <<<PROMPT
 You are a helpful food diary assistant. You help users add, edit, and delete food items from their daily diary.
 
@@ -105,6 +149,15 @@ You are a helpful food diary assistant. You help users add, edit, and delete foo
 - Current time: {$currentTime}
 - User's language: {$locale}
 - {$mealContext}
+
+## CRITICAL: Disambiguation using RECENT DIARY MEMORY
+- RECENT DIARY MEMORY is ONLY a hint for ambiguous short messages (like "тарілка борща", "кава", "йогурт").
+- The user's current message always has higher priority than memory.
+- If the user adds qualifiers/variants (e.g. "пісний/пісного", "без мʼяса", "з квасолею", brand, etc), DO NOT reuse a memory candidate unless the candidate title clearly contains the same qualifier.
+- If there is exactly ONE strong matching candidate and the user message is generic, you MAY directly add that product using the candidate's productId and grams.
+- If there are multiple plausible candidates, ask ONE short clarification question or use searchProduct to disambiguate.
+- If you disambiguate a product using RECENT DIARY MEMORY (i.e. you pick a specific variant because it was used recently), you MUST mention that in the user-facing summary, for example: "… ✓ як і вчора" / "… ✓ як минулого разу".
+{$recentDiaryMemory}
 
 ## CRITICAL: Meal Selection
 - If user specifies a meal (breakfast, lunch, dinner, snack, сніданок, обід, вечеря, перекус) - use that meal
@@ -160,7 +213,7 @@ Use sensible defaults based on typical serving sizes:
 
 ## Important Rules
 1. One tool-call per DISTINCT product: When adding multiple different products, call searchProduct and addToFoodIntake for EACH distinct product separately
-2. Search before create: Always try searchProduct first. Only use createProduct if no matching product is found
+2. Search before create: Always try searchProduct first. Only use createProduct if no matching product is found. searchProduct returns a LIST (up to 10); pick the best match based on user message.
 3. Estimate nutrition: When creating products, estimate realistic nutritional values per 100g based on common food data
 4. Respond in user's language: Reply in the same language the user used (Ukrainian or English)
 5. Be concise: Keep responses short and actionable
@@ -178,6 +231,346 @@ NEVER ask:
 - "Which meal?" - use current time to determine
 - "What product?" - if user already mentioned it in the conversation
 PROMPT;
+    }
+
+    /**
+     * Build a compact "memory" from the user's recent diary entries.
+     * The model should only use it to disambiguate short, generic messages.
+     */
+    private function buildRecentDiaryMemoryBlock(
+        string $command,
+        string $date,
+        int $candidateDays = 7,
+        int $frequencyDays = 30,
+        int $maxCandidates = 5
+    ): string {
+        $userId = Auth::id();
+
+        if (! $userId) {
+            return "RECENT DIARY MEMORY: unavailable (user not authenticated)";
+        }
+
+        $tokens = $this->extractFocusTokens($command);
+
+        // Even without tokens, keep memory short to avoid biasing the model.
+        if (empty($tokens)) {
+            return "RECENT DIARY MEMORY: (no focus tokens extracted from the message)";
+        }
+
+        $to = Carbon::parse($date)->toDateString();
+        $toCarbon = Carbon::parse($date)->startOfDay();
+
+        // 7-day candidates: recent matching entries, deduped by product_id, ordered by recency.
+        $fromCandidates = Carbon::parse($date)->subDays($candidateDays)->toDateString();
+        $recent = FoodIntake::query()
+            ->where('user_id', $userId)
+            ->whereBetween('date', [$fromCandidates, $to])
+            ->with('product')
+            ->orderByDesc('date')
+            ->orderByDesc('id')
+            ->limit(300)
+            ->get();
+
+        $candidateAgg = [];
+        $candidateOrder = [];
+
+        foreach ($recent as $fi) {
+            if (! $fi->product) {
+                continue;
+            }
+
+            $pid = (int) $fi->product_id;
+            $title = (string) $fi->product->title;
+            $hay = mb_strtolower($title);
+
+            if (! $this->containsAnyToken($hay, $tokens)) {
+                continue;
+            }
+
+            if (! isset($candidateAgg[$pid])) {
+                // Don't introduce new candidates once we reached the cap,
+                // but keep aggregating already-selected candidates.
+                if (count($candidateOrder) >= $maxCandidates) {
+                    continue;
+                }
+                $candidateAgg[$pid] = [
+                    'productId' => $pid,
+                    'title' => $title,
+                    'lastDate' => (string) $fi->date,
+                    'lastRelative' => $this->relativeDayLabel($toCarbon, Carbon::parse((string) $fi->date)->startOfDay()),
+                    'lastGrams' => (int) $fi->g,
+                    'sumGrams' => 0,
+                    'count' => 0,
+                ];
+                $candidateOrder[] = $pid;
+            }
+
+            $candidateAgg[$pid]['sumGrams'] += (int) $fi->g;
+            $candidateAgg[$pid]['count'] += 1;
+        }
+
+        $candidates = [];
+        foreach ($candidateOrder as $pid) {
+            if (! isset($candidateAgg[$pid])) {
+                continue;
+            }
+            $candidates[] = $candidateAgg[$pid];
+            if (count($candidates) >= $maxCandidates) {
+                break;
+            }
+        }
+
+        // 30-day "most frequent matching variant"
+        $fromFreq = Carbon::parse($date)->subDays($frequencyDays)->toDateString();
+        $freq = FoodIntake::query()
+            ->where('user_id', $userId)
+            ->whereBetween('date', [$fromFreq, $to])
+            ->with('product')
+            ->orderByDesc('date')
+            ->orderByDesc('id')
+            ->limit(1200)
+            ->get();
+
+        $freqAgg = [];
+        foreach ($freq as $fi) {
+            if (! $fi->product) {
+                continue;
+            }
+
+            $pid = (int) $fi->product_id;
+            $title = (string) $fi->product->title;
+            $hay = mb_strtolower($title);
+
+            if (! $this->containsAnyToken($hay, $tokens)) {
+                continue;
+            }
+
+            if (! isset($freqAgg[$pid])) {
+                $freqAgg[$pid] = [
+                    'productId' => $pid,
+                    'title' => $title,
+                    'count' => 0,
+                    'sumGrams' => 0,
+                    'lastDate' => (string) $fi->date,
+                    'lastRelative' => $this->relativeDayLabel($toCarbon, Carbon::parse((string) $fi->date)->startOfDay()),
+                    'lastGrams' => (int) $fi->g,
+                ];
+            }
+
+            $freqAgg[$pid]['count'] += 1;
+            $freqAgg[$pid]['sumGrams'] += (int) $fi->g;
+        }
+
+        $mostFrequent = null;
+        foreach ($freqAgg as $item) {
+            if ($mostFrequent === null || $item['count'] > $mostFrequent['count']) {
+                $mostFrequent = $item;
+            }
+        }
+
+        $lines = [];
+        $lines[] = "RECENT DIARY MEMORY (use only for ambiguity):";
+        $lines[] = "Focus tokens: " . implode(", ", $tokens);
+        $lines[] = "Matching candidates from last {$candidateDays} days (up to {$maxCandidates}):";
+
+        if (empty($candidates)) {
+            $lines[] = "(none)";
+        } else {
+            foreach ($candidates as $i => $c) {
+                $typical = (int) round(($c['sumGrams'] ?? 0) / max(1, (int) ($c['count'] ?? 1)));
+                $title = $this->sanitizeOneLine((string) $c['title']);
+                $rel = $c['lastRelative'] ?? null;
+                $relPart = $rel ? " ({$rel})" : "";
+                $lines[] = ($i + 1) . ") productId={$c['productId']}; title=\"{$title}\"; last={$c['lastGrams']}g on {$c['lastDate']}{$relPart}; typical={$typical}g; times={$c['count']}";
+            }
+        }
+
+        $lines[] = "Most frequent matching variant from last {$frequencyDays} days:";
+        if ($mostFrequent === null) {
+            $lines[] = "(none)";
+        } else {
+            $typical = (int) round(($mostFrequent['sumGrams'] ?? 0) / max(1, (int) ($mostFrequent['count'] ?? 1)));
+            $title = $this->sanitizeOneLine((string) $mostFrequent['title']);
+            $rel = $mostFrequent['lastRelative'] ?? null;
+            $relPart = $rel ? " ({$rel})" : "";
+            $lines[] = "productId={$mostFrequent['productId']}; title=\"{$title}\"; times={$mostFrequent['count']}; typical={$typical}g; last={$mostFrequent['lastGrams']}g on {$mostFrequent['lastDate']}{$relPart}";
+        }
+
+        return implode("\n", $lines);
+    }
+
+    private function extractFocusTokens(string $text): array
+    {
+        $t = mb_strtolower($text);
+        $t = preg_replace('/[0-9]+/u', ' ', $t);
+        $t = preg_replace('/[^\p{L}\s]+/u', ' ', $t);
+        $parts = preg_split('/\s+/u', trim($t)) ?: [];
+
+        $stop = [
+            'і','й','та','на','у','в','з','із','зі','до','по','за','для','без',
+            'це','цей','ця','ці','той','такий','я','ти','він','вона','вони','ми','ви',
+            'a','an','the','and','or','to','of','in','on','for','with','without',
+            'додай','додати','запиши','внеси','добав','постав','хочу','будь','ласка',
+            'тарілка','чашка','склянка','порція','шматок','ложка','ложки','шт','штуки',
+            'г','гр','грам','грами','ml','мл',
+        ];
+
+        $tokens = [];
+        foreach ($parts as $p) {
+            if ($p === '' || mb_strlen($p) < 3) {
+                continue;
+            }
+            if (in_array($p, $stop, true)) {
+                continue;
+            }
+            foreach ($this->tokenVariants($p) as $v) {
+                if ($v === '' || mb_strlen($v) < 3) {
+                    continue;
+                }
+                if (in_array($v, $stop, true)) {
+                    continue;
+                }
+                $tokens[] = $v;
+            }
+        }
+
+        return array_values(array_unique($tokens));
+    }
+
+    /**
+     * Generate a few variants for better matching across common UA/RU case endings.
+     * Goal: improve substring matching (e.g. "борща/борщу/борщем" -> "борщ").
+     */
+    private function tokenVariants(string $token): array
+    {
+        $token = trim(mb_strtolower($token));
+
+        // Normalize apostrophes (optional but helps UA words like "п'ять")
+        $token = str_replace(["’", "ʼ", "`"], "'", $token);
+
+        $variants = [$token];
+
+        // Also try without apostrophe (often product titles omit it)
+        if (str_contains($token, "'")) {
+            $variants[] = str_replace("'", '', $token);
+        }
+
+        $stem = $this->stemCyrillicToken($token);
+        if ($stem !== null) {
+            $variants[] = $stem;
+        }
+
+        // One more pass: if we removed apostrophe, stem that too
+        if (isset($variants[1]) && is_string($variants[1])) {
+            $stem2 = $this->stemCyrillicToken($variants[1]);
+            if ($stem2 !== null) {
+                $variants[] = $stem2;
+            }
+        }
+
+        // Unique, keep order
+        $out = [];
+        foreach ($variants as $v) {
+            if ($v === '' || in_array($v, $out, true)) {
+                continue;
+            }
+            $out[] = $v;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Conservative stemmer for UA/RU: strips common inflectional endings.
+     * Returns null if no safe stemming applied.
+     */
+    private function stemCyrillicToken(string $token): ?string
+    {
+        $token = trim($token);
+        $len = mb_strlen($token);
+
+        // Too short -> don't touch
+        if ($len < 4) {
+            return null;
+        }
+
+        // Only attempt stemming for Cyrillic-ish words (UA/RU)
+        if (! preg_match('/\p{Cyrillic}/u', $token)) {
+            return null;
+        }
+
+        // Common case endings UA/RU (sorted by length desc)
+        $suffixes = [
+            'ями', 'ами',
+            'ові', 'еві',
+            'ому', 'ему',
+            'ого', 'его',
+            'ими',
+            'ях', 'ах',
+            'ів', 'їв', 'ев', 'ов', 'ей',
+            'ою', 'ею', 'єю',
+            'ом', 'ем',
+            'ої', 'єї',
+            'ий', 'ій',
+            'у', 'ю', 'а', 'я', 'і', 'ї', 'и', 'е',
+        ];
+
+        foreach ($suffixes as $suf) {
+            $sufLen = mb_strlen($suf);
+            if ($sufLen >= $len) {
+                continue;
+            }
+            if (! str_ends_with($token, $suf)) {
+                continue;
+            }
+
+            $stem = mb_substr($token, 0, $len - $sufLen);
+
+            // Keep stems useful for substring matching
+            if (mb_strlen($stem) < 3) {
+                return null;
+            }
+
+            return $stem;
+        }
+
+        return null;
+    }
+
+    private function containsAnyToken(string $haystackLower, array $tokens): bool
+    {
+        foreach ($tokens as $t) {
+            if ($t !== '' && mb_strpos($haystackLower, $t) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function sanitizeOneLine(string $text): string
+    {
+        $text = str_replace(["\r", "\n"], ' ', $text);
+        $text = preg_replace('/\s+/u', ' ', $text);
+        return trim($text);
+    }
+
+    private function relativeDayLabel(Carbon $contextDate, Carbon $entryDate): ?string
+    {
+        // Positive diff means entry is in the past relative to context date.
+        $diff = $entryDate->diffInDays($contextDate, false);
+        if ($diff === 0) {
+            return 'today/сьогодні';
+        }
+        if ($diff === 1) {
+            return 'yesterday/вчора';
+        }
+        if ($diff === 2) {
+            return 'day before yesterday/позавчора';
+        }
+        if ($diff > 2) {
+            return "{$diff} days ago";
+        }
+        return null;
     }
 
     /**
@@ -205,6 +598,55 @@ PROMPT;
         }
 
         return $actions;
+    }
+
+    private function messagesToArrayForLogging(array $messages): array
+    {
+        // Prism message objects are value objects; keep logging resilient.
+        $out = [];
+        foreach ($messages as $m) {
+            $role = null;
+            $content = null;
+
+            if (is_object($m)) {
+                $role = method_exists($m, 'role') ? $m->role() : ($m->role ?? null);
+                $content = method_exists($m, 'content') ? $m->content() : ($m->content ?? null);
+            } elseif (is_array($m)) {
+                $role = $m['role'] ?? null;
+                $content = $m['content'] ?? null;
+            }
+
+            $out[] = [
+                'role' => $role,
+                'content' => $content,
+            ];
+        }
+        return $out;
+    }
+
+    private function extractToolCallsForLogging($response): array
+    {
+        $toolCalls = [];
+
+        if (! $response || ! property_exists($response, 'steps')) {
+            return $toolCalls;
+        }
+
+        foreach (($response->steps ?? []) as $step) {
+            if (! isset($step->toolCalls)) {
+                continue;
+            }
+
+            foreach ($step->toolCalls as $toolCall) {
+                $toolCalls[] = [
+                    'name' => $toolCall->name ?? null,
+                    'arguments' => method_exists($toolCall, 'arguments') ? $toolCall->arguments() : null,
+                    'result' => $toolCall->result ?? null,
+                ];
+            }
+        }
+
+        return $toolCalls;
     }
 }
 

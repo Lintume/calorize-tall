@@ -4,6 +4,7 @@ namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
 use App\Models\Product;
+use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class AddToFoodIntakeTool extends Tool
@@ -40,10 +41,20 @@ class AddToFoodIntakeTool extends Tool
 
     public function __invoke(int $productId, float $grams, string $mealType, string $date): string
     {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
+            'tool' => 'addToFoodIntake',
+            'args' => DiaryAgentLogger::payload([
+                'productId' => $productId,
+                'grams' => $grams,
+                'mealType' => $mealType,
+                'date' => $date,
+            ]),
+        ]);
+
         $userId = auth()->id();
 
         if (! $userId) {
-            return json_encode([
+            return $this->toolResult('addToFoodIntake', [
                 'success' => false,
                 'message' => 'User must be authenticated.',
             ]);
@@ -52,7 +63,7 @@ class AddToFoodIntakeTool extends Tool
         $product = Product::find($productId);
 
         if (! $product) {
-            return json_encode([
+            return $this->toolResult('addToFoodIntake', [
                 'success' => false,
                 'message' => "Product with ID {$productId} not found.",
             ]);
@@ -61,7 +72,7 @@ class AddToFoodIntakeTool extends Tool
         $mealTypeValue = self::MEAL_TYPES[strtolower($mealType)] ?? null;
 
         if ($mealTypeValue === null) {
-            return json_encode([
+            return $this->toolResult('addToFoodIntake', [
                 'success' => false,
                 'message' => "Invalid meal type: {$mealType}",
             ]);
@@ -94,7 +105,7 @@ class AddToFoodIntakeTool extends Tool
                 'calories' => round($product->calories * $multiplier),
             ]);
 
-            return json_encode([
+            return $this->toolResult('addToFoodIntake', [
                 'success' => true,
                 'message' => "Updated {$product->title} in {$mealType} to {$newTotalGrams}g",
                 'foodIntake' => [
@@ -122,7 +133,7 @@ class AddToFoodIntakeTool extends Tool
             'date' => $date,
         ]);
 
-        return json_encode([
+        return $this->toolResult('addToFoodIntake', [
             'success' => true,
             'message' => "Added {$gramsInt}g of {$product->title} to {$mealType}",
             'foodIntake' => [
@@ -132,6 +143,16 @@ class AddToFoodIntakeTool extends Tool
                 'calories' => $foodIntake->calories,
             ],
         ]);
+    }
+
+    private function toolResult(string $tool, array $payload): string
+    {
+        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
+            'tool' => $tool,
+            'result' => DiaryAgentLogger::payload($payload),
+        ]);
+
+        return json_encode($payload);
     }
 }
 
