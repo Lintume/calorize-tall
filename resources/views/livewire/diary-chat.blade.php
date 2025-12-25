@@ -107,7 +107,7 @@
                             <p>"{{ __('add apple to breakfast') }}"</p>
                             <p>"{{ __('200g chicken to lunch') }}"</p>
                             <p>"{{ __('copy yesterday dinner') }}"</p>
-                            <p>"додай банан на обід"</p>
+                            <p>"{{ __('add a banana to lunch') }}"</p>
                         </div>
                     </div>
 

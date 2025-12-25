@@ -1,12 +1,12 @@
 <x-app-layout>
 
-    @section('title', __('Calorize - Your Ultimate Path to Healthy Eating'))
+    @section('title', __('Calorize — AI Food Diary & Calorie Tracker'))
 
     @section('meta')
         <meta name="description"
-              content="{{ __('Calorize is your intuitive daily calorie diary with an extensive product database (85,000+ items) from Ukrainian supermarkets and local dishes. Achieve your goals easily.') }}">
+              content="{{ __('Calorize is an AI-powered food diary and calorie tracker. Log meals by chat or voice, pick the right product variant from your history, track calories & macros, and use an 85,000+ Ukrainian product database.') }}">
         <meta name="keywords"
-              content="{{ __('calorie diary, diet control, weight loss, healthy eating, calorie counting app, Ukrainian cuisine, large product database') }}">
+              content="{{ __('AI calorie tracker, AI food diary, calorie diary, macro tracker, calorie counting app, nutrition tracker, Ukrainian product database, recipes, weight loss') }}">
         <meta name="author" content="Calorize">
     @endsection
 
@@ -30,53 +30,87 @@
                 <img
                     src="/logo.png"
                     alt="Calorize Logo"
-                    class="w-64 h-56 object-cover mb-4 z-10 relative"
+                    class="w-40 h-36 md:w-44 md:h-40 object-cover mb-3 z-10 relative"
                     style="object-position: top;"
                     data-aos="zoom-in"
                 />
 
-                <h1 class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-pink-800 mb-3">
-                    Calorize
-                </h1>
                 <!-- Heading -->
                 <h1 class="
                     text-4xl
                     md:text-6xl
                     font-bold
                     leading-tight
-                    mb-4
+                    mb-3
                     relative
                     z-10
                 " data-aos="fade-up" data-aos-delay="200">
-                    {{ __('The Easiest Way to Master Your Diet') }}
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-pink-800">Calorize</span>
+                    <span class="text-gray-900"> {{ __('is an AI food diary') }}</span>
                 </h1>
 
                 <!-- Short Description -->
-                <p class="mt-2 text-lg max-w-2xl mx-auto font-sans relative z-10" data-aos="fade-up" data-aos-delay="400">
-                    {{ __('Every journey begins with a single step. Calorize is your map to healthier and more mindful eating. Start today, and we’ll guide you every step of the way.') }}
-                </p>
+                <div class="mt-2 max-w-2xl mx-auto font-sans relative z-10" data-aos="fade-up" data-aos-delay="400">
+                    <p class="text-lg text-gray-800">
+                        <span class="font-semibold text-gray-900">{{ __('Type it.') }}</span>
+                        <span class="font-semibold text-gray-900">{{ __('Say it.') }}</span>
+                        <span>{{ __('The AI logs it — with calories and macros.') }}</span>
+                    </p>
+
+                    <div class="mt-4 flex flex-wrap justify-center gap-2">
+                        <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-sm font-medium text-gray-800 shadow-sm border border-gray-200">
+                            {{ __('A bowl of borscht') }}
+                        </span>
+                        <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-sm font-medium text-gray-800 shadow-sm border border-gray-200">
+                            {{ __('2 eggs') }}
+                        </span>
+                        <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-sm font-medium text-gray-800 shadow-sm border border-gray-200">
+                            {{ __('coffee with milk') }}
+                        </span>
+                    </div>
+
+                    <p class="mt-4 text-base text-gray-700">
+                        {{ __('Calorize finds the right product (including your usual variant), chooses a sensible portion, and adds it to the correct meal.') }}
+                    </p>
+                </div>
+
+                <!-- Quick value bullets -->
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl w-full" data-aos="fade-up" data-aos-delay="500">
+                    <div class="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900">{{ __('Chat-first logging') }}</p>
+                        <p class="text-xs text-gray-600">{{ __('Text or voice → saved to diary') }}</p>
+                    </div>
+                    <div class="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900">{{ __('Smarter matches') }}</p>
+                        <p class="text-xs text-gray-600">{{ __('Uses your recent entries to disambiguate') }}</p>
+                    </div>
+                    <div class="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900">{{ __('85,000+ foods') }}</p>
+                        <p class="text-xs text-gray-600">{{ __('Ukrainian products & local dishes') }}</p>
+                    </div>
+                </div>
 
                 <!-- Call-to-Action Button -->
                 <a
                     href="{{ route('register') }}"
                     class="
-                        mt-8
+                        mt-7
                         inline-block
-                        bg-white
-                        text-amber-700
+                        bg-amber-700
+                        text-white
                         font-semibold
                         px-8
                         py-3
                         rounded-full
                         shadow-lg
-                        hover:bg-amber-100
+                        hover:bg-amber-800
                         transition-colors
                         relative
                         z-10
                     "
                     data-aos="fade-up" data-aos-delay="600"
                 >
-                    {{ __('Register Now') }}
+                    {{ __('Start Free') }}
                 </a>
             </div>
         </div>
@@ -100,20 +134,20 @@
                 mb-12
                 text-amber-900
             " data-aos="fade-up">
-                {{ __('Why Choose Calorize?') }}
+                {{ __('Why Calorize? Simple, fast, and powered by AI') }}
             </h2>
             <p class="text-lg max-w-3xl mx-auto text-center mb-8 text-gray-800">
-                {{ __('Imagine having a personal assistant that simplifies your journey. No stress, no complications—just straightforward guidance to help you reach your goals.') }}
+                {{ __('Most calorie apps fail because logging is tedious. Calorize flips it: you describe your food in a message, the AI understands it, finds the right product, and updates your diary. You stay consistent — results follow.') }}
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow" data-aos="fade-up" data-aos-delay="100">
-                    <a href="{{ route('personal') }}" class="block">
+                    <a href="{{ route('diary') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
-                            <i class="fa-solid fa-calendar-check text-2xl"></i>
-                            <span>{{ __('Intuitive Daily Diary') }}</span>
+                            <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
+                            <span>{{ __('AI Diary Assistant') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Logging meals feels as easy as flipping through a journal. Like having a friend that tracks your progress with care.') }}
+                            {{ __('Add, edit, delete, or copy meals by chat. Short messages work, and recent history helps pick the right variant — but your words always win (e.g. “lean”).') }}
                         </p>
                     </a>
                 </div>
@@ -121,10 +155,10 @@
                     <a href="{{ route('product.index') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
                             <i class="fa-solid fa-apple-whole text-2xl"></i>
-                            <span>{{ __('85,000+ Products') }}</span>
+                            <span>{{ __('85,000+ Products (Ukraine)') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('A massive database—from supermarket staples to grandma’s recipes. Everything you need is just a click away.') }}
+                            {{ __('Search fast, pick exact matches, and stop guessing. Great for branded foods, supermarket products, and everyday staples.') }}
                         </p>
                     </a>
                 </div>
@@ -132,10 +166,10 @@
                     <a href="{{ route('recipe.index') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
                             <i class="fa-solid fa-utensils text-2xl"></i>
-                            <span>{{ __('Surgical Recipe Precision') }}</span>
+                            <span>{{ __('Recipes that actually work') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Create or combine your own recipes with pinpoint accuracy. Include existing recipes as ingredients, account for cooking methods, and let Calorize handle the math.') }}
+                            {{ __('Build your recipes from ingredients (even other recipes), keep nutrition per 100g, and let Calorize handle the calculations for calories and macros.') }}
                         </p>
                     </a>
                 </div>
@@ -143,67 +177,91 @@
                     <a href="{{ route('statistic') }}" class="block">
                         <h3 class="text-xl font-semibold mb-3 flex items-center space-x-4 text-amber-800">
                             <i class="fa-solid fa-chart-line text-2xl"></i>
-                            <span>{{ __('Visual Progress Tracking') }}</span>
+                            <span>{{ __('Calories & macros made visible') }}</span>
                         </h3>
                         <p class="text-gray-700 leading-relaxed">
-                            {{ __('Stay motivated with clear graphs that display your progress. Monitor weight changes, macros, and more—all in a single dashboard.') }}
+                            {{ __('Track calories, proteins, fats, and carbs. See trends, stay on target, and adjust based on real data — not vibes.') }}
                         </p>
                     </a>
                 </div>
             </div>
         </section>
 
+        <!-- Built by a real user (trust / story) -->
+        <section class="container py-12">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
+                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                    <div class="max-w-3xl">
+                        <h2 class="text-3xl md:text-4xl font-bold text-amber-900 mb-3" data-aos="fade-up">
+                            {{ __('Built with the heart of an engineer — and a daily user') }}
+                        </h2>
+                        <p class="text-gray-700 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+                            {{ __('Calorize was created by a person who tracks food every day and continuously uses the product. The goal is simple: make calorie and macro tracking so effortless that you can stay consistent for months — not days.') }}
+                        </p>
+                        <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4" data-aos="fade-up" data-aos-delay="200">
+                            <div class="rounded-xl bg-amber-50 p-5">
+                                <p class="font-semibold text-amber-900">{{ __('Less friction, more consistency') }}</p>
+                                <p class="text-sm text-gray-700 mt-1">{{ __('The AI assistant reduces taps and choices — you just describe what you ate.') }}</p>
+                            </div>
+                            <div class="rounded-xl bg-amber-50 p-5">
+                                <p class="font-semibold text-amber-900">{{ __('Practical features first') }}</p>
+                                <p class="text-sm text-gray-700 mt-1">{{ __('Fast search, recipes, copy meals, edits, and a huge Ukrainian database — built for real-life use.') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-96 lg:w-[420px]" data-aos="fade-up" data-aos-delay="250">
+                        <div class="rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 border border-gray-100 p-7 text-left">
+                            <p class="text-sm font-semibold text-gray-900">{{ __('A promise') }}</p>
+                            <p class="mt-2 text-sm text-gray-700 leading-relaxed">
+                                {{ __('We keep iterating based on real daily use — so the app stays simple, fast, and useful.') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works (SEO-friendly) -->
+        <section class="container">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-amber-900 mb-4" data-aos="fade-up">
+                    {{ __('How the AI calorie diary works') }}
+                </h2>
+                <p class="text-gray-700 max-w-3xl" data-aos="fade-up" data-aos-delay="100">
+                    {{ __('Calorize is a functional calorie counting app with an AI assistant. It understands natural language, finds products, and updates your diary with calories and macros.') }}
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8" data-aos="fade-up" data-aos-delay="200">
+                    <div class="rounded-xl bg-amber-50 p-5">
+                        <p class="font-semibold text-amber-900">{{ __('1) Tell it what you ate') }}</p>
+                        <p class="text-sm text-gray-700 mt-1">{{ __('“a bowl of borscht”, “200g chicken”, “coffee with milk”') }}</p>
+                    </div>
+                    <div class="rounded-xl bg-amber-50 p-5">
+                        <p class="font-semibold text-amber-900">{{ __('2) AI finds the right item') }}</p>
+                        <p class="text-sm text-gray-700 mt-1">{{ __('Uses search + your recent diary to pick the most likely variant, and asks only when needed.') }}</p>
+                    </div>
+                    <div class="rounded-xl bg-amber-50 p-5">
+                        <p class="font-semibold text-amber-900">{{ __('3) Your diary updates instantly') }}</p>
+                        <p class="text-sm text-gray-700 mt-1">{{ __('Saved to the correct meal with grams and macros. Edit later by message.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Call to Action -->
         <section class="bg-gradient-to-r from-red-100 to-yellow-100 py-14 mt-12 rounded-lg shadow-md" data-aos="zoom-in">
-            <div class="container mx-auto text-center px-4">
+            <div class="container text-center px-4">
                 <h2 class="text-4xl md:text-5xl font-fancy-heading font-bold mb-6 text-amber-900">
-                    {{ __('Take Control of Your Diet Today!') }}
+                    {{ __('Start tracking without the busywork') }}
                 </h2>
                 <p class="text-lg max-w-3xl mx-auto mb-8 leading-relaxed text-gray-800">
-                    {{ __('Your best self is just around the corner. Imagine how confident you’ll feel after just one month of progress.') }}
+                    {{ __('Calorize keeps it simple: quick logging, accurate nutrition, and an AI assistant that helps you stay consistent. Create your account and try it today.') }}
                 </p>
                 <a
                     href="{{ route('register') }}"
                     class="bg-amber-700 text-white font-semibold px-8 py-3 rounded-full shadow-xl hover:bg-amber-800 transition-colors"
                 >
-                    {{ __('Create My Account') }}
+                    {{ __('Create Account') }}
                 </a>
-            </div>
-        </section>
-
-        <!-- Reviews Section -->
-        <section class="container mx-auto py-12 px-4 bg-amber-50 rounded-lg shadow-lg mt-16">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-amber-900" data-aos="fade-up">
-                {{ __('Reviews from our users') }}
-            </h2>
-            <p class="text-lg max-w-3xl mx-auto text-center mb-8 text-gray-800">
-                {{ __('Every review tells a story of transformation. Here are a few journeys that started with just one step: joining Calorize.') }}
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="200">
-                <!-- Review 1 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow flex items-center space-x-4">
-                    <img src="/images/reviews/avatar_woman_optimized.png" alt="{{ __('Olha avatar') }}" class="w-16 h-16 rounded-full shadow-md">
-                    <div>
-                        <p class="italic text-gray-700 leading-relaxed">
-                            {{ __('“Calorize is like a compass for my health. It shows me the right direction and keeps me on track.”') }}
-                        </p>
-                        <p class="text-right font-semibold mt-4 text-amber-800">
-                            – {{ __('Olha, 29 years old') }}
-                        </p>
-                    </div>
-                </div>
-                <!-- Review 2 -->
-                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow flex items-center space-x-4">
-                    <img src="/images/reviews/avatar_man_optimized.png" alt="{{ __('Dmytro avatar') }}" class="w-16 h-16 rounded-full shadow-md">
-                    <div>
-                        <p class="italic text-gray-700 leading-relaxed">
-                            {{ __('“Finally, an app that meets all my needs. Convenient interface, a huge product database, and the motivation to stick to my plan!”') }}
-                        </p>
-                        <p class="text-right font-semibold mt-4 text-amber-800">
-                            – {{ __('Dmytro, 35 years old') }}
-                        </p>
-                    </div>
-                </div>
             </div>
         </section>
 
