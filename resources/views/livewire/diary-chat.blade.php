@@ -15,9 +15,9 @@
         class="w-20 h-20 rounded-full flex flex-col items-center justify-center text-white cursor-pointer transition-all duration-200"
         :class="{
             'animate-pulse': $wire.isProcessing,
-            'bg-blue-600': true
+            'bg-amber-600': true
         }"
-        style="background-color: rgba(37, 99, 235, 0.75);"
+        style="background-color: rgba(217, 119, 6, 0.75);"
     >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -34,12 +34,12 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-        class="w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+        class="w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-300 flex flex-col overflow-hidden"
         style="max-height: min(70vh, 500px);"
         @click.outside="open = false"
     >
         <!-- Header -->
-        <div class="px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 flex justify-between items-center">
+        <div class="px-4 py-3 bg-gradient-to-r from-amber-600 to-amber-700 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <span class="text-lg">🤖</span>
                 <span class="font-medium text-white">{{ __('AI Assistant') }}</span>
@@ -101,9 +101,9 @@
                         </ul>
                     </div>
 
-                    <div class="mt-4 p-3 bg-blue-50 rounded-xl text-xs">
-                        <p class="font-medium text-blue-700 mb-2">{{ __('Examples:') }}</p>
-                        <div class="space-y-1 text-blue-600">
+                    <div class="mt-4 p-3 bg-amber-50 rounded-xl text-xs">
+                        <p class="font-medium text-amber-800 mb-2">{{ __('Examples:') }}</p>
+                        <div class="space-y-1 text-amber-700">
                             <p>"{{ __('add apple to breakfast') }}"</p>
                             <p>"{{ __('200g chicken to lunch') }}"</p>
                             <p>"{{ __('copy yesterday dinner') }}"</p>
@@ -123,7 +123,7 @@
                     <!-- User message -->
                     <template x-if="msg.role === 'user'">
                         <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-br-md"
-                             style="background-color: #3b82f6; color: white;">
+                             style="background-color: #d97706; color: white;">
                             <span x-text="msg.content"></span>
                         </div>
                     </template>
@@ -143,9 +143,9 @@
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-gray-500 mr-1">{{ __('Thinking...') }}</span>
                         <div class="flex space-x-1">
-                            <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
-                            <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
-                            <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
                         </div>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                     x-model="input"
                     @keydown.enter="send()"
                     type="text"
-                    class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                     :placeholder="recording ? '{{ __('Listening...') }}' : '{{ __('Type or speak...') }}'"
                     :disabled="recording || $wire.isProcessing"
                     x-ref="input"
@@ -193,7 +193,7 @@
                 <button
                     @click="send()"
                     :disabled="!input.trim() || $wire.isProcessing"
-                    class="w-11 h-11 bg-blue-500 hover:bg-blue-600 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="w-11 h-11 bg-amber-600 hover:bg-amber-700 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
