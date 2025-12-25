@@ -2,6 +2,59 @@
 
 This project uses Laravel Sail for local development with Docker.
 
+## Diary AI Agent (must-know)
+
+This repo contains an LLM-driven food diary agent used by the Diary chat UI.
+
+### Entry points / wiring
+
+- **UI component**: `app/Livewire/DiaryChat.php`
+  - Calls `app(App\Services\DiaryAgent\DiaryAgentService::class)->process($text, $context)`
+  - Passes `date`, `activeMeal`, and **conversation history** (`messages`)
+- **Main orchestrator**: `app/Services/DiaryAgent/DiaryAgentService.php`
+  - Builds **system prompt** + messages
+  - Calls Prism (`Prism::text()->using(OpenAI, 'gpt-4o-mini')`) with tools
+  - Parses tool calls from Prism response into `actions`
+
+### System prompt behavior (high-impact rules)
+
+- **Meal selection is automatic**: if the user doesn’t specify meal, agent defaults based on current time. It should not ask “which meal?”.
+- **Recent Diary Memory (disambiguation)**: agent injects a compact memory block built from the user’s `food_intake`:
+  - **7 days**: “matching candidates” (up to 5) for ambiguous short messages (e.g. “тарілка борща”)
+  - **30 days**: “most frequent matching variant” as fallback hint
+  - **Important**: memory is a *hint*, user text has priority (qualifiers like “пісного” must override memory).
+- **Token extraction**: `extractFocusTokens()` includes lightweight UA/RU stemming to match cases (“борща/борщу/борщем” → “борщ”).
+- **Plain text only**: prompt instructs the model to output NO markdown.
+
+### Tools (functions the model can call)
+
+Tools are in `app/Services/DiaryAgent/Tools/*` and are registered in `DiaryAgentService`.
+
+- **`searchProduct(query, onlyUserRecipes=false)`** (`SearchProductTool`)
+  - Returns **up to 10** matches (JSON: `found`, `count`, `products[]`)
+  - User recipes are prioritized via Meilisearch sorting
+- **`createProduct(name, calories, proteins, fats, carbohydrates)`** (`CreateProductTool`)
+  - Creates a user product (nutrition is per 100g)
+- **`addToFoodIntake(productId, grams, mealType, date)`** (`AddToFoodIntakeTool`)
+  - Adds ONE distinct product to meal
+  - Contains a safety merge: if same product/meal/date added again within ~90s, it merges grams into latest row
+- **`getFoodIntake(date, mealType)`** (`GetFoodIntakeTool`)
+  - Returns items for that meal/day including `foodIntakeId` (used for edit/delete/copy)
+- **`updateFoodIntake(foodIntakeId, grams)`** (`UpdateFoodIntakeTool`)
+  - Updates grams and recalculates macro totals for that row
+- **`deleteFoodIntake(foodIntakeId)`** (`DeleteFoodIntakeTool`)
+  - Deletes one entry
+
+### “Behind the scenes” logging (debugging)
+
+- **Logger**: `app/Services/DiaryAgent/DiaryAgentLogger.php` (request-scoped `requestId`)
+- **Channel**: `diary_agent` in `config/logging.php` → `storage/logs/diary-agent-YYYY-MM-DD.log`
+- **Config**: `config/diary_agent.php`
+- **ENV flags**:
+  - `DIARY_AGENT_LOG_ENABLED=true` to enable logging
+  - `DIARY_AGENT_LOG_PAYLOADS=true` to log full prompts/messages/tool args/results (may contain sensitive data)
+  - `DIARY_AGENT_LOG_TRUNCATE=8000` (or higher) to limit log size
+
 ## Important: Container Commands
 
 Always run the following commands through the Sail container:
