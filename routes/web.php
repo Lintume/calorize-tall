@@ -11,7 +11,28 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
+// Livewire update endpoint must be locale-agnostic.
+// Otherwise, switching locale (especially with SPA navigation) can leave the frontend
+// posting to the previous locale-prefixed endpoint and result in 404s.
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle);
+});
+
+// IMPORTANT: Livewire (v3) re-applies "persistent middleware" based on the original page route.
+// If we register localized routes based on the *current* request path (e.g. `/livewire/update`),
+// the locale prefix may default and Livewire will fail to match the original route (e.g. `en/diary`)
+// causing a 404 during updates. For Livewire requests, derive locale from the Referer URL.
+$localePrefix = LaravelLocalization::setLocale();
+if (request()->is('livewire/*')) {
+    $refererPath = parse_url(request()->headers->get('referer', ''), PHP_URL_PATH) ?: '';
+    $firstSegment = explode('/', trim($refererPath, '/'))[0] ?? null;
+
+    if ($firstSegment && array_key_exists($firstSegment, config('laravellocalization.supportedLocales', []))) {
+        $localePrefix = LaravelLocalization::setLocale($firstSegment);
+    }
+}
+
+Route::group(['prefix' => $localePrefix], function () {
 
     Route::view('/', 'pages.landing');
 
@@ -71,8 +92,4 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/privacy', function () {
         return view('pages.privacy');
     })->name('privacy');
-
-    Livewire::setUpdateRoute(function ($handle) {
-        return Route::post('/livewire/update', $handle);
-    });
 });
