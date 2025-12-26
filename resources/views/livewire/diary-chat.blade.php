@@ -264,6 +264,7 @@ function diaryChat() {
         recording: false,
         transcribing: false,
         input: '',
+        inputBeforeVoice: null,
         mediaRecorder: null,
         audioChunks: [],
         localMessages: [],
@@ -334,6 +335,13 @@ function diaryChat() {
                     return;
                 }
 
+                // UX: if there is existing text, hide it while recording so the meter looks "clean".
+                // We'll append the transcript to this text once transcription is ready.
+                this.inputBeforeVoice = this.input;
+                if ((this.input ?? '').trim().length > 0) {
+                    this.input = '';
+                }
+
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 this.stream = stream;
 
@@ -390,6 +398,11 @@ function diaryChat() {
                 this.recording = true;
             } catch (error) {
                 console.error('Error starting recording:', error);
+                // Restore typed text if we failed to start recording.
+                if (this.inputBeforeVoice !== null && (this.input ?? '').trim().length === 0) {
+                    this.input = this.inputBeforeVoice;
+                }
+                this.inputBeforeVoice = null;
                 alert("{{ __('Could not access microphone. Please check permissions.') }}");
             }
         },
@@ -465,6 +478,7 @@ function diaryChat() {
 
             const messageText = this.input;
             this.input = '';
+            this.inputBeforeVoice = null;
 
             // Optimistically show the user's message immediately
             this.localMessages = this.localMessages ?? [];
@@ -487,14 +501,20 @@ function diaryChat() {
         },
 
         onTranscriptionReady(text) {
-            // Put transcription in input for editing before sending
-            this.input = text;
+            const base = (this.inputBeforeVoice ?? '').trim();
+            const addition = (text ?? '').trim();
+            this.input = [base, addition].filter(Boolean).join(' ');
+            this.inputBeforeVoice = null;
             this.transcribing = false;
             this.$refs.input?.focus();
         },
 
         onTranscriptionError(message) {
             this.transcribing = false;
+            if (this.inputBeforeVoice !== null && (this.input ?? '').trim().length === 0) {
+                this.input = this.inputBeforeVoice;
+            }
+            this.inputBeforeVoice = null;
             alert(message);
         }
     }
