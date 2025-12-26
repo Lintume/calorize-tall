@@ -167,7 +167,7 @@
                         }"
                         :placeholder="recording
                             ? ''
-                            : (transcribing ? '{{ __('Transcribing...') }}' : '{{ __('Type or speak...') }}')"
+                            : (transcribing ? '' : '{{ __('Type or speak...') }}')"
                         :disabled="recording || transcribing || $wire.isProcessing"
                         x-ref="input"
                     >
@@ -184,6 +184,20 @@
                                     :style="`height: ${Math.max(15, Math.round(v * 100))}%`"
                                 ></div>
                             </template>
+                        </div>
+                    </div>
+
+                    <!-- Transcribing overlay inside input -->
+                    <div
+                        x-show="transcribing"
+                        class="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl bg-white/60 backdrop-blur-[1px]"
+                    >
+                        <div class="inline-flex items-center gap-2 text-sky-700 text-sm font-medium">
+                            <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                            </svg>
+                            <span class="animate-pulse">{{ __('Transcribing...') }}</span>
                         </div>
                     </div>
                 </div>
@@ -232,17 +246,6 @@
             <!-- Recording status -->
             <div x-show="recording" class="mt-2 text-center text-xs text-red-500 animate-pulse">
                 {{ __('Recording... Tap mic to stop') }}
-            </div>
-
-            <!-- Transcribing status -->
-            <div x-show="transcribing" class="mt-2 text-center text-xs text-sky-600">
-                <span class="inline-flex items-center gap-2">
-                    <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                    </svg>
-                    {{ __('Transcribing...') }}
-                </span>
             </div>
 
             <!-- Current context hint -->
@@ -301,8 +304,41 @@ function diaryChat() {
                     this.$nextTick(() => {
                         this.$refs.input?.focus();
                     });
+                } else {
+                    // If user closes the chat, release the mic to avoid keeping it active.
+                    this.releaseMicrophone();
                 }
             });
+        },
+
+        hasActiveStream() {
+            const s = this.stream;
+            if (!s) return false;
+            const tracks = s.getTracks?.() ?? [];
+            return tracks.length > 0 && tracks.some(t => t.readyState === 'live');
+        },
+
+        async ensureMicrophoneStream() {
+            if (this.hasActiveStream()) return this.stream;
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            this.stream = stream;
+            return stream;
+        },
+
+        releaseMicrophone() {
+            try {
+                if (this.mediaRecorder && this.recording) {
+                    this.mediaRecorder.stop();
+                    this.recording = false;
+                }
+            } catch (e) {}
+
+            try {
+                (this.stream?.getTracks?.() ?? []).forEach(track => track.stop());
+            } catch (e) {}
+
+            this.stream = null;
+            this.stopMeter();
         },
 
         async toggleRecording() {
@@ -331,8 +367,11 @@ function diaryChat() {
                     return;
                 }
 
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                this.stream = stream;
+                // Important for iOS Safari UX:
+                // If we stop tracks after each recording, the next start will re-trigger
+                // getUserMedia and can cause repeated permission prompts.
+                // Reuse the same stream during the page session and release it when chat closes.
+                const stream = await this.ensureMicrophoneStream();
 
                 // Setup live meter using Web Audio API
                 try {
@@ -375,9 +414,7 @@ function diaryChat() {
                         this.transcribing = false;
                         alert("{{ __('Could not transcribe audio. Please try again.') }}");
                     } finally {
-                        // Stop all tracks
-                        (this.stream ?? stream).getTracks().forEach(track => track.stop());
-                        this.stream = null;
+                        // Keep the stream for subsequent recordings to avoid re-prompting mic permissions on iOS.
                         this.stopMeter();
                     }
                 };
