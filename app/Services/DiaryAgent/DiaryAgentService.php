@@ -27,6 +27,7 @@ class DiaryAgentService
         $startedAt = microtime(true);
         DiaryAgentLogger::setRequestId($requestId);
 
+        $model = (string) config('diary_agent.model', 'gpt-4o-mini');
         $systemPrompt = $this->buildSystemPrompt($context, $command);
 
         $tools = [
@@ -46,7 +47,7 @@ class DiaryAgentService
             'date' => $context['date'] ?? null,
             'activeMeal' => $context['activeMeal'] ?? null,
             'locale' => app()->getLocale(),
-            'model' => 'gpt-4o-mini',
+            'model' => $model,
             'command' => DiaryAgentLogger::payload($command),
             'systemPrompt' => DiaryAgentLogger::payload($systemPrompt),
             'messages' => DiaryAgentLogger::payload($this->messagesToArrayForLogging($messages)),
@@ -54,7 +55,7 @@ class DiaryAgentService
             // Full content is logged only when DIARY_AGENT_LOG_PAYLOADS=true.
             'llmRequest' => DiaryAgentLogger::payload([
                 'provider' => 'openai',
-                'model' => 'gpt-4o-mini',
+                'model' => $model,
                 'system' => $systemPrompt,
                 'messages' => $this->messagesToArrayForLogging($messages),
                 'tools' => array_map(function ($tool) {
@@ -73,7 +74,7 @@ class DiaryAgentService
 
         try {
             $response = Prism::text()
-                ->using(Provider::OpenAI, 'gpt-4o-mini')
+                ->using(Provider::OpenAI, $model)
                 ->withSystemPrompt($systemPrompt)
                 ->withMessages($messages)
                 ->withTools($tools)
@@ -195,7 +196,7 @@ You are a helpful food diary assistant. You help users add, edit, and delete foo
 
 ## Your Capabilities
 You can:
-1. **Search for products** - Find existing products in the database
+1. **Search for products** - Find existing products in the database (86000+ products + user recipes)
 2. **Create products** - Add new products with estimated nutritional values
 3. **Add to meals** - Add products to breakfast, lunch, dinner, or snack
 4. **Edit portions** - Change the grams of existing items
@@ -244,6 +245,57 @@ Use sensible defaults based on typical serving sizes:
 ## Response Format
 After performing actions, provide a brief plain text summary like:
 "Додав 150g курячої грудки та 250g чаю з цукром до перекусу ✓"
+
+## CRITICAL: Search query normalization (before calling searchProduct)
+- searchProduct uses Meilisearch full-text search.
+- Never pass the raw user sentence as searchProduct.query.
+- Build a SHORT normalized product name (2-6 words) in Ukrainian\English (user language), focused on food nouns.
+- Remove filler/serving words and non-identifying adjectives (e.g. "білої", "нежирної", "смачної", "домашньої") unless they change meaning (e.g. "копчена", "смажена", "варена").
+- Convert common phrasing to typical catalog wording:
+  - "у муці/в муці/в паніровці" -> "в борошні/панірована"
+  - "жарена/жарений" -> "смажена/смажений"
+- For multi-ingredient items, keep key ingredients in the query:
+  - Example: "ананаси з креветками на шпажках" -> query like "ананас креветки шпажки" or "креветки з ананасом"
+  - Example: "риба жарена у муці" -> query like "риба смажена в борошні"
+
+## CRITICAL: Multiple search attempts + relevance gate
+- If the first searchProduct results are irrelevant (e.g. tea/drinks when user asked food; or missing key ingredient like "креветки"), DO NOT add any of them.
+- Try up to 3 searchProduct calls with different normalized queries (shorter / synonyms).
+- If after 2-3 searches there is no clearly relevant match, use createProduct (estimate nutrition per 100g) and then addToFoodIntake.
+- Do not “force” a match just because searchProduct returned something.
+
+## CRITICAL: Ukrainian-only catalog (normalize before searchProduct)
+- The product database is Ukrainian-first (RU words usually do NOT exist). Before calling searchProduct, ALWAYS normalize the query into Ukrainian.
+- Fix common rusisms/surzhyk/typos BEFORE search:
+  - "жарен(ий/а/е/і/...)" -> "смажен(ий/а/е/і/...)"
+  - "мука/муці/в муці/у муці/мцка" -> "борошно/в борошні"
+- Never pass a full user sentence to searchProduct.query. Build a SHORT Ukrainian product name (2-6 words) using common catalog wording.
+- If user wrote in RU, translate the food name to Ukrainian before searching.
+
+## CRITICAL: When to retry search vs createProduct (generic vs specific dishes)
+- Decide if the item is GENERIC (common dish) or SPECIFIC (unique dish) before searching.
+
+GENERIC (must try multiple searches):
+- Single main ingredient + cooking method OR very common dish name.
+- Examples: "риба смажена в борошні", "куряча грудка", "гречка варена", "омлет", "борщ".
+- Rule: for GENERIC items you MUST do at least 2 and up to 3 searchProduct attempts before createProduct.
+
+SPECIFIC (search once, then likely create):
+- 2+ distinct key ingredients, unusual combination, or “menu-style” dish.
+- Examples: "ананаси з креветками на шпажках", "салат з ... і ... і ...", "суші ...", "боул ...".
+- Rule: for SPECIFIC items do 1 searchProduct attempt; if no clearly relevant match, createProduct.
+
+## CRITICAL: Retry strategy (how to generate the 2-3 queries)
+- Attempt #1: normalized Ukrainian query, 2-6 words.
+- Attempt #2: shorten by removing adjectives and secondary words; keep only core noun(s) + method.
+- Attempt #3: use Ukrainian synonyms / catalog wording:
+  - "в борошні" <-> "панірована" / "в паніровці"
+  - reorder words: "риба в борошні смажена", "смажена риба в борошні", "риба панірована"
+  - drop qualifiers like "біла", "нежирна" unless they exist in titles
+
+## CRITICAL: When results are considered irrelevant (force retry)
+- If search results do NOT contain the core noun (e.g. for fish it should include "риб") in top results OR results look like a different category (seeds/beans/tea), treat the search as irrelevant and retry (for GENERIC items).
+- Never createProduct for a GENERIC dish after only 1 search unless the query is already minimal (core noun + method) and still irrelevant.
 
 PROMPT;
     }
