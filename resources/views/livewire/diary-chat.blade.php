@@ -304,41 +304,8 @@ function diaryChat() {
                     this.$nextTick(() => {
                         this.$refs.input?.focus();
                     });
-                } else {
-                    // If user closes the chat, release the mic to avoid keeping it active.
-                    this.releaseMicrophone();
                 }
             });
-        },
-
-        hasActiveStream() {
-            const s = this.stream;
-            if (!s) return false;
-            const tracks = s.getTracks?.() ?? [];
-            return tracks.length > 0 && tracks.some(t => t.readyState === 'live');
-        },
-
-        async ensureMicrophoneStream() {
-            if (this.hasActiveStream()) return this.stream;
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            this.stream = stream;
-            return stream;
-        },
-
-        releaseMicrophone() {
-            try {
-                if (this.mediaRecorder && this.recording) {
-                    this.mediaRecorder.stop();
-                    this.recording = false;
-                }
-            } catch (e) {}
-
-            try {
-                (this.stream?.getTracks?.() ?? []).forEach(track => track.stop());
-            } catch (e) {}
-
-            this.stream = null;
-            this.stopMeter();
         },
 
         async toggleRecording() {
@@ -367,11 +334,8 @@ function diaryChat() {
                     return;
                 }
 
-                // Important for iOS Safari UX:
-                // If we stop tracks after each recording, the next start will re-trigger
-                // getUserMedia and can cause repeated permission prompts.
-                // Reuse the same stream during the page session and release it when chat closes.
-                const stream = await this.ensureMicrophoneStream();
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                this.stream = stream;
 
                 // Setup live meter using Web Audio API
                 try {
@@ -405,16 +369,19 @@ function diaryChat() {
 
                 this.mediaRecorder.onstop = async () => {
                     try {
-                        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                        const mimeType = (this.mediaRecorder?.mimeType || this.audioChunks?.[0]?.type || 'audio/webm');
+                        const audioBlob = new Blob(this.audioChunks, { type: mimeType });
                         const base64 = await this.blobToBase64(audioBlob);
                         this.transcribing = true;
-                        this.$wire.processAudio(base64);
+                        this.$wire.processAudio(base64, mimeType);
                     } catch (error) {
                         console.error('Error preparing audio for transcription:', error);
                         this.transcribing = false;
                         alert("{{ __('Could not transcribe audio. Please try again.') }}");
                     } finally {
-                        // Keep the stream for subsequent recordings to avoid re-prompting mic permissions on iOS.
+                        // Stop all tracks
+                        (this.stream ?? stream).getTracks().forEach(track => track.stop());
+                        this.stream = null;
                         this.stopMeter();
                     }
                 };

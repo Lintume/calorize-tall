@@ -101,13 +101,13 @@ class DiaryChat extends Component
     /**
      * Process audio from the user
      */
-    public function processAudio(string $audioBase64): void
+    public function processAudio(string $audioBase64, ?string $mimeType = null): void
     {
         $this->isProcessing = true;
 
         try {
             $whisper = app(WhisperService::class);
-            $transcription = $whisper->transcribe($audioBase64);
+            $transcription = $whisper->transcribe($audioBase64, $mimeType);
 
             // Dispatch event so the frontend can show the transcription
             // in the input field for editing before sending
@@ -116,6 +116,7 @@ class DiaryChat extends Component
         } catch (\Exception $e) {
             Log::error('Whisper transcription error', [
                 'message' => $e->getMessage(),
+                'mimeType' => $mimeType,
             ]);
 
             $this->dispatch('transcription-error', message: __('Could not transcribe audio. Please try again.'));

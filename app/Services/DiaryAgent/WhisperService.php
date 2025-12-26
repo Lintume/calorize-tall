@@ -11,7 +11,7 @@ class WhisperService
     /**
      * Transcribe audio to text using OpenAI Whisper API
      */
-    public function transcribe(string $audioBase64): string
+    public function transcribe(string $audioBase64, ?string $mimeType = null): string
     {
         // Decode base64 audio
         $audioData = base64_decode($audioBase64);
@@ -20,9 +20,11 @@ class WhisperService
             throw new \InvalidArgumentException('Invalid base64 audio data');
         }
 
+        $extension = $this->guessExtensionFromMime($mimeType);
+
         // Create a temporary file for the audio
         $tempFile = tempnam(sys_get_temp_dir(), 'audio_');
-        $tempFilePath = $tempFile.'.webm';
+        $tempFilePath = $tempFile.'.'.$extension;
         rename($tempFile, $tempFilePath);
         file_put_contents($tempFilePath, $audioData);
 
@@ -33,7 +35,7 @@ class WhisperService
                 ->attach(
                     'file',
                     file_get_contents($tempFilePath),
-                    'audio.webm'
+                    'audio.'.$extension
                 )
                 ->post('https://api.openai.com/v1/audio/transcriptions', [
                     'model' => 'whisper-1',
@@ -55,6 +57,22 @@ class WhisperService
                 unlink($tempFilePath);
             }
         }
+    }
+
+    private function guessExtensionFromMime(?string $mimeType): string
+    {
+        $mimeType = strtolower(trim((string) $mimeType));
+
+        return match ($mimeType) {
+            'audio/mp4' => 'mp4',
+            'audio/m4a', 'audio/x-m4a' => 'm4a',
+            'audio/mpeg', 'audio/mp3' => 'mp3',
+            'audio/wav', 'audio/x-wav' => 'wav',
+            'audio/aac' => 'aac',
+            'audio/ogg', 'audio/opus' => 'ogg',
+            'audio/webm' => 'webm',
+            default => 'webm',
+        };
     }
 
     /**
