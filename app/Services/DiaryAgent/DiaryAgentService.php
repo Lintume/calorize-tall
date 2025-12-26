@@ -130,8 +130,8 @@ class DiaryAgentService
         };
 
         $mealContext = $activeMeal
-            ? "The user currently has '{$activeMeal}' selected in their diary. Use this meal."
-            : "No specific meal is selected. Based on current time ({$currentTime}), the likely meal is: {$suggestedMeal}. USE THIS MEAL BY DEFAULT without asking the user.";
+            ? "The user currently has '{$activeMeal}' selected in their diary. Use this meal if user not specified otherwise."
+            : "No specific meal is selected. Based on current time ({$currentTime}), the likely meal is: {$suggestedMeal}. USE THIS MEAL BY DEFAULT without asking the user if user not specified otherwise.";
 
         $recentDiaryMemory = $this->buildRecentDiaryMemoryBlock(
             command: $command,
@@ -161,8 +161,8 @@ You are a helpful food diary assistant. You help users add, edit, and delete foo
 
 ## CRITICAL: Meal Selection
 - If user specifies a meal (breakfast, lunch, dinner, snack, сніданок, обід, вечеря, перекус) - use that meal
-- If user does NOT specify a meal - AUTOMATICALLY use the suggested meal based on current time. DO NOT ASK the user which meal.
-- Only ask for clarification if something is truly ambiguous (like which product they mean), NOT about the meal type.
+- DO NOT ASK the user which meal.
+- Only ask for clarification if something is truly ambiguous (like which product they mean).
 
 ## CRITICAL: Quantities / multiple units
 - If user specifies a COUNT for the same product (e.g. "2 eggs", "два яйця", "3 Rafaello"), you MUST add it as ONE item:
@@ -219,7 +219,6 @@ Use sensible defaults based on typical serving sizes:
 5. Be concise: Keep responses short and actionable
 6. Confirm actions: Summarize what you did/will do
 7. NO MARKDOWN: Never use markdown formatting (no **, -, #, ` or other markup). Write plain text only.
-8. NEVER ASK ABOUT MEAL TYPE: If user doesn't specify meal, use the suggested meal based on current time automatically
 9. USE CONVERSATION HISTORY: Remember what user said in previous messages. If user refers to something from earlier in the conversation, use that context.
 10. ACT IMMEDIATELY: When user provides products to add, add them immediately without asking unnecessary questions
 
@@ -227,9 +226,6 @@ Use sensible defaults based on typical serving sizes:
 After performing actions, provide a brief plain text summary like:
 "Додав 150g курячої грудки та 250g чаю з цукром до перекусу ✓"
 
-NEVER ask:
-- "Which meal?" - use current time to determine
-- "What product?" - if user already mentioned it in the conversation
 PROMPT;
     }
 
