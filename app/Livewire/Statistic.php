@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -34,6 +35,22 @@ class Statistic extends Component
         'measurements' => [],
     ];
 
+    public array $nutrition = [
+        'days' => 0,
+        'total' => [
+            'calories' => 0,
+            'proteins' => 0,
+            'fats' => 0,
+            'carbohydrates' => 0,
+        ],
+        'avg' => [
+            'calories' => 0,
+            'proteins' => 0,
+            'fats' => 0,
+            'carbohydrates' => 0,
+        ],
+    ];
+
     #[Validate('nullable|in:subWeek,subMonth,subYear')]
     public string $timeRange = '';
 
@@ -53,7 +70,7 @@ class Statistic extends Component
         if (! $firstMeasurement) {
             $this->startDate = Carbon::now()->subWeek()->toDateString();
             $this->endDate = Carbon::now()->toDateString();
-
+            $this->computeNutritionAverages();
             return;
         }
         $firstAvailableDate = $firstMeasurement->date;
@@ -61,6 +78,7 @@ class Statistic extends Component
         $this->endDate = Carbon::now()->toDateString();
 
         $this->getData();
+        $this->computeNutritionAverages();
     }
 
     public function updated($field)
@@ -136,8 +154,45 @@ class Statistic extends Component
     private function rebuildChartData(): void
     {
         $this->getData();
+        $this->computeNutritionAverages();
         // Emit an event to the frontend
         $this->dispatch('chartDataUpdated', $this->data['dates'], $this->data['measurements']);
+    }
+
+    private function computeNutritionAverages(): void
+    {
+        $start = Carbon::parse($this->startDate)->startOfDay();
+        $end = Carbon::parse($this->endDate)->startOfDay();
+        $days = $start->diffInDays($end) + 1;
+
+        /** @var Collection<int, object{date:string, calories:string|int, proteins:string|int, fats:string|int, carbohydrates:string|int}> $dailyTotals */
+        $dailyTotals = Auth::user()
+            ->foodIntakes()
+            ->selectRaw('date, SUM(calories) as calories, SUM(proteins) as proteins, SUM(fats) as fats, SUM(carbohydrates) as carbohydrates')
+            ->whereBetween('date', [$this->startDate, $this->endDate])
+            ->groupBy('date')
+            ->get();
+
+        $totalCalories = (int) $dailyTotals->sum('calories');
+        $totalProteins = (int) $dailyTotals->sum('proteins');
+        $totalFats = (int) $dailyTotals->sum('fats');
+        $totalCarbohydrates = (int) $dailyTotals->sum('carbohydrates');
+
+        $this->nutrition = [
+            'days' => $days,
+            'total' => [
+                'calories' => $totalCalories,
+                'proteins' => $totalProteins,
+                'fats' => $totalFats,
+                'carbohydrates' => $totalCarbohydrates,
+            ],
+            'avg' => [
+                'calories' => $days ? (int) round($totalCalories / $days) : 0,
+                'proteins' => $days ? (int) round($totalProteins / $days) : 0,
+                'fats' => $days ? (int) round($totalFats / $days) : 0,
+                'carbohydrates' => $days ? (int) round($totalCarbohydrates / $days) : 0,
+            ],
+        ];
     }
 
     public function getReducedDates(array $dates): array

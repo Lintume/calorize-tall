@@ -37,6 +37,31 @@
             </select>
         </div>
     </div>
+
+    {{-- Average nutrition per day for selected period --}}
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <div class="text-xs text-gray-500">{{ __('Avg kcal / day') }}</div>
+            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['calories'] }}</div>
+            <div class="text-xs text-gray-400">{{ __('Days: ') }}{{ $nutrition['days'] }}</div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <div class="text-xs text-gray-500">{{ __('Avg proteins / day') }}</div>
+            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['proteins'] }}</div>
+            <div class="text-xs text-gray-400">{{ __('g') }}</div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <div class="text-xs text-gray-500">{{ __('Avg fats / day') }}</div>
+            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['fats'] }}</div>
+            <div class="text-xs text-gray-400">{{ __('g') }}</div>
+        </div>
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <div class="text-xs text-gray-500">{{ __('Avg carbs / day') }}</div>
+            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['carbohydrates'] }}</div>
+            <div class="text-xs text-gray-400">{{ __('g') }}</div>
+        </div>
+    </div>
+
     <div class="flex flex-col justify-center">
         <div class="flex flex-col shadow justify-between rounded-lg pb-8 xl:p-8 mt-3 bg-white">
             {{--tabs--}}
