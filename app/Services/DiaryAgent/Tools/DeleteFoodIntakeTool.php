@@ -3,7 +3,6 @@
 namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
-use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class DeleteFoodIntakeTool extends Tool
@@ -19,13 +18,6 @@ class DeleteFoodIntakeTool extends Tool
 
     public function __invoke(int $foodIntakeId): string
     {
-        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
-            'tool' => 'deleteFoodIntake',
-            'args' => DiaryAgentLogger::payload([
-                'foodIntakeId' => $foodIntakeId,
-            ]),
-        ]);
-
         $userId = auth()->id();
 
         if (! $userId) {
@@ -65,11 +57,6 @@ class DeleteFoodIntakeTool extends Tool
 
     private function toolResult(string $tool, array $payload): string
     {
-        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
-            'tool' => $tool,
-            'result' => DiaryAgentLogger::payload($payload),
-        ]);
-
         return json_encode($payload);
     }
 }

@@ -8,6 +8,7 @@ use App\Services\DiaryAgent\Tools\DeleteFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\GetFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\SearchProductTool;
 use App\Services\DiaryAgent\Tools\UpdateFoodIntakeTool;
+use App\Support\Helicone;
 use App\Models\FoodIntake;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +25,6 @@ class DiaryAgentService
     public function process(string $command, array $context): DiaryAgentResult
     {
         $requestId = (string) Str::uuid();
-        $startedAt = microtime(true);
-        DiaryAgentLogger::setRequestId($requestId);
 
         $model = (string) config('diary_agent.model', 'gpt-4o-mini');
         $systemPrompt = $this->buildSystemPrompt($context, $command);
@@ -42,63 +41,42 @@ class DiaryAgentService
         // Build messages array with conversation history
         $messages = $this->buildMessages($context['messages'] ?? [], $command);
 
-        DiaryAgentLogger::log('info', 'DiaryAgent request', [
-            'userId' => Auth::id(),
-            'date' => $context['date'] ?? null,
-            'activeMeal' => $context['activeMeal'] ?? null,
-            'locale' => app()->getLocale(),
-            'model' => $model,
-            'command' => DiaryAgentLogger::payload($command),
-            'systemPrompt' => DiaryAgentLogger::payload($systemPrompt),
-            'messages' => DiaryAgentLogger::payload($this->messagesToArrayForLogging($messages)),
-            // This is the closest thing to "what the LLM sees": the exact system prompt + message list we pass to Prism.
-            // Full content is logged only when DIARY_AGENT_LOG_PAYLOADS=true.
-            'llmRequest' => DiaryAgentLogger::payload([
-                'provider' => 'openai',
-                'model' => $model,
-                'system' => $systemPrompt,
-                'messages' => $this->messagesToArrayForLogging($messages),
-                'tools' => array_map(function ($tool) {
-                    // Prism tool objects vary; keep logging resilient.
-                    $name = null;
-                    if (is_object($tool)) {
-                        $name = method_exists($tool, 'name') ? $tool->name() : null;
-                    }
-                    return [
-                        'name' => $name,
-                        'class' => is_object($tool) ? get_class($tool) : gettype($tool),
-                    ];
-                }, $tools),
-            ]),
-        ]);
-
         try {
+            $heliconeHeaders = Helicone::headers(
+                sessionId: $requestId,
+                sessionPath: 'diary_agent/process',
+                properties: Helicone::defaultProperties([
+                    'Feature' => 'diary_agent',
+                    'Locale' => app()->getLocale(),
+                    'Date' => $context['date'] ?? null,
+                    'ActiveMeal' => $context['activeMeal'] ?? null,
+                    'RequestId' => $requestId,
+                ]),
+                sessionProperties: [
+                    'feature' => 'diary_agent',
+                    'userId' => Auth::id(),
+                    'date' => $context['date'] ?? null,
+                    'activeMeal' => $context['activeMeal'] ?? null,
+                    'locale' => app()->getLocale(),
+                ],
+            );
+
             $response = Prism::text()
                 ->using(Provider::OpenAI, $model)
                 ->withSystemPrompt($systemPrompt)
                 ->withMessages($messages)
                 ->withTools($tools)
                 ->withMaxSteps(10)
+                ->withClientOptions([
+                    'headers' => $heliconeHeaders,
+                ])
                 ->asText();
         } catch (\Throwable $e) {
-            DiaryAgentLogger::log('error', 'DiaryAgent LLM call failed', [
-                'error' => $e->getMessage(),
-                'exception' => get_class($e),
-            ]);
             throw $e;
         }
 
         // Parse the response and extract actions performed
         $actions = $this->parseToolCalls($response);
-
-        $durationMs = (int) round((microtime(true) - $startedAt) * 1000);
-
-        DiaryAgentLogger::log('info', 'DiaryAgent response', [
-            'durationMs' => $durationMs,
-            'text' => DiaryAgentLogger::payload($response->text ?? null),
-            'toolCalls' => DiaryAgentLogger::payload($this->extractToolCallsForLogging($response)),
-            'actions' => DiaryAgentLogger::payload($actions),
-        ]);
 
         return new DiaryAgentResult(
             message: $response->text,
@@ -673,60 +651,6 @@ PROMPT;
         return $actions;
     }
 
-    private function messagesToArrayForLogging(array $messages): array
-    {
-        // Prism message objects are value objects; keep logging resilient.
-        $out = [];
-        foreach ($messages as $m) {
-            $role = null;
-            $content = null;
-
-            if (is_object($m)) {
-                $role = method_exists($m, 'role') ? $m->role() : ($m->role ?? null);
-                // Prism versions differ: some expose content(), others text().
-                if (method_exists($m, 'content')) {
-                    $content = $m->content();
-                } elseif (method_exists($m, 'text')) {
-                    $content = $m->text();
-                } else {
-                    $content = $m->content ?? ($m->text ?? null);
-                }
-            } elseif (is_array($m)) {
-                $role = $m['role'] ?? null;
-                $content = $m['content'] ?? ($m['text'] ?? null);
-            }
-
-            $out[] = [
-                'role' => $role,
-                'content' => $content,
-            ];
-        }
-        return $out;
-    }
-
-    private function extractToolCallsForLogging($response): array
-    {
-        $toolCalls = [];
-
-        if (! $response || ! property_exists($response, 'steps')) {
-            return $toolCalls;
-        }
-
-        foreach (($response->steps ?? []) as $step) {
-            if (! isset($step->toolCalls)) {
-                continue;
-            }
-
-            foreach ($step->toolCalls as $toolCall) {
-                $toolCalls[] = [
-                    'name' => $toolCall->name ?? null,
-                    'arguments' => method_exists($toolCall, 'arguments') ? $toolCall->arguments() : null,
-                    'result' => $toolCall->result ?? null,
-                ];
-            }
-        }
-
-        return $toolCalls;
-    }
+    // Helicone now captures the full prompt/messages/tool calls/response for every LLM request.
 }
 

@@ -8,7 +8,11 @@ return [
     ],
     'providers' => [
         'openai' => [
-            'url' => env('OPENAI_URL', 'https://api.openai.com/v1'),
+            // If Helicone is enabled, route OpenAI-compatible traffic via Helicone proxy.
+            // Helicone headers are added at call sites (see App\\Support\\Helicone).
+            'url' => (bool) env('HELICONE_ENABLED', false)
+                ? env('HELICONE_OPENAI_PROXY_URL', 'https://oai.helicone.ai/v1')
+                : env('OPENAI_URL', 'https://api.openai.com/v1'),
             'api_key' => env('OPENAI_API_KEY', ''),
             'organization' => env('OPENAI_ORGANIZATION', null),
             'project' => env('OPENAI_PROJECT', null),

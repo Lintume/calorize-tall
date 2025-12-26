@@ -4,7 +4,6 @@ namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
 use App\Models\Product;
-use App\Services\DiaryAgent\DiaryAgentLogger;
 use Prism\Prism\Tool;
 
 class AddToFoodIntakeTool extends Tool
@@ -41,16 +40,6 @@ class AddToFoodIntakeTool extends Tool
 
     public function __invoke(int $productId, float $grams, string $mealType, string $date): string
     {
-        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
-            'tool' => 'addToFoodIntake',
-            'args' => DiaryAgentLogger::payload([
-                'productId' => $productId,
-                'grams' => $grams,
-                'mealType' => $mealType,
-                'date' => $date,
-            ]),
-        ]);
-
         $userId = auth()->id();
 
         if (! $userId) {
@@ -147,11 +136,6 @@ class AddToFoodIntakeTool extends Tool
 
     private function toolResult(string $tool, array $payload): string
     {
-        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
-            'tool' => $tool,
-            'result' => DiaryAgentLogger::payload($payload),
-        ]);
-
         return json_encode($payload);
     }
 }
