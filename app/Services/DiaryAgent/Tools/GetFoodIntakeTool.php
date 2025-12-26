@@ -4,6 +4,7 @@ namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\FoodIntake;
 use App\Services\DiaryAgent\DiaryAgentLogger;
+use Illuminate\Support\Facades\Auth;
 use Prism\Prism\Tool;
 
 class GetFoodIntakeTool extends Tool
@@ -20,23 +21,28 @@ class GetFoodIntakeTool extends Tool
         'вечеря' => 3,
         'snack' => 4,
         'перекус' => 4,
+        // Special value: return whole day
+        'all' => 0,
+    ];
+
+    private const MEAL_TYPE_LABELS_UK = [
+        1 => 'сніданок',
+        2 => 'обід',
+        3 => 'вечеря',
+        4 => 'перекус',
     ];
 
     public function __construct()
     {
         $this
             ->as('getFoodIntake')
-            ->for('Get products from a specific meal on a specific date. Useful for: 1) Finding items to delete/edit, 2) Copying meals between days. Returns list of food intake entries with their IDs.')
+            ->for('Get products from a meal on a date. Useful for: 1) Finding items to delete/edit, 2) Copying meals between days. If mealType is omitted or set to "all", returns the whole day (all meals) with mealType for each entry.')
             ->withStringParameter('date', 'Date in YYYY-MM-DD format (e.g., "2024-12-24")')
-            ->withEnumParameter(
-                'mealType',
-                'Type of meal',
-                ['breakfast', 'lunch', 'dinner', 'snack', 'сніданок', 'обід', 'вечеря', 'перекус']
-            )
+            ->withStringParameter('mealType', 'Optional. Meal type: breakfast/lunch/dinner/snack (or UA equivalents). Use "all" or omit to return whole day.')
             ->using($this);
     }
 
-    public function __invoke(string $date, string $mealType): string
+    public function __invoke(string $date, ?string $mealType = null): string
     {
         DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
             'tool' => 'getFoodIntake',
@@ -46,7 +52,7 @@ class GetFoodIntakeTool extends Tool
             ]),
         ]);
 
-        $userId = auth()->id();
+        $userId = Auth::id();
 
         if (! $userId) {
             return $this->toolResult('getFoodIntake', [
@@ -55,12 +61,72 @@ class GetFoodIntakeTool extends Tool
             ]);
         }
 
-        $mealTypeValue = self::MEAL_TYPES[strtolower($mealType)] ?? null;
+        $mealTypeNorm = $mealType !== null ? trim(mb_strtolower($mealType)) : null;
+        if ($mealTypeNorm === '') {
+            $mealTypeNorm = null;
+        }
+
+        // Whole day mode: mealType omitted or "all"
+        if ($mealTypeNorm === null || $mealTypeNorm === 'all') {
+            $intakes = FoodIntake::where('user_id', $userId)
+                ->where('date', $date)
+                ->with('product')
+                ->orderBy('type_food_intake')
+                ->orderBy('id')
+                ->get();
+
+            if ($intakes->isEmpty()) {
+                return $this->toolResult('getFoodIntake', [
+                    'success' => true,
+                    'message' => "No items found for {$date}",
+                    'date' => $date,
+                    'items' => [],
+                ]);
+            }
+
+            $items = $intakes->map(function ($intake) {
+                $mealValue = (int) $intake->type_food_intake;
+                $mealUk = self::MEAL_TYPE_LABELS_UK[$mealValue] ?? 'обід';
+
+                return [
+                    'foodIntakeId' => $intake->id,
+                    'productId' => $intake->product_id,
+                    'productTitle' => $intake->product?->title,
+                    'grams' => $intake->g,
+                    'calories' => $intake->calories,
+                    'proteins' => $intake->proteins,
+                    'fats' => $intake->fats,
+                    'carbohydrates' => $intake->carbohydrates,
+                    'mealTypeValue' => $mealValue,
+                    'mealType' => $mealUk,
+                ];
+            })->toArray();
+
+            // Group for convenience (optional for the LLM)
+            $meals = [];
+            foreach ($items as $it) {
+                $k = (string) ($it['mealType'] ?? 'обід');
+                if (! isset($meals[$k])) {
+                    $meals[$k] = [];
+                }
+                $meals[$k][] = $it;
+            }
+
+            return $this->toolResult('getFoodIntake', [
+                'success' => true,
+                'date' => $date,
+                'mealType' => 'all',
+                'items' => $items,
+                'meals' => $meals,
+            ]);
+        }
+
+        $mealTypeValue = self::MEAL_TYPES[$mealTypeNorm] ?? null;
 
         if ($mealTypeValue === null) {
             return $this->toolResult('getFoodIntake', [
                 'success' => false,
-                'message' => "Invalid meal type: {$mealType}",
+                'message' => 'Invalid meal type: ' . ($mealType ?? ''),
             ]);
         }
 
@@ -73,12 +139,12 @@ class GetFoodIntakeTool extends Tool
         if ($intakes->isEmpty()) {
             return $this->toolResult('getFoodIntake', [
                 'success' => true,
-                'message' => "No items found in {$mealType} for {$date}",
+                'message' => "No items found in {$mealTypeNorm} for {$date}",
                 'items' => [],
             ]);
         }
 
-        $items = $intakes->map(function ($intake) {
+        $items = $intakes->map(function ($intake) use ($mealTypeNorm) {
             return [
                 'foodIntakeId' => $intake->id,
                 'productId' => $intake->product_id,
@@ -88,13 +154,15 @@ class GetFoodIntakeTool extends Tool
                 'proteins' => $intake->proteins,
                 'fats' => $intake->fats,
                 'carbohydrates' => $intake->carbohydrates,
+                'mealTypeValue' => (int) $intake->type_food_intake,
+                'mealType' => self::MEAL_TYPE_LABELS_UK[(int) $intake->type_food_intake] ?? (string) $mealTypeNorm,
             ];
         });
 
         return $this->toolResult('getFoodIntake', [
             'success' => true,
             'date' => $date,
-            'mealType' => $mealType,
+            'mealType' => $mealTypeNorm,
             'items' => $items->toArray(),
         ]);
     }

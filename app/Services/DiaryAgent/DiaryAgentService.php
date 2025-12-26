@@ -231,6 +231,12 @@ Use sensible defaults based on typical serving sizes:
 - "today" / "сьогодні" = current date ({$date})
 - "day before yesterday" / "позавчора" = subtract 2 days
 
+## CRITICAL: Copying days/meals
+- If user asks to copy ("скопіюй", "copy"):
+  - ALWAYS call getFoodIntake for the source date first.
+  - If user says "все" / "all" (whole day), call getFoodIntake(date) WITHOUT mealType (or mealType="all") to get all meals.
+  - Then re-add each returned item to the target date with addToFoodIntake using the SAME mealType and grams.
+
 ## Important Rules
 1. One tool-call per DISTINCT product: When adding multiple different products, call searchProduct and addToFoodIntake for EACH distinct product separately
 2. Search before create: Always try searchProduct first. Only use createProduct if no matching product is found. searchProduct returns a LIST (up to 10); pick the best match based on user message.
