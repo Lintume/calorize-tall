@@ -155,26 +155,54 @@
         <!-- Input Area -->
         <div class="p-3 bg-white border-t border-gray-100">
             <div class="flex items-center gap-2">
-                <input
-                    x-model="input"
-                    @keydown.enter="send()"
-                    type="text"
-                    class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                    :placeholder="recording ? '{{ __('Listening...') }}' : '{{ __('Type or speak...') }}'"
-                    :disabled="recording || $wire.isProcessing"
-                    x-ref="input"
-                >
+                <div class="relative flex-1">
+                    <input
+                        x-model="input"
+                        @keydown.enter="send()"
+                        type="text"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
+                        :class="{
+                            'ring-2 ring-sky-400 border-sky-300 animate-pulse': transcribing,
+                            'ring-2 ring-red-400 border-red-300': recording
+                        }"
+                        :placeholder="recording
+                            ? ''
+                            : (transcribing ? '{{ __('Transcribing...') }}' : '{{ __('Type or speak...') }}')"
+                        :disabled="recording || transcribing || $wire.isProcessing"
+                        x-ref="input"
+                    >
+
+                    <!-- Live voice meter overlay (fills the whole input during recording) -->
+                    <div
+                        x-show="recording"
+                        class="pointer-events-none absolute inset-0 flex items-center rounded-xl overflow-hidden px-3 opacity-90"
+                    >
+                        <div class="w-full flex items-end justify-between gap-0.5 h-4">
+                            <template x-for="(v, i) in meterBars" :key="i">
+                                <div
+                                    class="w-1 rounded-sm bg-red-500/70 transition-[height] duration-75"
+                                    :style="`height: ${Math.max(15, Math.round(v * 100))}%`"
+                                ></div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Mic button -->
                 <button
                     @click="toggleRecording()"
-                    :disabled="$wire.isProcessing"
+                    :disabled="$wire.isProcessing || transcribing"
                     :class="{
                         'bg-red-500 hover:bg-red-600': recording,
                         'bg-gray-100 hover:bg-gray-200': !recording
                     }"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+                    class="relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 disabled:opacity-50"
                 >
+                    <span
+                        x-show="recording"
+                        class="absolute inset-0 rounded-xl bg-red-400/40 animate-ping"
+                        style="animation-duration: 1s;"
+                    ></span>
                     <template x-if="!recording">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -206,6 +234,17 @@
                 {{ __('Recording... Tap mic to stop') }}
             </div>
 
+            <!-- Transcribing status -->
+            <div x-show="transcribing" class="mt-2 text-center text-xs text-sky-600">
+                <span class="inline-flex items-center gap-2">
+                    <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    {{ __('Transcribing...') }}
+                </span>
+            </div>
+
             <!-- Current context hint -->
             <div class="mt-2 text-center text-xs text-gray-400">
                 <span x-show="!$wire.activeMeal">{{ __('Date') }}: {{ $date }}</span>
@@ -220,10 +259,16 @@ function diaryChat() {
     return {
         open: false,
         recording: false,
+        transcribing: false,
         input: '',
         mediaRecorder: null,
         audioChunks: [],
         localMessages: [],
+        stream: null,
+        audioContext: null,
+        analyser: null,
+        meterRaf: null,
+        meterBars: Array.from({ length: 48 }, () => 0),
 
         scrollToBottom() {
             this.$nextTick(() => {
@@ -287,6 +332,24 @@ function diaryChat() {
                 }
 
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                this.stream = stream;
+
+                // Setup live meter using Web Audio API
+                try {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    if (AC) {
+                        this.audioContext = new AC();
+                        const source = this.audioContext.createMediaStreamSource(stream);
+                        this.analyser = this.audioContext.createAnalyser();
+                        this.analyser.fftSize = 256;
+                        this.analyser.smoothingTimeConstant = 0.85;
+                        source.connect(this.analyser);
+                        this.startMeter();
+                    }
+                } catch (e) {
+                    // Meter is optional; recording must still work.
+                    console.warn('Voice meter init failed:', e);
+                }
                 const preferredMimeType = 'audio/webm;codecs=opus';
                 const options = (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported?.(preferredMimeType))
                     ? { mimeType: preferredMimeType }
@@ -302,12 +365,21 @@ function diaryChat() {
                 };
 
                 this.mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-                    const base64 = await this.blobToBase64(audioBlob);
-                    this.$wire.processAudio(base64);
-
-                    // Stop all tracks
-                    stream.getTracks().forEach(track => track.stop());
+                    try {
+                        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+                        const base64 = await this.blobToBase64(audioBlob);
+                        this.transcribing = true;
+                        this.$wire.processAudio(base64);
+                    } catch (error) {
+                        console.error('Error preparing audio for transcription:', error);
+                        this.transcribing = false;
+                        alert("{{ __('Could not transcribe audio. Please try again.') }}");
+                    } finally {
+                        // Stop all tracks
+                        (this.stream ?? stream).getTracks().forEach(track => track.stop());
+                        this.stream = null;
+                        this.stopMeter();
+                    }
                 };
 
                 this.mediaRecorder.start();
@@ -323,6 +395,53 @@ function diaryChat() {
                 this.mediaRecorder.stop();
                 this.recording = false;
             }
+        },
+
+        startMeter() {
+            if (!this.analyser) return;
+            const bufferLength = this.analyser.frequencyBinCount;
+            const data = new Uint8Array(bufferLength);
+
+            const tick = () => {
+                if (!this.recording || !this.analyser) return;
+
+                this.analyser.getByteFrequencyData(data);
+
+                // Take low-mid bins; normalize to 0..1 and spread across bars
+                const bars = this.meterBars.length;
+                const startBin = 2;
+                const endBin = Math.min(bufferLength - 1, 40);
+                const span = Math.max(1, endBin - startBin);
+
+                for (let i = 0; i < bars; i++) {
+                    const bin = startBin + Math.floor((i / bars) * span);
+                    const raw = data[bin] ?? 0;
+                    const v = Math.min(1, raw / 180);
+                    // Keep a tiny floor so it doesn't look "dead" on silence.
+                    this.meterBars[i] = Math.max(0.06, v);
+                }
+
+                this.meterRaf = requestAnimationFrame(tick);
+            };
+
+            cancelAnimationFrame(this.meterRaf);
+            this.meterRaf = requestAnimationFrame(tick);
+        },
+
+        stopMeter() {
+            cancelAnimationFrame(this.meterRaf);
+            this.meterRaf = null;
+            this.meterBars = this.meterBars.map(() => 0);
+
+            try {
+                this.analyser?.disconnect?.();
+            } catch (e) {}
+            this.analyser = null;
+
+            try {
+                this.audioContext?.close?.();
+            } catch (e) {}
+            this.audioContext = null;
         },
 
         blobToBase64(blob) {
@@ -366,10 +485,12 @@ function diaryChat() {
         onTranscriptionReady(text) {
             // Put transcription in input for editing before sending
             this.input = text;
+            this.transcribing = false;
             this.$refs.input?.focus();
         },
 
         onTranscriptionError(message) {
+            this.transcribing = false;
             alert(message);
         }
     }
