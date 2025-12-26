@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 class DiaryAgentLogger
 {
     private const REQUEST_ID_KEY = 'diaryAgentRequestId';
+    private const MAX_LOG_ITEMS = 50;
+    private const MAX_LOG_DEPTH = 6;
 
     public static function setRequestId(string $requestId): void
     {
@@ -55,19 +57,9 @@ class DiaryAgentLogger
 
         $truncate = (int) config('diary_agent.logging.truncate', 8000);
 
-        if (is_string($value)) {
-            return self::truncateString($value, $truncate);
-        }
-
-        if (is_array($value) || is_object($value)) {
-            $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            if ($json === false) {
-                return ['_unserializable' => true];
-            }
-            return self::truncateString($json, $truncate);
-        }
-
-        return $value;
+        // Keep structure (arrays/objects) in logs to make payloads readable/searchable.
+        // Only truncate strings and cap depth/size to avoid huge log entries.
+        return self::truncateDeep($value, $truncate, 0);
     }
 
     private static function summarizeForLogs(mixed $value): array|string|null
@@ -101,6 +93,64 @@ class DiaryAgentLogger
         return [
             '_type' => gettype($value),
         ];
+    }
+
+    private static function truncateDeep(mixed $value, int $truncate, int $depth): mixed
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if ($depth >= self::MAX_LOG_DEPTH) {
+            return self::summarizeForLogs($value);
+        }
+
+        if (is_string($value)) {
+            return self::truncateString($value, $truncate);
+        }
+
+        if (is_bool($value) || is_int($value) || is_float($value)) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            $out = [];
+            $i = 0;
+            foreach ($value as $k => $v) {
+                if ($i >= self::MAX_LOG_ITEMS) {
+                    $out['_truncated'] = true;
+                    $out['_total_items'] = count($value);
+                    break;
+                }
+                $out[$k] = self::truncateDeep($v, $truncate, $depth + 1);
+                $i++;
+            }
+            return $out;
+        }
+
+        if (is_object($value)) {
+            // Try common serialization patterns first.
+            if ($value instanceof \JsonSerializable) {
+                return self::truncateDeep($value->jsonSerialize(), $truncate, $depth + 1);
+            }
+            if (method_exists($value, 'toArray')) {
+                try {
+                    return self::truncateDeep($value->toArray(), $truncate, $depth + 1);
+                } catch (\Throwable) {
+                    // fall through
+                }
+            }
+
+            // As a last resort, attempt to log public properties.
+            $vars = get_object_vars($value);
+            if (! empty($vars)) {
+                return self::truncateDeep($vars, $truncate, $depth + 1);
+            }
+
+            return self::summarizeForLogs($value);
+        }
+
+        return self::summarizeForLogs($value);
     }
 
     private static function truncateString(string $text, int $max): string

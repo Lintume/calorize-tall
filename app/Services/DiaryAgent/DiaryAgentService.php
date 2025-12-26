@@ -50,6 +50,25 @@ class DiaryAgentService
             'command' => DiaryAgentLogger::payload($command),
             'systemPrompt' => DiaryAgentLogger::payload($systemPrompt),
             'messages' => DiaryAgentLogger::payload($this->messagesToArrayForLogging($messages)),
+            // This is the closest thing to "what the LLM sees": the exact system prompt + message list we pass to Prism.
+            // Full content is logged only when DIARY_AGENT_LOG_PAYLOADS=true.
+            'llmRequest' => DiaryAgentLogger::payload([
+                'provider' => 'openai',
+                'model' => 'gpt-4o-mini',
+                'system' => $systemPrompt,
+                'messages' => $this->messagesToArrayForLogging($messages),
+                'tools' => array_map(function ($tool) {
+                    // Prism tool objects vary; keep logging resilient.
+                    $name = null;
+                    if (is_object($tool)) {
+                        $name = method_exists($tool, 'name') ? $tool->name() : null;
+                    }
+                    return [
+                        'name' => $name,
+                        'class' => is_object($tool) ? get_class($tool) : gettype($tool),
+                    ];
+                }, $tools),
+            ]),
         ]);
 
         try {
@@ -606,10 +625,17 @@ PROMPT;
 
             if (is_object($m)) {
                 $role = method_exists($m, 'role') ? $m->role() : ($m->role ?? null);
-                $content = method_exists($m, 'content') ? $m->content() : ($m->content ?? null);
+                // Prism versions differ: some expose content(), others text().
+                if (method_exists($m, 'content')) {
+                    $content = $m->content();
+                } elseif (method_exists($m, 'text')) {
+                    $content = $m->text();
+                } else {
+                    $content = $m->content ?? ($m->text ?? null);
+                }
             } elseif (is_array($m)) {
                 $role = $m['role'] ?? null;
-                $content = $m['content'] ?? null;
+                $content = $m['content'] ?? ($m['text'] ?? null);
             }
 
             $out[] = [
