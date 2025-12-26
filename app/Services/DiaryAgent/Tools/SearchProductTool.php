@@ -30,6 +30,7 @@ class SearchProductTool extends Tool
         ]);
 
         $userId = Auth::id();
+        $limit = 10;
 
         // Build Meilisearch filter
         if ($onlyUserRecipes) {
@@ -44,8 +45,10 @@ class SearchProductTool extends Tool
             ->options([
                 'filter' => $filter,
                 'sort' => ['user_id:desc'],
+                // Explicit Meilisearch limit (some Scout engines may not fully honor ->take()).
+                'limit' => $limit,
             ])
-            ->take(10)
+            ->take($limit)
             ->get();
 
         if ($products->isEmpty()) {
