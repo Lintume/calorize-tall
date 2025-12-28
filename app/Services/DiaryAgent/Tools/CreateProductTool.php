@@ -42,7 +42,7 @@ class CreateProductTool extends Tool
             'proteins' => round($proteins, 1),
             'fats' => round($fats, 1),
             'carbohydrates' => round($carbohydrates, 1),
-            'base' => false,
+            'base' => true,
             'user_id' => $userId,
         ]);
 
