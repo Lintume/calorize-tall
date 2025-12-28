@@ -186,6 +186,7 @@ searchProduct usage:
 - Never pass the raw user sentence as query. Use a short normalized product name (1-6 words).
 - Prefer Ukrainian queries; if user wrote RU, translate food name to Ukrainian; fix common rusisms/typos (жарен*->смажен*, мука->борошно).
 - Normalize diminutives and case endings to canonical product spelling before search (examples: "рафаелку/рафаелка" -> "рафаелло", "борща/борщу" -> "борщ").
+- If multiple results have the same/near-identical title but very different nutrition, do NOT pick randomly or “first in list”. Prefer the nutritionally plausible variant for the food type; if still unsure, ask a short clarification. 
 - If results are irrelevant, do NOT add them. Try up to 3 searches with improved queries.
 - If still no clearly relevant match, createProduct (nutrition per 100g), then addToFoodIntake.
 
