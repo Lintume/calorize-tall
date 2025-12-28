@@ -3,7 +3,6 @@
 namespace App\Services\DiaryAgent\Tools;
 
 use App\Models\Product;
-use App\Services\DiaryAgent\DiaryAgentLogger;
 use Illuminate\Support\Facades\Auth;
 use Prism\Prism\Tool;
 
@@ -21,14 +20,6 @@ class SearchProductTool extends Tool
 
     public function __invoke(string $query, bool $onlyUserRecipes = false): string
     {
-        DiaryAgentLogger::log('debug', 'DiaryAgent tool call', [
-            'tool' => 'searchProduct',
-            'args' => DiaryAgentLogger::payload([
-                'query' => $query,
-                'onlyUserRecipes' => $onlyUserRecipes,
-            ]),
-        ]);
-
         $userId = Auth::id();
         $limit = 10;
 
@@ -79,11 +70,6 @@ class SearchProductTool extends Tool
 
     private function toolResult(string $tool, array $payload): string
     {
-        DiaryAgentLogger::log('debug', 'DiaryAgent tool result', [
-            'tool' => $tool,
-            'result' => DiaryAgentLogger::payload($payload),
-        ]);
-
         return json_encode($payload);
     }
 }

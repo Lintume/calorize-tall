@@ -47,14 +47,6 @@ Tools are in `app/Services/DiaryAgent/Tools/*` and are registered in `DiaryAgent
 
 ### “Behind the scenes” logging (debugging)
 
-- **Logger**: `app/Services/DiaryAgent/DiaryAgentLogger.php` (request-scoped `requestId`)
-- **Channel**: `diary_agent` in `config/logging.php` → `storage/logs/diary-agent-YYYY-MM-DD.log`
-- **Config**: `config/diary_agent.php`
-- **ENV flags**:
-  - `DIARY_AGENT_LOG_ENABLED=true` to enable logging
-  - `DIARY_AGENT_LOG_PAYLOADS=true` to log full prompts/messages/tool args/results (may contain sensitive data)
-  - `DIARY_AGENT_LOG_TRUNCATE=8000` (or higher) to limit log size
-
 ## Important: Container Commands
 
 Always run the following commands through the Sail container:
