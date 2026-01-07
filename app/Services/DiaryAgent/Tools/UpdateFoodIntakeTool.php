@@ -11,9 +11,9 @@ class UpdateFoodIntakeTool extends Tool
     {
         $this
             ->as('updateFoodIntake')
-            ->for('Update the grams for ONE existing food intake entry. Use getFoodIntake first to get the foodIntakeId.')
-            ->withNumberParameter('foodIntakeId', 'Food intake ID from getFoodIntake result')
-            ->withNumberParameter('grams', 'New amount in grams')
+            ->for('Update grams for ONE entry. Use getFoodIntake first.')
+            ->withNumberParameter('foodIntakeId', 'Food intake ID from getFoodIntake')
+            ->withNumberParameter('grams', 'New amount (g)')
             ->using($this);
     }
 

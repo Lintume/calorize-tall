@@ -8,10 +8,12 @@ use App\Services\DiaryAgent\Tools\DeleteFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\GetFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\SearchProductTool;
 use App\Services\DiaryAgent\Tools\UpdateFoodIntakeTool;
+use App\Services\Prism\GeminiWithHelicone;
 use App\Support\Helicone;
 use App\Models\FoodIntake;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache as LaravelCache;
 use Illuminate\Support\Str;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Facades\Prism;
@@ -20,6 +22,11 @@ use Prism\Prism\Facades\Tool;
 class DiaryAgentService
 {
     /**
+     * Cache key for the static system prompt
+     */
+    private const STATIC_PROMPT_CACHE_KEY = 'diary_agent:static_prompt_cache';
+
+    /**
      * Process a voice/text command and return agent response with actions
      */
     public function process(string $command, array $context): DiaryAgentResult
@@ -27,7 +34,15 @@ class DiaryAgentService
         $requestId = (string) Str::uuid();
 
         $model = (string) config('diary_agent.model', 'gpt-4o-mini');
+        
+        // Determine provider based on model name
+        $provider = $this->determineProvider($model);
+        
+        // Build system prompt (optimized for implicit caching: static first, dynamic last)
         $systemPrompt = $this->buildSystemPrompt($context, $command);
+        
+        // For Gemini models, ensure static prompt is cached (implicit caching works automatically
+        // when static content comes first, which we've already done in buildSystemPrompt)
 
         $tools = [
             Tool::make(SearchProductTool::class),
@@ -40,9 +55,6 @@ class DiaryAgentService
 
         // Build messages array with conversation history
         $messages = $this->buildMessages($context['messages'] ?? [], $command);
-
-        // Determine provider based on model name
-        $provider = $this->determineProvider($model);
 
         try {
             $heliconeHeaders = Helicone::headers(
@@ -141,63 +153,41 @@ class DiaryAgentService
             maxCandidates: 5
         );
 
-        return <<<PROMPT
-You are a food diary agent that performs actions via tools.
+        // Split prompt: static rules first (for implicit caching), dynamic context last
+        $staticRules = <<<STATIC
+Food diary agent for calculating calories and macros. Use tools to add/edit/delete/copy items.
 
-Context:
-Date: {$date}
-Time: {$currentTime}
-{$mealContext}
+Rules:
+- Plain text only, brief replies. Match user language (UA/EN).
+- Use history for references ("як вчора", "те саме").
+- Act immediately; ask only if truly ambiguous.
+- Meal: use user's name or context default. Don't ask "which meal?".
 
-Global rules:
-- Output plain text only (no markdown formatting). Be brief.
-- Reply in the language used in the user's latest message (UA/EN), unless they ask otherwise.
-- Use conversation history to resolve references (e.g. "як вчора", "те саме", "зроби як минулого разу").
-- When the user provides items to add/edit/delete/copy, do it immediately via tools. Ask only if truly ambiguous (usually which product variant).
+Quantities:
+- Never add same product multiple times. Count items: "2 eggs" = 120g (one entry).
+- Prioritize the cooking method (fried, boiled, etc.). If the found products do not specify the cooking method or the BV contradicts logic (for example, 0g fat for fried), be sure to use createProduct to create the exact variant.
+- Defaults: egg 60g, bread 30g, apple/pear/orange 150g, banana 120g, tea/coffee 250ml, milk 200ml, candy 10-15g, Rafaello/Ferrero 10g.
 
-Meal selection:
-- If the user names a meal (breakfast/lunch/dinner/snack or UA), use it.
-- Otherwise use the selected/suggested meal from context. Do NOT ask “which meal?”.
+Copying: getFoodIntake(source), then re-add each item to target date/meal.
 
-RECENT DIARY MEMORY (only for ambiguity):
-- Use it only for short generic messages (e.g. "кава", "йогурт", "тарілка борща").
-- The user's message overrides memory.
-- If the user adds qualifiers (e.g. "пісний", "без мʼяса", brand), do NOT pick a memory candidate unless its title clearly contains the same qualifier.
-- If you choose a specific variant because of memory, mention it in the summary (e.g. "як і вчора/як минулого разу").
-{$recentDiaryMemory}
+Search:
+- Normalize query (1-6 words). UA preferred; fix rusisms (жарен*->смажен*, мука->борошно).
+- Normalize endings: "рафаелку"->"рафаелло", "борща"->"борщ".
+- If ambiguous nutrition, prefer plausible variant or ask briefly.
+- Max 3 search attempts. If no match, createProduct then addToFoodIntake.
 
-Portions & quantities:
-- Never represent quantity by adding the same product multiple times.
-- If user says COUNT (e.g. "2 eggs"), add ONE item with grams = count * unit weight.
-- If grams are missing, use defaults:
-  Egg 60g each; Bread slice 30g; Apple/pear/orange 150g; Banana 120g; Tea/coffee 250ml; Milk 200ml; Candy 10-15g; Rafaello/Ferrero 10g each.
+After actions, output brief summary. IMPORTANT: If you created a new product using createProduct (not just found it via searchProduct), explicitly mention this in the summary. For example: "Створив новий продукт 'риба біла смажена в борошні' та додав 100г на обід" or "Created new product 'fried fish in flour' and added 100g to lunch". This helps users understand when new products are being added to their database.
+STATIC;
 
-Dates:
-- Interpret today/сьогодні as {$date}.
-- Interpret yesterday/вчора as {$date} minus 1 day.
-- Interpret day before yesterday/позавчора as {$date} minus 2 days.
+        // Dynamic context goes last (not cached)
+        $memorySection = $recentDiaryMemory ? "\n{$recentDiaryMemory}\n" : "";
+        $dynamicContext = <<<DYNAMIC
 
-Copying:
-- If the user asks to copy, first call getFoodIntake for the source.
-- Whole day copy: call getFoodIntake with mealType omitted or mealType="all".
-- Re-add each returned item to the target date with the same mealType and grams.
+Context: {$date} {$currentTime}. {$mealContext}
+Dates: today={$date}, yesterday={$date}-1d, позавчора={$date}-2d.{$memorySection}
+DYNAMIC;
 
-Adding multiple different products:
-- For each distinct product, call searchProduct then addToFoodIntake separately.
-
-searchProduct usage:
-- Never pass the raw user sentence as query. Use a short normalized product name (1-6 words).
-- Prefer Ukrainian queries; if user wrote RU, translate food name to Ukrainian; fix common rusisms/typos (жарен*->смажен*, мука->борошно).
-- Normalize diminutives and case endings to canonical product spelling before search (examples: "рафаелку/рафаелка" -> "рафаелло", "борща/борщу" -> "борщ").
-- If multiple results have the same/near-identical title but very different nutrition, do NOT pick randomly or “first in list”. Prefer the nutritionally plausible variant for the food type; if still unsure, ask a short clarification. 
-- If results are irrelevant, do NOT add them. Try up to 3 searches with improved queries.
-- If still no clearly relevant match, createProduct (nutrition per 100g), then addToFoodIntake.
-
-Create product:
-- Estimate realistic nutrition per 100g.
-
-After actions, output a short summary of what was done.
-PROMPT;
+        return $staticRules . $dynamicContext;
     }
 
     /**
@@ -214,14 +204,14 @@ PROMPT;
         $userId = Auth::id();
 
         if (! $userId) {
-            return "RECENT DIARY MEMORY: unavailable (user not authenticated)";
+            return "";
         }
 
         $tokens = $this->extractFocusTokens($command);
 
-        // Even without tokens, keep memory short to avoid biasing the model.
+        // Skip memory if no tokens extracted (saves tokens)
         if (empty($tokens)) {
-            return "RECENT DIARY MEMORY: (no focus tokens extracted from the message)";
+            return "";
         }
 
         $to = Carbon::parse($date)->toDateString();
@@ -335,32 +325,31 @@ PROMPT;
             }
         }
 
-        $lines = [];
-        $lines[] = "RECENT DIARY MEMORY (use only for ambiguity):";
-        $lines[] = "Focus tokens: " . implode(", ", $tokens);
-        $lines[] = "Matching candidates from last {$candidateDays} days (up to {$maxCandidates}):";
+        // Skip memory section entirely if no data found (saves tokens)
+        if (empty($candidates) && $mostFrequent === null) {
+            return "";
+        }
 
-        if (empty($candidates)) {
-            $lines[] = "(none)";
-        } else {
+        $lines = [];
+        $lines[] = "RECENT DIARY MEMORY (only for ambiguity):";
+        
+        if (!empty($candidates)) {
+            $lines[] = "Candidates (last {$candidateDays}d):";
             foreach ($candidates as $i => $c) {
                 $typical = (int) round(($c['sumGrams'] ?? 0) / max(1, (int) ($c['count'] ?? 1)));
                 $title = $this->sanitizeOneLine((string) $c['title']);
                 $rel = $c['lastRelative'] ?? null;
                 $relPart = $rel ? " ({$rel})" : "";
-                $lines[] = ($i + 1) . ") productId={$c['productId']}; title=\"{$title}\"; last={$c['lastGrams']}g on {$c['lastDate']}{$relPart}; typical={$typical}g; times={$c['count']}";
+                $lines[] = ($i + 1) . ") id={$c['productId']} \"{$title}\" {$c['lastGrams']}g{$relPart} (avg {$typical}g, {$c['count']}x)";
             }
         }
 
-        $lines[] = "Most frequent matching variant from last {$frequencyDays} days:";
-        if ($mostFrequent === null) {
-            $lines[] = "(none)";
-        } else {
+        if ($mostFrequent !== null) {
             $typical = (int) round(($mostFrequent['sumGrams'] ?? 0) / max(1, (int) ($mostFrequent['count'] ?? 1)));
             $title = $this->sanitizeOneLine((string) $mostFrequent['title']);
             $rel = $mostFrequent['lastRelative'] ?? null;
             $relPart = $rel ? " ({$rel})" : "";
-            $lines[] = "productId={$mostFrequent['productId']}; title=\"{$title}\"; times={$mostFrequent['count']}; typical={$typical}g; last={$mostFrequent['lastGrams']}g on {$mostFrequent['lastDate']}{$relPart}";
+            $lines[] = "Most frequent (last {$frequencyDays}d): id={$mostFrequent['productId']} \"{$title}\" {$mostFrequent['count']}x, avg {$typical}g{$relPart}";
         }
 
         return implode("\n", $lines);

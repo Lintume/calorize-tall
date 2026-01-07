@@ -35,9 +35,9 @@ class GetFoodIntakeTool extends Tool
     {
         $this
             ->as('getFoodIntake')
-            ->for('Get products from a meal on a date. Useful for: 1) Finding items to delete/edit, 2) Copying meals between days. If mealType is omitted or set to "all", returns the whole day (all meals) with mealType for each entry.')
-            ->withStringParameter('date', 'Date in YYYY-MM-DD format (e.g., "2024-12-24")')
-            ->withStringParameter('mealType', 'Optional. Meal type: breakfast/lunch/dinner/snack (or UA equivalents). Use "all" or omit to return whole day.')
+            ->for('Get meal items for a date. Use for delete/edit/copy. Omit mealType or use "all" for whole day.')
+            ->withStringParameter('date', 'Date (YYYY-MM-DD)')
+            ->withStringParameter('mealType', 'Meal: breakfast/lunch/dinner/snack (or UA). Use "all" or omit for whole day.')
             ->using($this);
     }
 

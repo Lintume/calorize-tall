@@ -26,15 +26,15 @@ class AddToFoodIntakeTool extends Tool
     {
         $this
             ->as('addToFoodIntake')
-            ->for('Add ONE DISTINCT product to a meal with TOTAL grams. If the user says "2 eggs"/"два яйця", call this tool ONCE with grams = 2 * 60 = 120 (don’t call it twice). Use sensible defaults when user didn’t specify grams.')
-            ->withNumberParameter('productId', 'Product ID from searchProduct result')
-            ->withNumberParameter('grams', 'Amount in grams (use sensible defaults: apple=150, egg=60, tea=250, bread slice=30, candy=10)')
+            ->for('Add ONE product to meal with total grams. "2 eggs" = 120g (one call). Use defaults if grams not specified.')
+            ->withNumberParameter('productId', 'Product ID from searchProduct')
+            ->withNumberParameter('grams', 'Amount in grams')
             ->withEnumParameter(
                 'mealType',
-                'Type of meal',
+                'Meal type',
                 ['breakfast', 'lunch', 'dinner', 'snack', 'сніданок', 'обід', 'вечеря', 'перекус']
             )
-            ->withStringParameter('date', 'Date in YYYY-MM-DD format')
+            ->withStringParameter('date', 'Date (YYYY-MM-DD)')
             ->using($this);
     }
 

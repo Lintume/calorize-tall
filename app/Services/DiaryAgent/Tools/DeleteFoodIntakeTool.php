@@ -11,8 +11,8 @@ class DeleteFoodIntakeTool extends Tool
     {
         $this
             ->as('deleteFoodIntake')
-            ->for('Delete ONE food intake entry from the diary. Use getFoodIntake first to find the foodIntakeId of the item to delete.')
-            ->withNumberParameter('foodIntakeId', 'Food intake ID from getFoodIntake result')
+            ->for('Delete ONE entry. Use getFoodIntake first.')
+            ->withNumberParameter('foodIntakeId', 'Food intake ID from getFoodIntake')
             ->using($this);
     }
 

@@ -54,21 +54,21 @@ class DiaryChat extends Component
 
         $this->isProcessing = true;
 
-        // Add user message to chat
-        $this->messages[] = [
-            'role' => 'user',
-            'content' => $text,
-            'timestamp' => now()->toIso8601String(),
-        ];
-
         try {
             $agent = app(DiaryAgentService::class);
             $result = $agent->process($text, [
                 'date' => $this->date,
                 'activeMeal' => $this->activeMeal,
                 'userId' => auth()->id(),
-                'messages' => $this->messages, // Pass conversation history
+                'messages' => $this->messages, // Pass conversation history (without current message)
             ]);
+
+            // Add user message to chat AFTER processing (to avoid duplication)
+            $this->messages[] = [
+                'role' => 'user',
+                'content' => $text,
+                'timestamp' => now()->toIso8601String(),
+            ];
 
             // Add assistant response
             $this->messages[] = [

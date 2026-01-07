@@ -154,6 +154,36 @@ Place the `products.xlsx` file in the root directory, then run:
 
 # Production build
 ./vendor/bin/sail npm run build
+```
+
+### Meilisearch (Product Search)
+
+The application uses Meilisearch for fast product search. The search index must be synchronized with the database.
+
+#### Reindex Products
+
+**Important:** If you manually modify the `products` table (INSERT, UPDATE, DELETE via SQL/phpMyAdmin), you must reindex Meilisearch:
+
+```sh
+# Clear the existing index
+./vendor/bin/sail artisan scout:flush "App\Models\Product"
+
+# Reimport all products
+./vendor/bin/sail artisan scout:import "App\Models\Product"
+
+# Sync index settings (filterableAttributes, sortableAttributes, etc.)
+./vendor/bin/sail artisan scout:sync-index-settings
+```
+
+> **Note:** When using Eloquent methods (`Product::create()`, `->save()`, `->delete()`), the index is updated automatically.
+
+#### Troubleshooting Search Issues
+
+If product search returns empty results:
+
+1. Check Meilisearch is running: `curl http://localhost:7700/health`
+2. Verify index has documents: `curl http://localhost:7700/indexes/products/stats -H "Authorization: Bearer masterKey"`
+3. Reindex products using the commands above
 
 ## Xdebug Configuration
 
