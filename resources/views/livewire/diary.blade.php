@@ -81,6 +81,7 @@
                                             <td class="px-2 py-4 break-words" x-text="prod.product.title"></td>
                                             <td class="px-2 py-4">
                                                 <input type="number" min="0"
+                                                       :id="'grams-' + prod.product_id"
                                                        class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                                        x-model="prod.g">
                                             </td>
@@ -294,8 +295,16 @@
                 });
 
                 this.$wire.on('productAdded', product => {
+                    const productId = product[0].id;
                     this.foodIntakes[this.active].products.push(this.formProductAsFoodIntake(product[0]));
                     this.createProductForm = false;
+                    this.$nextTick(() => {
+                        const gramsInput = document.getElementById('grams-' + productId);
+                        if (gramsInput) {
+                            gramsInput.focus();
+                            gramsInput.select();
+                        }
+                    });
                 });
 
                 const lastShown = localStorage.getItem('tooltipLastShown');
@@ -334,7 +343,15 @@
                 if (this.foodIntakes[this.active].products.find(p => p.product_id === product.id)) {
                     return;
                 }
+                const productId = product.id;
                 this.foodIntakes[this.active].products.push(this.formProductAsFoodIntake(product));
+                this.$nextTick(() => {
+                    const gramsInput = document.getElementById('grams-' + productId);
+                    if (gramsInput) {
+                        gramsInput.focus();
+                        gramsInput.select();
+                    }
+                });
             },
 
             formProductAsFoodIntake(product) {

@@ -41,6 +41,9 @@ class DiaryAgentService
         // Build messages array with conversation history
         $messages = $this->buildMessages($context['messages'] ?? [], $command);
 
+        // Determine provider based on model name
+        $provider = $this->determineProvider($model);
+
         try {
             $heliconeHeaders = Helicone::headers(
                 sessionId: $requestId,
@@ -62,7 +65,7 @@ class DiaryAgentService
             );
 
             $response = Prism::text()
-                ->using(Provider::OpenAI, $model)
+                ->using($provider, $model)
                 ->withSystemPrompt($systemPrompt)
                 ->withMessages($messages)
                 ->withTools($tools)
@@ -562,6 +565,20 @@ PROMPT;
         }
 
         return $actions;
+    }
+
+    /**
+     * Determine the provider based on model name
+     */
+    private function determineProvider(string $model): Provider
+    {
+        // Check if model is a Gemini model
+        if (str_starts_with(strtolower($model), 'gemini-')) {
+            return Provider::Gemini;
+        }
+
+        // Default to OpenAI for GPT models and others
+        return Provider::OpenAI;
     }
 
     // Helicone now captures the full prompt/messages/tool calls/response for every LLM request.
