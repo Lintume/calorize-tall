@@ -23,67 +23,75 @@
     <div class="rounded-2xl bg-white border border-stone-200 shadow-sm overflow-hidden mt-6">
 
         {{-- Gradient Header with Date + Progress --}}
-        <div class="bg-gradient-to-r from-amber-50 via-orange-50/50 to-amber-50 px-4 py-3 border-b border-amber-100/50">
+        <div class="bg-gradient-to-r from-amber-50 via-orange-50/50 to-amber-50 px-3 sm:px-4 md:px-6 py-3 sm:py-4 border-b border-amber-100/50">
             {{-- Date Row --}}
-            <div class="flex flex-wrap items-center gap-2 mb-3">
+            <div class="flex items-center justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
                 {{-- Date Navigation --}}
-                <div class="flex items-center gap-1">
+                <div class="flex items-center bg-white/60 p-1 rounded-xl border border-amber-100/50 shadow-sm shrink">
                     <button wire:click="changeDate(-1)"
-                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/80 text-amber-600 hover:bg-white hover:shadow-sm transition-all">
-                        <i class="fas fa-chevron-left text-xs"></i>
+                            class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-amber-600 active:bg-white hover:bg-white hover:shadow-sm transition-all shrink-0">
+                        <i class="fas fa-chevron-left text-xs sm:text-sm"></i>
                     </button>
 
-                    <div class="relative">
+                    <div class="relative px-2 sm:px-3 min-w-[85px] sm:min-w-[100px] text-center">
                         <input wire:model.live="date" type="date" id="date"
                                class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" />
-                        <div class="px-3 py-1.5 bg-white/80 rounded-lg cursor-pointer hover:bg-white transition-all min-w-[100px] text-center">
-                            <span class="text-sm font-semibold text-stone-800" x-text="formattedDate"></span>
-                        </div>
+                        <span class="text-xs sm:text-sm md:text-base font-bold text-stone-800 whitespace-nowrap" x-text="formattedDate"></span>
                     </div>
 
                     <button wire:click="changeDate(1)"
-                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/80 text-amber-600 hover:bg-white hover:shadow-sm transition-all">
-                        <i class="fas fa-chevron-right text-xs"></i>
+                            class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex items-center justify-center rounded-lg text-amber-600 active:bg-white hover:bg-white hover:shadow-sm transition-all shrink-0">
+                        <i class="fas fa-chevron-right text-xs sm:text-sm"></i>
                     </button>
                 </div>
 
-                {{-- Today button --}}
-                <button wire:click="goToToday" x-show="!isToday" x-cloak
-                        class="px-2.5 py-1 text-xs font-medium text-amber-700 bg-amber-100/80 hover:bg-amber-200 rounded-lg transition-colors">
-                    {{ __('Today') }}
-                </button>
+                {{-- Right side buttons --}}
+                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <button wire:click="goToToday" x-show="!isToday" x-cloak
+                            class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold text-amber-700 bg-amber-100 border border-amber-200 rounded-lg hover:bg-amber-200 transition-colors whitespace-nowrap shadow-sm">
+                        {{ __('Today') }}
+                    </button>
 
-                {{-- Save button --}}
-                <button @click="save"
-                        class="ml-auto px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-sm transition-all">
-                    <i class="fas fa-check mr-1"></i>
-                    {{ __('Save') }}
-                </button>
+                    <button @click="save"
+                            class="px-3 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-md active:scale-95 transition-all">
+                        <i class="fas fa-check mr-1 sm:mr-1.5"></i>
+                        {{ __('Save') }}
+                    </button>
+                </div>
             </div>
 
             {{-- Progress Bar + Macros --}}
-            <div class="bg-white/60 rounded-xl p-2.5">
+            <div class="bg-white/70 rounded-2xl p-3 sm:p-4 shadow-sm border border-white/50">
                 {{-- Calorie Progress --}}
-                <div class="flex items-center gap-3 mb-2">
+                <div class="flex items-center gap-3 sm:gap-4 mb-2.5 sm:mb-3">
                     <div class="flex-1">
-                        <div class="h-2 bg-stone-100 rounded-full overflow-hidden">
-                            <div class="h-full rounded-full transition-all duration-500"
+                        <div class="h-2.5 sm:h-3 bg-stone-100 rounded-full overflow-hidden p-0.5 sm:p-1">
+                            <div class="h-full rounded-full transition-all duration-500 shadow-sm"
                                  :class="calorieProgress > 100 ? 'bg-gradient-to-r from-red-400 to-red-500' : 'bg-gradient-to-r from-amber-400 to-orange-500'"
                                  :style="'width: ' + Math.min(calorieProgress, 100) + '%'">
                             </div>
                         </div>
                     </div>
-                    <span class="text-xs font-semibold whitespace-nowrap">
-                        <span class="text-amber-600" x-text="totalCalories"></span>
-                        <span class="text-stone-400">/ {{ Auth::user()->kcal_per_day ?: 2000 }}</span>
-                    </span>
+                    <div class="text-right leading-none">
+                        <span class="text-sm sm:text-base md:text-lg font-black text-amber-600" x-text="totalCalories"></span>
+                        <span class="text-[10px] sm:text-xs font-bold text-stone-400">/ {{ Auth::user()->kcal_per_day ?: 2000 }}</span>
+                    </div>
                 </div>
 
                 {{-- Macros --}}
-                <div class="flex items-center justify-center gap-4 text-xs">
-                    <span><span class="text-stone-400">{{ __('Prot') }}</span> <span class="font-semibold text-blue-600" x-text="totalProteins"></span></span>
-                    <span><span class="text-stone-400">{{ __('Fat') }}</span> <span class="font-semibold text-orange-500" x-text="totalFats"></span></span>
-                    <span><span class="text-stone-400">{{ __('Carb') }}</span> <span class="font-semibold text-emerald-600" x-text="totalCarbohydrates"></span></span>
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 text-[11px] sm:text-xs md:text-sm">
+                    <div class="bg-blue-50/40 rounded-lg py-1.5 sm:py-2 flex items-center justify-center gap-1.5 sm:gap-2 border border-blue-100/30">
+                        <span class="text-stone-400 font-medium">{{ __('Prot') }}</span>
+                        <span class="font-bold text-blue-600" x-text="totalProteins"></span>
+                    </div>
+                    <div class="bg-orange-50/40 rounded-lg py-1.5 sm:py-2 flex items-center justify-center gap-1.5 sm:gap-2 border border-orange-100/30">
+                        <span class="text-stone-400 font-medium">{{ __('Fat') }}</span>
+                        <span class="font-bold text-orange-500" x-text="totalFats"></span>
+                    </div>
+                    <div class="bg-emerald-50/40 rounded-lg py-1.5 sm:py-2 flex items-center justify-center gap-1.5 sm:gap-2 border border-emerald-100/30">
+                        <span class="text-stone-400 font-medium">{{ __('Carb') }}</span>
+                        <span class="font-bold text-emerald-600" x-text="totalCarbohydrates"></span>
+                    </div>
                 </div>
             </div>
         </div>

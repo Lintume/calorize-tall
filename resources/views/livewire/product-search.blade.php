@@ -2,19 +2,19 @@
     {{-- Search bar --}}
     <div class="relative">
         <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
-        <input
-            type="text"
-            placeholder="{{ __('Search...') }}"
+            <input
+                type="text"
+                placeholder="{{ __('Search...') }}"
             class="w-full pl-10 pr-10 py-2.5 border border-stone-200 rounded-xl text-sm focus:border-amber-500 focus:ring-amber-500"
-            wire:model.live.debounce.500ms="search"
-        />
-        @if($search)
+                wire:model.live.debounce.500ms="search"
+            />
+            @if($search)
             <button type="button"
                     class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
-                    wire:click="$set('search', '')">
-                <i class="fas fa-times"></i>
-            </button>
-        @endif
+                            wire:click="$set('search', '')">
+                        <i class="fas fa-times"></i>
+                    </button>
+            @endif
     </div>
     <div class="text-red-500 text-sm mt-1">@error('search') {{ $message }} @enderror</div>
 

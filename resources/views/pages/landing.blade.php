@@ -25,11 +25,11 @@
 
                     <!-- Logo (cropped bottom to hide text) -->
                     <div class="mb-6 mx-auto w-36 lg:w-44 overflow-hidden" style="aspect-ratio: 1 / 0.82;">
-                        <img
-                            src="/logo.png"
-                            alt="Calorize Logo"
+                <img
+                    src="/logo.png"
+                    alt="Calorize Logo"
                             class="w-full drop-shadow-lg"
-                        />
+                />
                     </div>
 
                     <!-- Main Heading -->
@@ -38,7 +38,7 @@
                         <span class="block text-3xl sm:text-4xl lg:text-5xl font-medium text-stone-800 mt-4">
                             {{ __('is an AI food diary') }}
                         </span>
-                    </h1>
+                </h1>
 
                     <!-- Tagline -->
                     <p class="text-xl sm:text-2xl text-stone-600 max-w-2xl mx-auto leading-relaxed mb-10">
@@ -109,10 +109,10 @@
                 <div class="text-center mb-16 lg:mb-20">
                     <h2 class="text-4xl sm:text-5xl font-bold text-stone-900 mb-6">
                         {{ __('Why Calorize?') }}
-                    </h2>
+            </h2>
                     <p class="text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed">
                         {{ __('Most calorie apps fail because logging is tedious. Calorize flips it: you describe your food in a message, the AI understands it, finds the right product, and updates your diary.') }}
-                    </p>
+            </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
@@ -123,7 +123,7 @@
                             </div>
                             <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
                                 {{ __('AI Diary Assistant') }}
-                            </h3>
+                        </h3>
                         </div>
                         <p class="text-base text-stone-600 leading-relaxed">
                             {{ __('Add, edit, delete, or copy meals by chat. Short messages work, and recent history helps pick the right variant — but your words always win (e.g. "lean").') }}
@@ -134,10 +134,10 @@
                         <div class="flex items-center gap-5 mb-5">
                             <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
                                 <i class="fas fa-apple-whole text-xl"></i>
-                            </div>
+                </div>
                             <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
                                 {{ __('85,000+ Products (Ukraine)') }}
-                            </h3>
+                        </h3>
                         </div>
                         <p class="text-base text-stone-600 leading-relaxed">
                             {{ __('Search fast, pick exact matches, and stop guessing. Great for branded foods, supermarket products, and everyday staples.') }}
@@ -148,10 +148,10 @@
                         <div class="flex items-center gap-5 mb-5">
                             <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
                                 <i class="fas fa-utensils text-xl"></i>
-                            </div>
+                </div>
                             <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
                                 {{ __('Recipes that actually work') }}
-                            </h3>
+                        </h3>
                         </div>
                         <p class="text-base text-stone-600 leading-relaxed">
                             {{ __('Build your recipes from ingredients (even other recipes), keep nutrition per 100g, and let Calorize handle the calculations for calories and macros.') }}
@@ -162,10 +162,10 @@
                         <div class="flex items-center gap-5 mb-5">
                             <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
                                 <i class="fas fa-chart-line text-xl"></i>
-                            </div>
+                </div>
                             <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
                                 {{ __('Calories & macros made visible') }}
-                            </h3>
+                        </h3>
                         </div>
                         <p class="text-base text-stone-600 leading-relaxed">
                             {{ __('Track calories, proteins, fats, and carbs. See trends, stay on target, and adjust based on real data — not vibes.') }}
@@ -187,20 +187,20 @@
                 <div class="text-center mb-16 lg:mb-20">
                     <h2 class="text-4xl sm:text-5xl font-bold mb-6">
                         {{ __('How the AI calorie diary works') }}
-                    </h2>
+                        </h2>
                     <p class="text-xl text-stone-400 max-w-3xl mx-auto leading-relaxed">
                         {{ __('Calorize is a functional calorie counting app with an AI assistant. It understands natural language, finds products, and updates your diary with calories and macros.') }}
-                    </p>
+                        </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
                     <div class="text-center">
                         <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-white text-3xl font-bold shadow-2xl shadow-amber-500/30">
                             1
-                        </div>
+                            </div>
                         <h3 class="text-xl font-semibold mb-4">{{ __('1) Tell it what you ate') }}</h3>
                         <p class="text-stone-400 leading-relaxed">{{ __('"a bowl of borscht", "200g chicken", "coffee with milk"') }}</p>
-                    </div>
+                            </div>
                     <div class="text-center">
                         <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-white text-3xl font-bold shadow-2xl shadow-amber-500/30">
                             2
@@ -225,10 +225,10 @@
                 <div class="text-center mb-14 lg:mb-16">
                     <h2 class="text-4xl sm:text-5xl font-bold text-stone-900 mb-6">
                         {{ __('Built with the heart of an engineer — and a daily user') }}
-                    </h2>
+                </h2>
                     <p class="text-xl text-stone-600 max-w-4xl mx-auto leading-relaxed">
                         {{ __('Calorize was created by a person who tracks food every day and continuously uses the product. The goal is simple: make calorie and macro tracking so effortless that you can stay consistent for months — not days.') }}
-                    </p>
+                </p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10 max-w-4xl mx-auto">
@@ -242,7 +242,7 @@
                     <div class="p-8 lg:p-10 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-200/50">
                         <div class="w-14 h-14 mb-5 flex items-center justify-center rounded-xl bg-amber-100 text-amber-700">
                             <i class="fas fa-wrench text-2xl"></i>
-                        </div>
+                    </div>
                         <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ __('Practical features first') }}</h3>
                         <p class="text-base text-stone-600 leading-relaxed">{{ __('Fast search, recipes, copy meals, edits, and a huge Ukrainian database — built for real-life use.') }}</p>
                     </div>
@@ -278,8 +278,8 @@
             <div class="max-w-6xl mx-auto px-6 lg:px-8">
                 <div class="flex items-center justify-between mb-14 lg:mb-16">
                     <h2 class="text-3xl sm:text-4xl font-bold text-stone-900">
-                        {{ __('Our Blog') }}
-                    </h2>
+                {{ __('Our Blog') }}
+            </h2>
                     <a href="{{ route('blog') }}" class="text-base text-amber-700 hover:text-amber-800 font-semibold flex items-center gap-2">
                         {{ __('View All Articles') }}
                         <i class="fas fa-arrow-right"></i>
@@ -291,61 +291,61 @@
                     <a href="{{ route('blog-2') }}" class="group">
                         <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
                             <img src="/blog/blog-1.webp"
-                                 alt="{{ __('5 tips for effective weight loss') }}"
+                            alt="{{ __('5 tips for effective weight loss') }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                         </div>
                         <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                            {{ __('5 tips for effective weight loss') }}
-                        </h3>
+                                {{ __('5 tips for effective weight loss') }}
+                            </h3>
                         <p class="text-base text-stone-500 line-clamp-2">
-                            {{ __('Learn how to achieve your ideal weight without harming your health.') }}
-                        </p>
-                    </a>
+                                {{ __('Learn how to achieve your ideal weight without harming your health.') }}
+                            </p>
+                            </a>
 
                     <!-- Blog Card 2 -->
                     <a href="{{ route('blog-1') }}" class="group">
                         <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
                             <img src="/blog/blog-2.webp"
-                                 alt="{{ __('How to count calories correctly?') }}"
+                            alt="{{ __('How to count calories correctly?') }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                         </div>
                         <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                            {{ __('How to count calories correctly?') }}
-                        </h3>
+                                {{ __('How to count calories correctly?') }}
+                            </h3>
                         <p class="text-base text-stone-500 line-clamp-2">
-                            {{ __('Step by step: Learn how calorie counting can change your life.') }}
-                        </p>
-                    </a>
+                                {{ __('Step by step: Learn how calorie counting can change your life.') }}
+                            </p>
+                            </a>
 
                     <!-- Blog Card 3 -->
                     <a href="{{ route('blog-3') }}" class="group">
                         <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
                             <img src="/blog/blog-3.webp"
-                                 alt="{{ __('Top 10 healthy foods') }}"
+                            alt="{{ __('Top 10 healthy foods') }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                         </div>
                         <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                            {{ __('Top 10 healthy foods') }}
-                        </h3>
+                                {{ __('Top 10 healthy foods') }}
+                            </h3>
                         <p class="text-base text-stone-500 line-clamp-2">
-                            {{ __('A list of foods that will help you stay healthy and active.') }}
-                        </p>
-                    </a>
+                                {{ __('A list of foods that will help you stay healthy and active.') }}
+                            </p>
+                            </a>
 
                     <!-- Blog Card 4 -->
                     <a href="{{ route('blog-4') }}" class="group">
                         <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
                             <img src="/blog/blog-4.webp"
-                                 alt="{{ __('Why is water important for weight loss?') }}"
+                            alt="{{ __('Why is water important for weight loss?') }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                         </div>
                         <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                            {{ __('Why is water important for weight loss?') }}
-                        </h3>
+                                {{ __('Why is water important for weight loss?') }}
+                            </h3>
                         <p class="text-base text-stone-500 line-clamp-2">
-                            {{ __('Find out why water is your best ally in weight management.') }}
-                        </p>
-                    </a>
+                                {{ __('Find out why water is your best ally in weight management.') }}
+                            </p>
+                            </a>
                 </div>
             </div>
         </section>

@@ -42,18 +42,18 @@
                     {{-- Header with gradient --}}
                     <div class="bg-gradient-to-br from-amber-50 to-orange-50 px-8 py-6 border-b border-amber-100/50">
                         <div class="flex items-start justify-between">
-                            <div>
+            <div>
                                 <h1 class="text-2xl font-bold text-stone-900 leading-tight">{{ $product->title }}</h1>
                                 <p class="text-base text-stone-500 mt-1">{{ __('Per 100 gram') }}</p>
                             </div>
-                            @if(auth()->check() && $product->user_id === auth()->id())
+                @if(auth()->check() && $product->user_id === auth()->id())
                                 <a href="{{ route('product.edit', $product->id) }}"
                                    class="p-2.5 text-stone-400 hover:text-amber-700 hover:bg-amber-100 rounded-xl transition-all">
                                     <i class="fas fa-edit text-lg"></i>
-                                </a>
-                            @endif
-                        </div>
-                    </div>
+                    </a>
+                @endif
+            </div>
+        </div>
 
                     {{-- Calories - Hero element --}}
                     <div class="px-8 py-10 text-center bg-gradient-to-b from-white to-stone-50/50">
@@ -133,10 +133,10 @@
                             <i class="fas fa-arrow-left"></i>
                             {{ __('Show All') }}
                         </a>
-                    </div>
-                </div>
+        </div>
+    </div>
 
-                @guest
+    @guest
                     {{-- AI Demo --}}
                     <div class="bg-white rounded-3xl shadow-xl shadow-stone-200/50 overflow-hidden border border-stone-100">
                         <div class="px-8 py-6 border-b border-stone-100 bg-gradient-to-br from-stone-50 to-white">
@@ -239,8 +239,8 @@
                         <a href="{{ route('diary') }}"
                            class="inline-flex items-center justify-center w-full px-6 py-4 text-lg font-semibold text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 rounded-2xl shadow-lg shadow-amber-600/25 transition-all duration-300">
                             <i class="fas fa-plus mr-2"></i>
-                            {{ __('Add to the diary') }}
-                        </a>
+                    {{ __('Add to the diary') }}
+                </a>
                     </div>
                 @endauth
 

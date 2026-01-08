@@ -8,35 +8,35 @@
             <div class="flex flex-1 gap-4">
                 <div class="flex-1">
                     <label for="start-date" class="block text-sm font-medium text-stone-600 mb-1.5">{{__('Start date')}}</label>
-                    <input
-                        wire:model.live="startDate"
-                        type="date"
-                        id="start-date"
+                <input
+                    wire:model.live="startDate"
+                    type="date"
+                    id="start-date"
                         class="block w-full rounded-xl border-stone-200 bg-white shadow-sm focus:border-amber-500 focus:ring-amber-500 text-stone-800 text-sm py-2.5 px-4"
-                    />
+                />
                     <div class="text-red-600 text-xs mt-1">@error('startDate') {{ $message }} @enderror</div>
-                </div>
+            </div>
                 <div class="flex-1">
                     <label for="end-date" class="block text-sm font-medium text-stone-600 mb-1.5">{{__('End date')}}</label>
-                    <input
-                        wire:model.live="endDate"
-                        type="date"
-                        id="end-date"
+                <input
+                    wire:model.live="endDate"
+                    type="date"
+                    id="end-date"
                         class="block w-full rounded-xl border-stone-200 bg-white shadow-sm focus:border-amber-500 focus:ring-amber-500 text-stone-800 text-sm py-2.5 px-4"
-                    />
+                />
                     <div class="text-red-600 text-xs mt-1">@error('endDate') {{ $message }} @enderror</div>
                 </div>
             </div>
             <!-- Period selector -->
             <div class="flex-1 md:max-w-xs">
                 <label class="block text-sm font-medium text-stone-600 mb-1.5 invisible">{{__('Period')}}</label>
-                <select wire:model.live="timeRange"
+            <select wire:model.live="timeRange"
                         class="block w-full rounded-xl border-stone-200 bg-white shadow-sm focus:border-amber-500 focus:ring-amber-500 text-stone-800 text-sm py-2.5 px-4">
                     <option value="">{{__('Select period')}}</option>
-                    @foreach($timeRanges as $key => $value)
-                        <option value="{{ $key }}">{{ __($value) }}</option>
-                    @endforeach
-                </select>
+                @foreach($timeRanges as $key => $value)
+                    <option value="{{ $key }}">{{ __($value) }}</option>
+                @endforeach
+            </select>
             </div>
         </div>
     </div>
@@ -70,37 +70,37 @@
         <!-- Tabs -->
         <div class="border-b border-stone-200 px-6">
             <nav class="flex gap-1 -mb-px overflow-x-auto" aria-label="Tabs">
-                @foreach($tabs as $key=>$value)
-                    <a href="#"
-                       wire:click.prevent="changeTab('{{$key}}')"
+                    @foreach($tabs as $key=>$value)
+                            <a href="#"
+                               wire:click.prevent="changeTab('{{$key}}')"
                        @class([
                            'px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                            'border-amber-500 text-amber-700' => $currentTab == $key,
                            'border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300' => $currentTab != $key
-                       ])
+])
                        aria-current="{{ $currentTab == $key ? 'page' : 'false' }}"
-                    >{{ __($value) }}</a>
-                @endforeach
+                            >{{ __($value) }}</a>
+                    @endforeach
             </nav>
-        </div>
+            </div>
 
         <!-- Chart Content -->
-        @if($data['dates'] && $data['measurements'])
-            <div class="p-6">
-                <canvas id="myChart" class="w-full"></canvas>
-            </div>
-        @else
+            @if($data['dates'] && $data['measurements'])
+                <div class="p-6">
+                    <canvas id="myChart" class="w-full"></canvas>
+                </div>
+            @else
             <div class="p-8 text-center">
                 <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-stone-100">
                     <i class="fas fa-chart-line text-2xl text-stone-400"></i>
                 </div>
                 <h2 class="text-xl font-semibold text-stone-800 mb-2">{{__('No data for selected period')}}</h2>
                 <p class="text-stone-500">{{__('Please add measurements in ')}}
-                    <a href="{{route('diary')}}"
+                        <a href="{{route('diary')}}"
                        class="text-amber-600 hover:text-amber-700 font-medium hover:underline">{{__('Diary')}}</a>
-                </p>
-            </div>
-        @endif
+                    </p>
+                </div>
+            @endif
     </div>
 </div>
 

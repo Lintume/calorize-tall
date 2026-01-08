@@ -5,9 +5,9 @@
     {{-- Errors --}}
     @if($errors->any())
         <div class="mt-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl mb-4">
-            @foreach ($errors->all() as $error)
+        @foreach ($errors->all() as $error)
                 <div class="text-sm">{{ $error }}</div>
-            @endforeach
+        @endforeach
         </div>
     @endif
 
@@ -26,12 +26,12 @@
             <div class="flex items-center gap-3 mb-6">
                 <div class="flex-1 relative">
                     <i class="fas fa-utensils absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
-                    <input
-                        type="text"
-                        placeholder="{{ __('Enter the recipe name') }}"
+                <input
+                    type="text"
+                    placeholder="{{ __('Enter the recipe name') }}"
                         class="w-full pl-10 pr-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:border-amber-500 focus:ring-amber-500"
-                        wire:model="title"
-                    />
+                    wire:model="title"
+                />
                 </div>
                 <button @click="save"
                         class="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 rounded-xl transition-colors shadow-sm">
@@ -63,17 +63,17 @@
                                 <th class="w-12 sm:w-14 px-2 py-3 text-center text-xs font-medium text-stone-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Carb') }}</th>
                                 <th class="w-14 sm:w-16 px-2 py-3 text-center text-xs font-medium text-stone-500 uppercase tracking-wider hidden sm:table-cell">{{ __('Kcal') }}</th>
                                 <th class="w-8 px-2 py-3"></th>
-                            </tr>
-                        </thead>
+                        </tr>
+                    </thead>
                         <tbody class="divide-y divide-stone-50">
-                            <template x-for="selectedProduct in selectedProducts" :key="selectedProduct.id">
+                        <template x-for="selectedProduct in selectedProducts" :key="selectedProduct.id">
                                 <tr class="hover:bg-stone-50/50 transition-colors">
                                     <td class="px-2 md:px-4 py-3 text-sm text-stone-700 truncate" x-text="selectedProduct.title"></td>
                                     <td class="px-2 py-3">
-                                        <input type="number" min="1"
+                                    <input type="number" min="1"
                                                class="w-full h-8 px-2 text-sm border border-stone-200 rounded-lg focus:border-amber-500 focus:ring-amber-500"
-                                               x-model="selectedProduct.grams">
-                                    </td>
+                                           x-model="selectedProduct.grams">
+                                </td>
                                     <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell" x-text="selectedProduct.proteins"></td>
                                     <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell" x-text="selectedProduct.fats"></td>
                                     <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell" x-text="selectedProduct.carbohydrates"></td>
@@ -83,34 +83,34 @@
                                                 class="text-stone-300 hover:text-red-500 transition-colors">
                                             <i class="fas fa-times text-sm"></i>
                                         </button>
-                                    </td>
-                                </tr>
-                            </template>
+                                </td>
+                            </tr>
+                        </template>
 
                             {{-- Total Row --}}
                             <tr class="bg-stone-50/50">
                                 <td class="px-2 md:px-4 py-3">
                                     <div class="flex items-center gap-2">
                                         <span class="text-sm font-medium text-stone-700">{{ __('Total') }}</span>
-                                        <div class="relative group">
+                                <div class="relative group">
                                             <i class="fas fa-info-circle text-stone-400 cursor-pointer hover:text-stone-600 text-xs"></i>
                                             <div class="absolute left-0 bottom-full mb-2 w-64 bg-stone-800 text-white text-xs rounded-lg shadow-lg px-3 py-2 hidden group-hover:block z-10">
-                                                {{ __('Enter the total weight of the finished dish after cooking or adding water. Ensure to re-weigh the dish after any thermal processing or liquid addition to get accurate results.') }}
+                                        {{ __('Enter the total weight of the finished dish after cooking or adding water. Ensure to re-weigh the dish after any thermal processing or liquid addition to get accurate results.') }}
                                             </div>
-                                        </div>
                                     </div>
-                                </td>
+                                </div>
+                            </td>
                                 <td class="px-2 py-3">
-                                    <input type="number" min="1"
+                                <input type="number" min="1"
                                            class="w-full h-8 px-2 text-sm border border-stone-200 rounded-lg focus:border-amber-500 focus:ring-amber-500 bg-white"
-                                           x-model="calculated.totalGrams">
-                                </td>
+                                       x-model="calculated.totalGrams">
+                            </td>
                                 <td class="px-2 py-3 text-center text-sm font-medium text-blue-600 hidden sm:table-cell" x-text="calculated.totalProteins"></td>
                                 <td class="px-2 py-3 text-center text-sm font-medium text-orange-500 hidden sm:table-cell" x-text="calculated.totalFats"></td>
                                 <td class="px-2 py-3 text-center text-sm font-medium text-emerald-600 hidden sm:table-cell" x-text="calculated.totalCarbohydrates"></td>
                                 <td class="px-2 py-3 text-center text-sm font-bold text-amber-600 hidden sm:table-cell" x-text="calculated.totalCalories"></td>
                                 <td class="px-2 py-3"></td>
-                            </tr>
+                        </tr>
 
                             {{-- Per 100g Row --}}
                             <tr class="bg-amber-50/50">
@@ -122,9 +122,9 @@
                                 <td class="px-2 py-3 text-center text-sm font-medium text-emerald-600 hidden sm:table-cell" x-text="calculated.carbohydratesPer100g"></td>
                                 <td class="px-2 py-3 text-center text-lg font-bold text-amber-700" x-text="calculated.kcalPer100g"></td>
                                 <td class="px-2 py-3"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
             </template>
 

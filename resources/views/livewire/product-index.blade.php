@@ -86,12 +86,12 @@
             <div class="mb-5">
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
-                    <input
-                        type="text"
-                        placeholder="{{ __('Search...') }}"
+                <input
+                    type="text"
+                    placeholder="{{ __('Search...') }}"
                         class="w-full pl-10 pr-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:border-amber-500 focus:ring-amber-500"
-                        wire:model.live.debounce.500ms="search"
-                    />
+                    wire:model.live.debounce.500ms="search"
+                />
                 </div>
                 <div class="text-red-500 text-sm mt-1">@error('search') {{ $message }} @enderror</div>
             </div>
@@ -122,16 +122,16 @@
                                 <tr class="hover:bg-stone-50/50 transition-colors">
                                     <td class="px-2 md:px-4 py-3">
                                         <div class="flex items-center gap-2 min-w-0">
-                                            @if($product->user_id)
+                                        @if($product->user_id)
                                                 <a href="{{ route('product.edit', $product->id) }}"
                                                    class="text-stone-400 hover:text-amber-600 transition-colors flex-shrink-0">
                                                     <i class="fas fa-edit text-sm"></i>
-                                                </a>
-                                            @endif
+                                            </a>
+                                        @endif
                                             <a href="{{ route('product.show', $product->slug) }}"
                                                class="text-stone-700 hover:text-amber-600 transition-colors truncate">
-                                                {{ $product->title }}
-                                            </a>
+                                            {{ $product->title }}
+                                        </a>
                                         </div>
                                     </td>
                                     <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell">{{ $product->proteins }}</td>

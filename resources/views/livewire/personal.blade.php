@@ -12,10 +12,10 @@
     {{-- Errors --}}
     @if($errors->any())
         <div class="mt-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl mb-4">
-            @foreach ($errors->all() as $error)
+        @foreach ($errors->all() as $error)
                 <div class="text-sm">{{ $error }}</div>
-            @endforeach
-        </div>
+        @endforeach
+    </div>
     @endif
 
     <div class="mt-6 space-y-6">
@@ -26,7 +26,7 @@
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                     {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                 </div>
-                <div>
+                    <div>
                     <h1 class="text-xl font-bold text-stone-800">{{ Auth::user()->name }}</h1>
                     <p class="text-sm text-stone-500">{{ __('Personal Settings') }}</p>
                 </div>
@@ -103,12 +103,12 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
+                    </div>
+                </div>
 
         {{-- Measurements Card --}}
         <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
-            <div @click="active === 'measurements' ? active = null : active = 'measurements'"
+                <div @click="active === 'measurements' ? active = null : active = 'measurements'"
                  class="px-5 py-4 border-b border-stone-100 bg-stone-50/50 cursor-pointer hover:bg-stone-100/50 transition-colors">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -185,24 +185,24 @@
                         <div x-show="!error.fat_percent">
                             <p class="text-2xl font-bold text-violet-600" x-text="calculated.fat_percent + '%'"></p>
                             <template x-if="user.sex === 'male'">
-                                <div>
+                    <div>
                                     <p x-show="calculated.fat_percent < 6" class="text-xs text-violet-500 mt-1">{{ __('Essential fat') }}</p>
                                     <p x-show="calculated.fat_percent >= 6 && calculated.fat_percent < 14" class="text-xs text-sky-500 mt-1">{{ __('Athletes') }}</p>
                                     <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 18" class="text-xs text-emerald-500 mt-1">{{ __('Fitness') }}</p>
                                     <p x-show="calculated.fat_percent >= 18 && calculated.fat_percent < 25" class="text-xs text-amber-500 mt-1">{{ __('Average') }}</p>
                                     <p x-show="calculated.fat_percent >= 25" class="text-xs text-red-500 mt-1">{{ __('Obese') }}</p>
-                                </div>
-                            </template>
+                            </div>
+                        </template>
                             <template x-if="user.sex === 'female'">
-                                <div>
+                            <div>
                                     <p x-show="calculated.fat_percent < 14" class="text-xs text-violet-500 mt-1">{{ __('Essential fat') }}</p>
                                     <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 21" class="text-xs text-sky-500 mt-1">{{ __('Athletes') }}</p>
                                     <p x-show="calculated.fat_percent >= 21 && calculated.fat_percent < 25" class="text-xs text-emerald-500 mt-1">{{ __('Fitness') }}</p>
                                     <p x-show="calculated.fat_percent >= 25 && calculated.fat_percent < 32" class="text-xs text-amber-500 mt-1">{{ __('Average') }}</p>
                                     <p x-show="calculated.fat_percent >= 32" class="text-xs text-red-500 mt-1">{{ __('Obese') }}</p>
-                                </div>
-                            </template>
-                        </div>
+                            </div>
+                        </template>
+                    </div>
                         <p x-show="error.fat_percent" class="text-xs text-stone-400 mt-1">
                             {{ __('Insufficient data. Please fill waist, neck, hips (for women), height and birth date.') }}
                         </p>
@@ -286,7 +286,7 @@
                         <p x-show="error.weeks_to_target" class="text-xs text-stone-400 mt-1">
                             {{ __('Insufficient data. Please fill weight, target weight and deficit kcal.') }}
                         </p>
-                    </div>
+                </div>
 
                 </div>
             </div>
