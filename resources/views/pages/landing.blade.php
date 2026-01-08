@@ -113,7 +113,14 @@
                                         <div class="px-5 pt-5 pb-3 border-b border-stone-200/60 bg-white/60">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-3">
-                                                    <div class="h-10 w-10 rounded-2xl bg-stone-900 text-white flex items-center justify-center font-extrabold tracking-tight">C</div>
+                                                    <div class="h-10 w-10 rounded-2xl bg-white border border-stone-200 flex items-center justify-center overflow-hidden">
+                                                        <img
+                                                            src="/favicon/favicon.svg"
+                                                            onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
+                                                            alt="Calorize"
+                                                            class="h-7 w-7"
+                                                        />
+                                                    </div>
                                                     <div>
                                                         <div class="text-sm font-semibold text-stone-900">Calorize</div>
                                                         <div class="text-xs text-stone-500">{{ __('landing.demo.subtitle') }}</div>

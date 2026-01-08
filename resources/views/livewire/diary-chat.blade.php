@@ -38,7 +38,12 @@
         <!-- Header -->
         <div class="px-4 py-3 bg-gradient-to-r from-amber-600 to-amber-700 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <span class="text-lg">🤖</span>
+                <img
+                    src="/favicon/favicon.svg"
+                    onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
+                    alt="Calorize"
+                    class="h-5 w-5"
+                />
                 <span class="font-medium text-white">{{ __('AI Assistant') }}</span>
             </div>
             <div class="flex items-center gap-2">

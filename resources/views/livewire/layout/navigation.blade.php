@@ -23,7 +23,12 @@ new class extends Component {
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center mr-3">
                     <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" wire:navigate>
-                        <x-application-logo class="w-8 md:w-10 fill-current text-stone-500 py-2"/>
+                        <img
+                            src="/favicon/favicon.svg"
+                            onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
+                            alt="Calorize"
+                            class="w-8 h-8 md:w-9 md:h-9"
+                        />
                     </a>
                 </div>
 
