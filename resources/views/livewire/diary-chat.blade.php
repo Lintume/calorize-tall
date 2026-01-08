@@ -1,7 +1,7 @@
 <div
     x-data="diaryChat()"
     x-init="init()"
-    class="fixed bottom-0 left-0 mb-4 ml-4 z-50"
+    class="fixed bottom-6 left-6 z-40"
     @transcription-ready.window="onTranscriptionReady($event.detail.text)"
     @transcription-error.window="onTranscriptionError($event.detail.message)"
 >
@@ -12,17 +12,14 @@
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-75"
         x-transition:enter-end="opacity-100 scale-100"
-        class="w-20 h-20 rounded-full flex flex-col items-center justify-center text-white cursor-pointer transition-all duration-200"
-        :class="{
-            'animate-pulse': $wire.isProcessing,
-            'bg-sky-600': true
-        }"
-        style="background-color: rgba(2, 132, 199, 0.75);"
+        class="w-16 h-16 rounded-full flex flex-col items-center justify-center text-white cursor-pointer shadow-lg hover:scale-105 transition-transform"
+        :class="$wire.isProcessing ? 'animate-pulse' : ''"
+        style="background: linear-gradient(to bottom right, #0ea5e9, #0284c7);"
     >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
-        <span class="text-xs font-bold mt-0.5">AI</span>
+        <span class="text-[10px] font-medium opacity-80">AI</span>
     </button>
 
     <!-- Chat Panel (expanded) -->
@@ -246,12 +243,6 @@
             <!-- Recording status -->
             <div x-show="recording" class="mt-2 text-center text-xs text-red-500 animate-pulse">
                 {{ __('Recording... Tap mic to stop') }}
-            </div>
-
-            <!-- Current context hint -->
-            <div class="mt-2 text-center text-xs text-gray-400">
-                <span x-show="!$wire.activeMeal">{{ __('Date') }}: {{ $date }}</span>
-                <span x-show="$wire.activeMeal" x-text="'{{ __('Adding to') }}: ' + $wire.activeMeal + ' ({{ $date }})'"></span>
             </div>
         </div>
     </div>

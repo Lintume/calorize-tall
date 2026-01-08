@@ -3,187 +3,256 @@
 
     @section('title', __('Diary'))
 
-    {{--    success message--}}
-    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4"></div>
+    {{-- Success message --}}
+    <div x-show="successMessage" x-text="successMessage"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform -translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         class="mt-4 bg-emerald-600 text-white p-3 rounded-xl mb-4 shadow-lg"></div>
 
-{{--    errors--}}
-    <div class="text-red-600">
-        @foreach ($errors->all() as $error)
-            <div>{{ $error }}</div>
-        @endforeach
-    </div>
-    <div class="flex flex-wrap mt-8 mb-4">
-        <div class="flex w-full items-center">
-            <!-- Previous button -->
-            <button wire:click="changeDate(-1)"
-                class="px-4 py-2 rounded-l-md">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-
-            <!-- Datepicker -->
-            <input
-                wire:model.live="date"
-                type="date"
-                id="date"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            />
-            <div class="text-red-600">@error('date') {{ $message }} @enderror</div>
-
-            <!-- Next button -->
-            <button wire:click="changeDate(1)"
-                class="px-4 py-2 rounded-r-md">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-
-            <!-- Save button -->
-            <x-primary-button class="ml-4" @click="save">
-                {{ __('Save') }}
-            </x-primary-button>
+    {{-- Errors --}}
+    @if($errors->any())
+        <div class="mt-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl mb-4">
+            @foreach ($errors->all() as $error)
+                <div class="text-sm">{{ $error }}</div>
+            @endforeach
         </div>
-    </div>
-    <div class="flex flex-col justify-center">
-        <div class="flex flex-col shadow justify-between rounded-lg pb-4 xl:p-8 mt-3 bg-white">
-            <div class="block-container p-4 md:p-8 xl:p-10 space-y-3">
-                @foreach(['breakfast', 'lunch', 'dinner', 'snack'] as $intake)
+    @endif
 
-                    {{--food intake label--}}
-                    <div @click="setActiveMeal('{{ $intake }}')"
-                         class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
-                        <div class="flex items-center">
-                            <div class="text-xl" x-text="foodIntakes.{{ $intake }}.translatable"></div>
-                            <div x-text="foodIntakes.{{ $intake }}.totalCalories"
-                                 class="ml-3 inline-flex px-2 items-center bg-gray-400 border border-transparent rounded-md font-semibold text-white tracking-widest">
-                            </div>
+    {{-- Main Content Card --}}
+    <div class="rounded-2xl bg-white border border-stone-200 shadow-sm overflow-hidden mt-6">
+
+        {{-- Compact Header: Date + Macros + Save --}}
+        <div class="border-b border-stone-100 px-4 py-3">
+            <div class="flex items-center justify-between gap-3">
+                {{-- Date Navigation --}}
+                <div class="flex items-center gap-1.5">
+                    <button wire:click="changeDate(-1)"
+                            class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-500 hover:bg-stone-100 transition-colors">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+
+                    <div class="relative">
+                        <input wire:model.live="date" type="date" id="date"
+                               class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" />
+                        <div class="px-3 py-1.5 text-sm font-medium text-stone-800 cursor-pointer hover:text-amber-700 transition-colors">
+                            <span x-text="formattedDate"></span>
                         </div>
-                        <i x-show="active !== '{{ $intake }}'" class="fas fa-plus"></i>
-                        <i x-show="active === '{{ $intake }}'" class="fas fa-minus"></i>
                     </div>
 
-                    <div x-show="active === '{{ $intake }}'">
+                    <button wire:click="changeDate(1)"
+                            class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-500 hover:bg-stone-100 transition-colors">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
 
-                        {{--food intake table--}}
-                        <template x-if="foodIntakes.{{ $intake }}.products.length">
-                            <table class="mt-5 min-w-full divide-y divide-gray-200 table-fixed">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
-                                        <th class="w-1/12 px-1 py-2 text-xs text-left font-medium text-gray-400 uppercase tracking-wider">{{ __('Grams') }}</th>
-                                        <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Prot') }}</th>
-                                        <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Fat') }}</th>
-                                        <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Carb') }}</th>
-                                        <th class="w-1/12 px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sm:table-cell">{{ __('Kcal') }}</th>
-                                        <th class="w-1/12 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                    <button wire:click="goToToday" x-show="!isToday"
+                            class="ml-1 px-2 py-1 text-xs font-medium text-amber-700 hover:bg-amber-50 rounded transition-colors">
+                        {{ __('Today') }}
+                    </button>
+                </div>
+
+                {{-- Macros inline --}}
+                <div class="hidden sm:flex items-center gap-4 text-xs">
+                    <span class="text-blue-600 font-medium">
+                        <span class="text-stone-400">{{ __('Prot') }}:</span>
+                        <span x-text="totalProteins"></span>
+                    </span>
+                    <span class="text-orange-500 font-medium">
+                        <span class="text-stone-400">{{ __('Fat') }}:</span>
+                        <span x-text="totalFats"></span>
+                    </span>
+                    <span class="text-emerald-600 font-medium">
+                        <span class="text-stone-400">{{ __('Carb') }}:</span>
+                        <span x-text="totalCarbohydrates"></span>
+                    </span>
+                </div>
+
+                {{-- Save button --}}
+                <button @click="save"
+                        class="px-3 py-1.5 text-sm font-medium text-amber-700 hover:bg-amber-50 rounded-lg transition-colors">
+                    <i class="fas fa-check mr-1"></i>
+                    {{ __('Save') }}
+                </button>
+            </div>
+
+            {{-- Mobile macros --}}
+            <div class="sm:hidden flex justify-center gap-4 text-xs mt-2 pt-2 border-t border-stone-100">
+                <span class="text-blue-600 font-medium">
+                    <span class="text-stone-400">{{ __('Prot') }}:</span>
+                    <span x-text="totalProteins"></span>
+                </span>
+                <span class="text-orange-500 font-medium">
+                    <span class="text-stone-400">{{ __('Fat') }}:</span>
+                    <span x-text="totalFats"></span>
+                </span>
+                <span class="text-emerald-600 font-medium">
+                    <span class="text-stone-400">{{ __('Carb') }}:</span>
+                    <span x-text="totalCarbohydrates"></span>
+                </span>
+            </div>
+        </div>
+
+        {{-- Meal Sections --}}
+        <div class="p-3 md:p-4 space-y-2">
+            @foreach(['breakfast', 'lunch', 'dinner', 'snack'] as $intake)
+                {{-- Meal Header --}}
+                <div @click="setActiveMeal('{{ $intake }}')"
+                     :class="active === '{{ $intake }}' ? 'border-amber-200 bg-amber-50/50' : 'border-stone-100 hover:border-stone-200'"
+                     class="rounded-xl border p-3 flex justify-between items-center cursor-pointer transition-all duration-200">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                             :class="active === '{{ $intake }}' ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'">
+                            @if($intake === 'breakfast')
+                                <i class="fas fa-sun"></i>
+                            @elseif($intake === 'lunch')
+                                <i class="fas fa-utensils"></i>
+                            @elseif($intake === 'dinner')
+                                <i class="fas fa-moon"></i>
+                            @else
+                                <i class="fas fa-cookie-bite"></i>
+                            @endif
+                        </div>
+                        <span class="font-medium text-stone-800" x-text="foodIntakes.{{ $intake }}.translatable"></span>
+                        <span x-text="foodIntakes.{{ $intake }}.totalCalories"
+                              :class="foodIntakes.{{ $intake }}.totalCalories > 0 ? 'text-amber-700' : 'text-stone-400'"
+                              class="text-sm font-medium">
+                        </span>
+                    </div>
+                    <i :class="active === '{{ $intake }}' ? 'fas fa-chevron-up text-amber-500' : 'fas fa-chevron-down text-stone-300'"
+                       class="text-xs"></i>
+                </div>
+
+                {{-- Meal Content (expanded) --}}
+                <div x-show="active === '{{ $intake }}'"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 -translate-y-2"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="px-2">
+
+                    {{-- Food Intake Table --}}
+                    <template x-if="foodIntakes.{{ $intake }}.products.length">
+                        <div class="mt-3 overflow-x-auto">
+                            <table class="w-full table-fixed">
+                                <thead>
+                                    <tr class="border-b border-stone-100">
+                                        <th class="px-2 py-2 text-left text-xs font-medium text-stone-400 uppercase">{{ __('Title') }}</th>
+                                        <th class="w-16 sm:w-20 px-1 py-2 text-left text-xs font-medium text-stone-400 uppercase">{{ __('Grams') }}</th>
+                                        <th class="w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase hidden sm:table-cell">{{ __('Prot') }}</th>
+                                        <th class="w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase hidden sm:table-cell">{{ __('Fat') }}</th>
+                                        <th class="w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase hidden sm:table-cell">{{ __('Carb') }}</th>
+                                        <th class="w-14 sm:w-16 px-2 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Kcal') }}</th>
+                                        <th class="w-8 px-1 py-2"></th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
+                                <tbody class="divide-y divide-stone-50">
                                     <template x-for="prod in foodIntakes.{{ $intake }}.products" :key="prod.id">
-                                        <tr>
-                                            <td class="px-2 py-4 break-words" x-text="prod.product.title"></td>
-                                            <td class="px-2 py-4">
+                                        <tr class="hover:bg-stone-50/50">
+                                            <td class="px-2 py-2 text-sm text-stone-700 truncate" x-text="prod.product.title"></td>
+                                            <td class="px-1 py-2">
                                                 <input type="number" min="0"
                                                        :id="'grams-' + prod.product_id"
-                                                       class="w-full h-10 p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                       class="w-full h-8 px-2 text-sm border border-stone-200 rounded-lg focus:border-amber-500 focus:ring-amber-500"
                                                        x-model="prod.g">
                                             </td>
-                                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                x-text="prod.proteins"></td>
-                                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                x-text="prod.fats"></td>
-                                            <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                                x-text="prod.carbohydrates"></td>
-                                            <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
-                                                x-text="prod.calories"></td>
-                                            <td class="px-2 py-3 whitespace-nowrap">
-                                                <a href="#" @click.prevent="removeProduct(prod.product_id)"
-                                                   class="text-red-500 hover:underline">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </a>
+                                            <td class="px-1 py-2 text-center text-sm text-stone-400 hidden sm:table-cell" x-text="prod.proteins"></td>
+                                            <td class="px-1 py-2 text-center text-sm text-stone-400 hidden sm:table-cell" x-text="prod.fats"></td>
+                                            <td class="px-1 py-2 text-center text-sm text-stone-400 hidden sm:table-cell" x-text="prod.carbohydrates"></td>
+                                            <td class="px-2 py-2 text-center text-sm font-medium text-stone-600" x-text="prod.calories"></td>
+                                            <td class="px-1 py-2">
+                                                <button @click.prevent="removeProduct(prod.product_id)"
+                                                        class="text-stone-300 hover:text-red-500 transition-colors">
+                                                    <i class="fas fa-times text-xs"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     </template>
-                                    <tr class="bg-gray-50 hidden sm:table-row">
-                                        <td class="px-2 py-4 break-words">{{ __('Total') }}</td>
-                                        <td class="px-2 py-4"></td>
-                                        <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                            x-text="foodIntakes.{{ $intake }}.totalProteins"></td>
-                                        <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                            x-text="foodIntakes.{{ $intake }}.totalFats"></td>
-                                        <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap hidden sm:table-cell"
-                                            x-text="foodIntakes.{{ $intake }}.totalCarbohydrates"></td>
-                                        <td class="px-2 py-3 text-center whitespace-nowrap sm:table-cell"
-                                            x-text="foodIntakes.{{ $intake }}.totalCalories"></td>
-                                        <td class="px-2 py-3 whitespace-nowrap"></td>
+                                    {{-- Total Row --}}
+                                    <tr class="bg-stone-50/50 hidden sm:table-row">
+                                        <td class="px-2 py-2 text-sm font-medium text-stone-600">{{ __('Total') }}</td>
+                                        <td></td>
+                                        <td class="px-1 py-2 text-center text-sm font-medium text-blue-600" x-text="foodIntakes.{{ $intake }}.totalProteins"></td>
+                                        <td class="px-1 py-2 text-center text-sm font-medium text-orange-500" x-text="foodIntakes.{{ $intake }}.totalFats"></td>
+                                        <td class="px-1 py-2 text-center text-sm font-medium text-emerald-600" x-text="foodIntakes.{{ $intake }}.totalCarbohydrates"></td>
+                                        <td class="px-2 py-2 text-center text-sm font-bold text-amber-600" x-text="foodIntakes.{{ $intake }}.totalCalories"></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </template>
-
-                        {{--search or create product--}}
-                        <div x-show="createProductForm" class="mt-5">
-                            <livewire:product-create wire:key="productCreate-{{ Str::random() }}"/>
-                        </div>
-                        <div x-show="!createProductForm" class="mt-5">
-                            <livewire:product-search wire:key="productSearch-{{ Str::random() }}"/>
-                        </div>
-                    </div>
-                @endforeach
-                <div class="rounded-lg border border-gray-300 p-2 flex justify-around">
-                    <div class="text-green-500">
-                        {{ __('Proteins: ') }} <span x-text="totalProteins"></span>
-                    </div>
-                    <div class="text-red-500">
-                        {{ __('Fats: ') }} <span x-text="totalFats"></span>
-                    </div>
-                    <div class="text-yellow-500">
-                        {{ __('Carbohydrates: ') }} <span x-text="totalCarbohydrates"></span>
-                    </div>
-                </div>
-
-                {{--measurements--}}
-                <div @click="active === 'measurements' ? active = null : active = 'measurements'"
-                     class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
-                    <div> {{ __('Measurements') }}</div>
-                    <i x-show="active !== 'measurements'" class="fas fa-plus"></i>
-                    <i x-show="active === 'measurements'" class="fas fa-minus"></i>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4" x-show="active === 'measurements'">
-                    <template x-for="(measurement, index) in measurements" :key="index">
-                        <div>
-                            <label x-text="measurement.translatable"
-                                   class="block text-sm font-medium text-gray-700"></label>
-                            <input type="number" x-model="measurement.value" min="1" step="0.1"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                   @focus="if (measurement.value == 0) measurement.value = ''">
                         </div>
                     </template>
-                    <div class="flex flex-col justify-end h-full">
-                        <x-primary-button @click="save"
-                            class="self-end">
-                            {{ __('Save') }}
-                        </x-primary-button>
+
+                    {{-- Empty State --}}
+                    <template x-if="!foodIntakes.{{ $intake }}.products.length">
+                        <div class="mt-3 py-4 text-center text-sm text-stone-400">
+                            {{ __('No products added yet') }}
+                        </div>
+                    </template>
+
+                    {{-- Search or Create Product --}}
+                    <div x-show="createProductForm" class="mt-3">
+                        <livewire:product-create wire:key="productCreate-{{ Str::random() }}"/>
                     </div>
+                    <div x-show="!createProductForm" class="mt-3">
+                        <livewire:product-search wire:key="productSearch-{{ Str::random() }}"/>
+                    </div>
+                </div>
+            @endforeach
+
+            {{-- Measurements Section --}}
+            <div @click="active === 'measurements' ? active = null : active = 'measurements'"
+                 :class="active === 'measurements' ? 'border-amber-200 bg-amber-50/50' : 'border-stone-100 hover:border-stone-200'"
+                 class="rounded-xl border p-3 flex justify-between items-center cursor-pointer transition-all duration-200">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                         :class="active === 'measurements' ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'">
+                        <i class="fas fa-ruler"></i>
+                    </div>
+                    <span class="font-medium text-stone-800">{{ __('Measurements') }}</span>
+                </div>
+                <i :class="active === 'measurements' ? 'fas fa-chevron-up text-amber-500' : 'fas fa-chevron-down text-stone-300'"
+                   class="text-xs"></i>
+            </div>
+
+            {{-- Measurements Content --}}
+            <div x-show="active === 'measurements'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="grid grid-cols-2 sm:grid-cols-4 gap-3 px-2 pt-3">
+                <template x-for="(measurement, index) in measurements" :key="index">
+                    <div>
+                        <label x-text="measurement.translatable"
+                               class="block text-xs font-medium text-stone-500 mb-1"></label>
+                        <input type="number" x-model="measurement.value" min="1" step="0.1"
+                               class="block w-full rounded-lg border-stone-200 text-sm py-2 px-2.5 focus:border-amber-500 focus:ring-amber-500"
+                               @focus="if (measurement.value == 0) measurement.value = ''">
+                    </div>
+                </template>
+                <div class="flex items-end">
+                    <button @click="save"
+                            class="w-full py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
+                        {{ __('Save') }}
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    <div @click="toggleRemainingCalories">
-        <div @mouseover="showTooltip = true" @mouseleave="showTooltip = false"
-             :class="{
-            'bg-green-600': showRemainingCalories && remainingCalories >= 0,
-            'bg-red-600': showRemainingCalories && remainingCalories < 0,
-            'bg-yellow-600': !showRemainingCalories
-         }"
-             class="fixed bottom-0 right-0 mb-4 mr-4 w-20 h-20 rounded-full z-50 flex flex-col items-center justify-center bg-opacity-75 text-white">
-            <div x-show="!showRemainingCalories" class="font-bold" x-text="totalCalories"></div>
-            <div x-show="showRemainingCalories" class="font-bold" x-text="remainingCalories"></div>
-            <div class="text-xs">{{ __('Kcal') }}</div>
-        </div>
-        <div x-show="showTooltip" class="absolute bottom-24 right-0 mb-4 mr-4 w-48 p-2 bg-gray-800 text-white rounded shadow-lg">
-            <div class="flex justify-between items-center">
-                <span>{{ __('Click circle to see remaining calories') }}</span>
-            </div>
+
+    {{-- Floating Calorie Counter --}}
+    <div @click="showRemainingCalories = !showRemainingCalories"
+         class="fixed bottom-6 right-6 z-40 cursor-pointer">
+        <div :class="{
+                'bg-gradient-to-br from-emerald-500 to-emerald-600': showRemainingCalories && remainingCalories >= 0,
+                'bg-gradient-to-br from-red-500 to-red-600': showRemainingCalories && remainingCalories < 0,
+                'bg-gradient-to-br from-amber-500 to-amber-600': !showRemainingCalories
+             }"
+             class="w-16 h-16 rounded-full flex flex-col items-center justify-center text-white shadow-lg hover:scale-105 transition-transform">
+            <div x-show="!showRemainingCalories" class="text-lg font-bold" x-text="totalCalories"></div>
+            <div x-show="showRemainingCalories" class="text-lg font-bold" x-text="remainingCalories"></div>
+            <div class="text-[10px] font-medium opacity-80">{{ __('Kcal') }}</div>
         </div>
     </div>
+
     <x-loading-screen/>
 
     {{-- AI Chat Assistant --}}
@@ -193,13 +262,12 @@
 <script>
     function diaryApp() {
         return {
-            active: null, // breakfast, lunch, dinner, snack, measurements
-            showRemainingCalories: false,
+            active: null,
             createProductForm: false,
+            showRemainingCalories: false,
 
             totalCalories: 0,
             remainingCalories: 0,
-            showTooltip: false,
 
             totalFats: 0,
             totalProteins: 0,
@@ -255,8 +323,20 @@
                     value: @json($measurement->biceps_cm ?? ''),
                 }
             },
+
+            get formattedDate() {
+                const date = new Date(this.$wire.date + 'T00:00:00');
+                const options = { weekday: 'short', day: 'numeric', month: 'short' };
+                return date.toLocaleDateString('{{ app()->getLocale() }}', options);
+            },
+
+            get isToday() {
+                const today = new Date();
+                const selected = new Date(this.$wire.date + 'T00:00:00');
+                return today.toDateString() === selected.toDateString();
+            },
+
             init() {
-                // after initialization
                 this.$nextTick(() => {
                     this.calculate();
                 });
@@ -283,7 +363,6 @@
                     this.measurements.neck.value = foodIntakes[4].neck_cm;
                     this.measurements.biceps.value = foodIntakes[4].biceps_cm;
 
-                    // Notify the chat component about the date change
                     Livewire.dispatch('date-changed', { date: this.$wire.date });
                 });
 
@@ -291,7 +370,7 @@
                     this.successMessage = message;
                     setTimeout(() => {
                         this.successMessage = '';
-                    }, 3000); // Hide after 3 seconds
+                    }, 3000);
                 });
 
                 this.$wire.on('productAdded', product => {
@@ -306,26 +385,17 @@
                         }
                     });
                 });
-
-                const lastShown = localStorage.getItem('tooltipLastShown');
-                const now = new Date();
-                if (!lastShown || (now - new Date(lastShown)) > 30 * 24 * 60 * 60 * 1000) {
-                    this.showTooltip = true;
-                    localStorage.setItem('tooltipLastShown', now);
-                }
             },
             calculate() {
                 for (let key in this.foodIntakes) {
                     if (this.foodIntakes.hasOwnProperty(key)) {
                         let intake = this.foodIntakes[key];
-                        // calculate all products calories
                         intake.products.forEach(product => {
                             product.calories = Math.round(product.product.calories * product.g / 100);
                             product.fats = Math.round(product.product.fats * product.g / 100);
                             product.proteins = Math.round(product.product.proteins * product.g / 100);
                             product.carbohydrates = Math.round(product.product.carbohydrates * product.g / 100);
                         });
-                        // calculate total intake calories
                         intake.totalCalories = intake.products.reduce((acc, product) => acc + product.calories, 0);
                         intake.totalFats = intake.products.reduce((acc, product) => acc + product.fats, 0);
                         intake.totalProteins = intake.products.reduce((acc, product) => acc + product.proteins, 0);
@@ -333,7 +403,7 @@
                     }
                 }
                 this.totalCalories = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalCalories, 0);
-                this.remainingCalories = Math.round({{ Auth::user()->kcal_per_day }} - this.totalCalories);
+                this.remainingCalories = Math.round({{ Auth::user()->kcal_per_day ?: 2000 }} - this.totalCalories);
                 this.totalFats = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalFats, 0);
                 this.totalProteins = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalProteins, 0);
                 this.totalCarbohydrates = Object.values(this.foodIntakes).reduce((acc, intake) => acc + intake.totalCarbohydrates, 0);
@@ -359,7 +429,6 @@
                 product.g = 100;
                 product.product_id = product.id;
                 product.product = productCopy;
-
                 return product;
             },
 
@@ -371,19 +440,12 @@
                 this.$wire.call('save', this.foodIntakes, this.measurements);
             },
 
-            toggleRemainingCalories() {
-                this.showRemainingCalories = !this.showRemainingCalories;
-                this.showTooltip = false;
-            },
-
             refreshDiary() {
-                // Reload the current date's food intakes from the server
                 this.$wire.refreshDiary();
             },
 
             setActiveMeal(meal) {
                 this.active = (this.active === meal) ? null : meal;
-                // Notify the chat component about the active meal
                 Livewire.dispatch('meal-selected', { meal: this.active });
             }
         }

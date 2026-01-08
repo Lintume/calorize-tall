@@ -164,6 +164,14 @@ class Diary extends Component
         $this->dispatch('updatedDate', $this->breakfast, $this->lunch, $this->dinner, $this->snack, $this->measurement);
     }
 
+    public function goToToday(): void
+    {
+        $this->date = now()->toDateString();
+        $this->setFoodIntakes();
+        $this->setMeasurement();
+        $this->dispatch('updatedDate', $this->breakfast, $this->lunch, $this->dinner, $this->snack, $this->measurement);
+    }
+
     public function render()
     {
         return view('livewire.diary');

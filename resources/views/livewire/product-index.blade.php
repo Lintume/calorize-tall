@@ -6,31 +6,6 @@
         @section('title', __('Products'))
     @endif
 
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                @if($isRecipesRequest)
-                    {{ __('Recipes') }}
-                @else
-                    {{ __('Products') }}
-                @endif
-            </h2>
-            @if($isRecipesRequest)
-                <a href="{{ route('recipe.create') }}">
-                    <x-secondary-button>
-                        {{ __('Create Recipe') }}
-                    </x-secondary-button>
-                </a>
-            @else
-                <a href="{{ route('product.create') }}">
-                    <x-secondary-button>
-                        {{ __('Create Product') }}
-                    </x-secondary-button>
-                </a>
-            @endif
-        </div>
-    </x-slot>
-
     @section('meta')
         @if ($products->onFirstPage())
             <link rel="next" href="{{ $products->nextPageUrl() }}">
@@ -80,61 +55,95 @@
         </script>
     @endsection
 
-    <div class="flex flex-col shadow justify-between rounded-lg mt-5 bg-white mb-1">
-        <div class="p-5 md:p-10">
-            <!-- Search bar -->
-            <div class="mb-5 md:mb-10">
-                <input
-                    type="text"
-                    placeholder="{{ __('Search...') }}"
-                    class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                    wire:model.live.debounce.500ms="search"
-                />
-                <div class="text-red-600">@error('search') {{ $message }} @enderror</div>
+    {{-- Header --}}
+    <div class="flex justify-between items-center mt-6 mb-4">
+        <h1 class="text-2xl font-bold text-stone-800">
+            @if($isRecipesRequest)
+                {{ __('Recipes') }}
+            @else
+                {{ __('Products') }}
+            @endif
+        </h1>
+        @if($isRecipesRequest)
+            <a href="{{ route('recipe.create') }}">
+                <button class="px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl transition-colors">
+                    <i class="fas fa-plus mr-2"></i>{{ __('Create Recipe') }}
+                </button>
+            </a>
+        @else
+            <a href="{{ route('product.create') }}">
+                <button class="px-4 py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl transition-colors">
+                    <i class="fas fa-plus mr-2"></i>{{ __('Create Product') }}
+                </button>
+            </a>
+        @endif
+    </div>
+
+    {{-- Main Card --}}
+    <div class="rounded-2xl bg-white border border-stone-200 shadow-sm overflow-hidden">
+        <div class="p-4 md:p-6">
+            {{-- Search bar --}}
+            <div class="mb-5">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                    <input
+                        type="text"
+                        placeholder="{{ __('Search...') }}"
+                        class="w-full pl-10 pr-4 py-2.5 border border-stone-200 rounded-xl text-sm focus:border-amber-500 focus:ring-amber-500"
+                        wire:model.live.debounce.500ms="search"
+                    />
+                </div>
+                <div class="text-red-500 text-sm mt-1">@error('search') {{ $message }} @enderror</div>
             </div>
+
             @if($products->isEmpty())
-                <div class="text-center text-gray-500">
-                    {{ __('No products found.') }}
+                <div class="py-12 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
+                        <i class="fas fa-search text-2xl"></i>
+                    </div>
+                    <p class="text-stone-500">{{ __('No products found.') }}</p>
                 </div>
             @else
-                <!-- Table -->
+                {{-- Table --}}
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
-                                <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">{{ __('Prot') }}</th>
-                                <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">{{ __('Fat') }}</th>
-                                <th class="w-1/12 px-1 py-2 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">{{ __('Carb') }}</th>
-                                <th class="w-1/12 px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kcal') }}</th>
-                                <th class="w-1/12 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                    <table class="w-full table-fixed">
+                        <thead>
+                            <tr class="border-b border-stone-100">
+                                <th class="px-2 md:px-4 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">{{ __('Title') }}</th>
+                                <th class="w-12 sm:w-14 px-2 py-3 text-center text-xs font-medium text-stone-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Prot') }}</th>
+                                <th class="w-12 sm:w-14 px-2 py-3 text-center text-xs font-medium text-stone-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Fat') }}</th>
+                                <th class="w-12 sm:w-14 px-2 py-3 text-center text-xs font-medium text-stone-400 uppercase tracking-wider hidden sm:table-cell">{{ __('Carb') }}</th>
+                                <th class="w-14 sm:w-16 px-2 py-3 text-center text-xs font-medium text-stone-500 uppercase tracking-wider">{{ __('Kcal') }}</th>
+                                <th class="w-8 px-2 py-3"></th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="divide-y divide-stone-50">
                             @foreach($products as $product)
-                                <tr>
-                                    <td class="px-2 py-4 break-words">
-                                        @if($product->user_id)
-                                            <a href="{{route('product.edit', $product->id) }}"
-                                               class="hover:underline">
-                                                <i class="fas fa-edit text-blue-800"></i>
+                                <tr class="hover:bg-stone-50/50 transition-colors">
+                                    <td class="px-2 md:px-4 py-3">
+                                        <div class="flex items-center gap-2 min-w-0">
+                                            @if($product->user_id)
+                                                <a href="{{ route('product.edit', $product->id) }}"
+                                                   class="text-stone-400 hover:text-amber-600 transition-colors flex-shrink-0">
+                                                    <i class="fas fa-edit text-sm"></i>
+                                                </a>
+                                            @endif
+                                            <a href="{{ route('product.show', $product->slug) }}"
+                                               class="text-stone-700 hover:text-amber-600 transition-colors truncate">
+                                                {{ $product->title }}
                                             </a>
-                                        @endif
-                                        <a href="{{route('product.show', $product->slug) }}"
-                                           class="hover:underline">
-                                            {{ $product->title }}
-                                        </a>
+                                        </div>
                                     </td>
-                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->proteins }}</td>
-                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->fats }}</td>
-                                    <td class="px-1 py-2 text-center text-gray-400 whitespace-nowrap">{{ $product->carbohydrates }}</td>
-                                    <td class="px-2 py-3 text-center whitespace-nowrap">{{ $product->calories }}</td>
-                                    <td class="px-2 py-3 whitespace-nowrap">
+                                    <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell">{{ $product->proteins }}</td>
+                                    <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell">{{ $product->fats }}</td>
+                                    <td class="px-2 py-3 text-center text-sm text-stone-400 hidden sm:table-cell">{{ $product->carbohydrates }}</td>
+                                    <td class="px-2 py-3 text-center text-sm font-medium text-stone-600">{{ $product->calories }}</td>
+                                    <td class="px-2 py-3">
                                         @if($product->user_id)
-                                            <a href="#" wire:click.prevent="delete({{ $product->id }})"
-                                               class="text-red-500 hover:underline">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                            <button wire:click.prevent="delete({{ $product->id }})"
+                                                    class="text-stone-300 hover:text-red-500 transition-colors">
+                                                <i class="fas fa-times text-sm"></i>
+                                            </button>
                                         @endif
                                     </td>
                                 </tr>
@@ -142,45 +151,9 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- Pagination -->
-                <div class="mt-4">
-                    {{--                    <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">--}}
-                    {{--            <span>--}}
-                    {{--                --}}{{-- Previous Page Link --}}
-                    {{--                @if ($products->onFirstPage())--}}
-                    {{--                    <span--}}
-                    {{--                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md dark:text-gray-600 dark:bg-gray-800 dark:border-gray-600">--}}
-                    {{--                        {!! __('pagination.previous') !!}--}}
-                    {{--                    </span>--}}
-                    {{--                @else--}}
-                    {{--                    <a href="{{ $products->previousPageUrl() }}">--}}
-                    {{--                    <button type="button" dusk="previousPage"--}}
-                    {{--                            wire:loading.attr="disabled"--}}
-                    {{--                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">--}}
-                    {{--                                {!! __('pagination.previous') !!}--}}
-                    {{--                        </button>--}}
-                    {{--                    </a>--}}
-                    {{--                @endif--}}
-                    {{--            </span>--}}
 
-                    {{--                        <span>--}}
-                    {{--                --}}{{-- Next Page Link --}}
-                    {{--                            @if ($products->hasMorePages())--}}
-                    {{--                                <a href="{{ $products->nextPageUrl() }}">--}}
-                    {{--                                    <button type="button" dusk="nextPage"--}}
-                    {{--                                            wire:loading.attr="disabled"--}}
-                    {{--                                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-500 focus:outline-none focus:ring ring-blue-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300">--}}
-                    {{--                                {!! __('pagination.next') !!}--}}
-                    {{--                        </button>--}}
-                    {{--                                    </a>--}}
-                    {{--                            @else--}}
-                    {{--                                <span--}}
-                    {{--                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default leading-5 rounded-md">--}}
-                    {{--                        {!! __('pagination.next') !!}--}}
-                    {{--                    </span>--}}
-                    {{--                            @endif--}}
-                    {{--            </span>--}}
-                    {{--                    </nav>--}}
+                {{-- Pagination --}}
+                <div class="mt-6 pt-4 border-t border-stone-100">
                     {{ $products->links() }}
                 </div>
             @endif

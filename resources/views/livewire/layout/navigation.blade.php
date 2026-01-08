@@ -15,15 +15,15 @@ new class extends Component {
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white/80 backdrop-blur-md border-b border-stone-200/60 sticky top-0 z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between">
+        <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center mr-3">
                     <a href="{{ route('dashboard') }}" wire:navigate>
-                        <x-application-logo class="w-8 md:w-10 fill-current text-gray-500 py-2"/>
+                        <x-application-logo class="w-8 md:w-10 fill-current text-stone-500 py-2"/>
                     </a>
                 </div>
 
@@ -35,18 +35,10 @@ new class extends Component {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{__('welcome.diary')}}
                     </x-nav-link>
-                    {{--                    <x-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"--}}
-                    {{--                                wire:navigate>--}}
-                    {{--                        {{__('welcome.createProduct')}}--}}
-                    {{--                    </x-nav-link>--}}
                     <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')"
                                 wire:navigate>
                         {{__('welcome.productList')}}
                     </x-nav-link>
-                    {{--                    <x-nav-link :href="route('recipe.create')" :active="request()->routeIs('recipe.create')"--}}
-                    {{--                                wire:navigate>--}}
-                    {{--                        {{__('welcome.createRecipe')}}--}}
-                    {{--                    </x-nav-link>--}}
                     <x-nav-link :href="route('recipe.index')" :active="request()->routeIs('recipe.index')"
                                 wire:navigate>
                         {{__('welcome.recipes')}}
@@ -61,7 +53,7 @@ new class extends Component {
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
-                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-stone-500 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition ease-in-out duration-150">
                                 <div>{{ __('welcome.language') }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -74,11 +66,11 @@ new class extends Component {
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <a href="{{ LaravelLocalization::getLocalizedURL('en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <a href="{{ LaravelLocalization::getLocalizedURL('en') }}" class="block px-4 py-2 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors">
                                 English
                             </a>
 
-                            <a href="{{ LaravelLocalization::getLocalizedURL('uk') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <a href="{{ LaravelLocalization::getLocalizedURL('uk') }}" class="block px-4 py-2 text-sm text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors">
                                 Українська
                             </a>
                         </x-slot>
@@ -91,7 +83,7 @@ new class extends Component {
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 <button
-                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-stone-500 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition ease-in-out duration-150">
                                     <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
                                          x-on:profile-updated.window="name = $event.detail.name"></div>
 
@@ -141,7 +133,7 @@ new class extends Component {
                         @click="open = ! open"
                         class="
             inline-flex items-center justify-center p-2
-            rounded-md
+            rounded-lg
             text-amber-700
             hover:bg-amber-100
             hover:text-amber-900
@@ -188,7 +180,7 @@ new class extends Component {
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-stone-100">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                 {{__('welcome.statistic')}}
@@ -221,7 +213,7 @@ new class extends Component {
         </div>
 
         <!-- Language Switcher -->
-        <div class="py-1 border-t border-gray-200">
+        <div class="py-1 border-t border-stone-200">
             @if (app()->getLocale() == 'uk')
                 <x-responsive-nav-link :href="LaravelLocalization::getLocalizedURL('en')" wire:navigate>
                     English
@@ -234,12 +226,12 @@ new class extends Component {
         </div>
         <!-- Responsive Settings Options -->
         @auth
-            <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="pt-4 pb-1 border-t border-stone-200">
                 <div class="px-4">
-                    <div class="font-medium text-base text-gray-800"
+                    <div class="font-medium text-base text-stone-800"
                          x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name"
                          x-on:profile-updated.window="name = $event.detail.name"></div>
-                    <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                    <div class="font-medium text-sm text-stone-500">{{ auth()->user()->email }}</div>
                 </div>
 
                 <div class="mt-3 space-y-1">

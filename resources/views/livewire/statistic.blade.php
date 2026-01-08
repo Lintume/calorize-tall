@@ -1,101 +1,106 @@
 <div>
     @section('title', __('Statistic'))
 
-    <div class="flex flex-wrap mt-8 mb-4">
-        <div class="flex w-full md:w-1/2 lg:w-1/2 space-x-3">
-            <!-- Перший дейтпікер -->
-            <div class="w-full">
-                <label for="start-date" class="block text-sm font-medium text-gray-700">{{__('Start date')}}</label>
-                <input
-                    wire:model.live="startDate"
-                    type="date"
-                    id="start-date"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-                <div class="text-red-600">@error('startDate') {{ $message }} @enderror</div>
+    <!-- Date Range Selector -->
+    <div class="mt-8 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+            <!-- Date inputs -->
+            <div class="flex flex-1 gap-4">
+                <div class="flex-1">
+                    <label for="start-date" class="block text-sm font-medium text-stone-600 mb-1.5">{{__('Start date')}}</label>
+                    <input
+                        wire:model.live="startDate"
+                        type="date"
+                        id="start-date"
+                        class="block w-full rounded-xl border-stone-200 bg-white shadow-sm focus:border-amber-500 focus:ring-amber-500 text-stone-800 text-sm py-2.5 px-4"
+                    />
+                    <div class="text-red-600 text-xs mt-1">@error('startDate') {{ $message }} @enderror</div>
+                </div>
+                <div class="flex-1">
+                    <label for="end-date" class="block text-sm font-medium text-stone-600 mb-1.5">{{__('End date')}}</label>
+                    <input
+                        wire:model.live="endDate"
+                        type="date"
+                        id="end-date"
+                        class="block w-full rounded-xl border-stone-200 bg-white shadow-sm focus:border-amber-500 focus:ring-amber-500 text-stone-800 text-sm py-2.5 px-4"
+                    />
+                    <div class="text-red-600 text-xs mt-1">@error('endDate') {{ $message }} @enderror</div>
+                </div>
             </div>
-            <!-- Другий дейтпікер -->
-            <div class="w-full">
-                <label for="end-date" class="block text-sm font-medium text-gray-700">{{__('End date')}}</label>
-                <input
-                    wire:model.live="endDate"
-                    type="date"
-                    id="end-date"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-                <div class="text-red-600">@error('endDate') {{ $message }} @enderror</div>
-            </div>
-        </div>
-        <div class="w-full md:w-1/2 lg:w-1/2 md:pl-3">
-            <!-- Select time range -->
-            <select wire:model.live="timeRange"
-                    class="w-full mt-6 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                <option value=""> {{__('Select period')}}</option>
-                @foreach($timeRanges as $key => $value)
-                    <option value="{{ $key }}">{{ __($value) }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    {{-- Average nutrition per day for selected period --}}
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-        <div class="rounded-lg border border-gray-200 bg-white p-4">
-            <div class="text-xs text-gray-500">{{ __('Avg kcal / day') }}</div>
-            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['calories'] }}</div>
-            <div class="text-xs text-gray-400">{{ __('Days: ') }}{{ $nutrition['days'] }}</div>
-        </div>
-        <div class="rounded-lg border border-gray-200 bg-white p-4">
-            <div class="text-xs text-gray-500">{{ __('Avg proteins / day') }}</div>
-            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['proteins'] }}</div>
-            <div class="text-xs text-gray-400">{{ __('g') }}</div>
-        </div>
-        <div class="rounded-lg border border-gray-200 bg-white p-4">
-            <div class="text-xs text-gray-500">{{ __('Avg fats / day') }}</div>
-            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['fats'] }}</div>
-            <div class="text-xs text-gray-400">{{ __('g') }}</div>
-        </div>
-        <div class="rounded-lg border border-gray-200 bg-white p-4">
-            <div class="text-xs text-gray-500">{{ __('Avg carbs / day') }}</div>
-            <div class="text-2xl font-semibold text-gray-900">{{ $nutrition['avg']['carbohydrates'] }}</div>
-            <div class="text-xs text-gray-400">{{ __('g') }}</div>
-        </div>
-    </div>
-
-    <div class="flex flex-col justify-center">
-        <div class="flex flex-col shadow justify-between rounded-lg pb-8 xl:p-8 mt-3 bg-white">
-            {{--tabs--}}
-            <div
-                class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mx-6">
-                <ul class="flex flex-wrap -mb-px">
-                    @foreach($tabs as $key=>$value)
-                        <li class="me-2">
-                            <a href="#"
-                               wire:click.prevent="changeTab('{{$key}}')"
-                               @class(['inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500' => $currentTab == $key,
-'inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300' => $currentTab != $key
-])
-                               aria-current="page"
-                            >{{ __($value) }}</a>
-                        </li>
+            <!-- Period selector -->
+            <div class="flex-1 md:max-w-xs">
+                <label class="block text-sm font-medium text-stone-600 mb-1.5 invisible">{{__('Period')}}</label>
+                <select wire:model.live="timeRange"
+                        class="block w-full rounded-xl border-stone-200 bg-white shadow-sm focus:border-amber-500 focus:ring-amber-500 text-stone-800 text-sm py-2.5 px-4">
+                    <option value="">{{__('Select period')}}</option>
+                    @foreach($timeRanges as $key => $value)
+                        <option value="{{ $key }}">{{ __($value) }}</option>
                     @endforeach
-                </ul>
+                </select>
             </div>
-            {{--chart--}}
-            @if($data['dates'] && $data['measurements'])
-                <div class="p-6">
-                    <canvas id="myChart" class="w-full"></canvas>
-                </div>
-            @else
-                <div class="p-6">
-                    <h2 class="text-xl font-bold mb-4 md:text-2xl">{{__('No data for selected period')}}</h2>
-                    <p>{{__('Please add measurements in ')}}
-                        <a href="{{route('diary')}}"
-                           class="text-blue-600 hover:underline">{{__('Diary')}}</a>
-                    </p>
-                </div>
-            @endif
         </div>
+    </div>
+
+    <!-- Average Nutrition Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100 p-5 shadow-sm">
+            <div class="text-xs font-medium text-stone-500 uppercase tracking-wide mb-1">{{ __('Avg kcal / day') }}</div>
+            <div class="text-3xl font-bold text-amber-700">{{ $nutrition['avg']['calories'] }}</div>
+            <div class="text-xs text-stone-400 mt-1">{{ __('Days: ') }}{{ $nutrition['days'] }}</div>
+        </div>
+        <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 shadow-sm">
+            <div class="text-xs font-medium text-stone-500 uppercase tracking-wide mb-1">{{ __('Avg proteins / day') }}</div>
+            <div class="text-3xl font-bold text-blue-700">{{ $nutrition['avg']['proteins'] }}</div>
+            <div class="text-xs text-stone-400 mt-1">{{ __('g') }}</div>
+        </div>
+        <div class="rounded-2xl bg-gradient-to-br from-orange-50 to-white border border-orange-100 p-5 shadow-sm">
+            <div class="text-xs font-medium text-stone-500 uppercase tracking-wide mb-1">{{ __('Avg fats / day') }}</div>
+            <div class="text-3xl font-bold text-orange-600">{{ $nutrition['avg']['fats'] }}</div>
+            <div class="text-xs text-stone-400 mt-1">{{ __('g') }}</div>
+        </div>
+        <div class="rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-5 shadow-sm">
+            <div class="text-xs font-medium text-stone-500 uppercase tracking-wide mb-1">{{ __('Avg carbs / day') }}</div>
+            <div class="text-3xl font-bold text-emerald-600">{{ $nutrition['avg']['carbohydrates'] }}</div>
+            <div class="text-xs text-stone-400 mt-1">{{ __('g') }}</div>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="rounded-2xl bg-white border border-stone-200 shadow-sm overflow-hidden">
+        <!-- Tabs -->
+        <div class="border-b border-stone-200 px-6">
+            <nav class="flex gap-1 -mb-px overflow-x-auto" aria-label="Tabs">
+                @foreach($tabs as $key=>$value)
+                    <a href="#"
+                       wire:click.prevent="changeTab('{{$key}}')"
+                       @class([
+                           'px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
+                           'border-amber-500 text-amber-700' => $currentTab == $key,
+                           'border-transparent text-stone-500 hover:text-stone-700 hover:border-stone-300' => $currentTab != $key
+                       ])
+                       aria-current="{{ $currentTab == $key ? 'page' : 'false' }}"
+                    >{{ __($value) }}</a>
+                @endforeach
+            </nav>
+        </div>
+
+        <!-- Chart Content -->
+        @if($data['dates'] && $data['measurements'])
+            <div class="p-6">
+                <canvas id="myChart" class="w-full"></canvas>
+            </div>
+        @else
+            <div class="p-8 text-center">
+                <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-stone-100">
+                    <i class="fas fa-chart-line text-2xl text-stone-400"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-stone-800 mb-2">{{__('No data for selected period')}}</h2>
+                <p class="text-stone-500">{{__('Please add measurements in ')}}
+                    <a href="{{route('diary')}}"
+                       class="text-amber-600 hover:text-amber-700 font-medium hover:underline">{{__('Diary')}}</a>
+                </p>
+            </div>
+        @endif
     </div>
 </div>
 
@@ -107,13 +112,16 @@
     function createChart(labels, data) {
         const ctx = document.getElementById('myChart').getContext('2d');
         myChart = new Chart(ctx, {
-            type: 'line', // Chart type
+            type: 'line',
             data: {
-                labels: labels, // X-axis labels
+                labels: labels,
                 datasets: [{
-                    data: data, // Y-axis values
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2
+                    data: data,
+                    borderColor: 'rgb(217, 119, 6)', // amber-600
+                    backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
                 }]
             },
             options: {
@@ -121,39 +129,54 @@
                     intersect: false,
                     mode: 'index',
                 },
-                pointRadius: 5,
+                pointRadius: 4,
+                pointBackgroundColor: 'rgb(217, 119, 6)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
                 plugins: {
                     legend: {
-                        display: false // Hide the legend
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#78716c' // stone-500
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#e7e5e4' // stone-200
+                        },
+                        ticks: {
+                            color: '#78716c' // stone-500
+                        }
                     }
                 }
             },
         });
     }
 
-    // Initialize the chart with initial data
     createChart(@json($data['dates']), @json($data['measurements']));
 
-    // Listen for Livewire event to update chart
     Livewire.on('chartDataUpdated', (data) => {
         const canvas = document.getElementById('myChart');
 
-        // Ensure canvas is available and myChart exists
         if (!canvas || !canvas.getContext) {
             console.error("Canvas element is not ready.");
             return;
         }
 
-        // Destroy existing chart if it exists
         if (myChart) {
             myChart.destroy();
         }
 
-        // Recreate the chart with new data
         createChart(data[0], data[1]);
     });
 
 </script>
 @endscript
 @endif
-

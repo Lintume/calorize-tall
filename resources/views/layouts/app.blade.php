@@ -21,13 +21,13 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Maven+Pro:wght@500;600;700&display=swap"
             rel="stylesheet"
             media="print"
             onload="this.media='all'"
         />
         <noscript>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Maven+Pro:wght@500;600;700&display=swap" />
         </noscript>
 
         <!-- Scripts -->
@@ -60,13 +60,13 @@
         @yield('meta')
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-neutral-50 flex flex-col">
+        <div class="min-h-screen bg-stone-50 flex flex-col">
             <livewire:layout.navigation/>
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white/50 backdrop-blur-sm border-b border-stone-200/60">
+                    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
@@ -82,18 +82,18 @@
             </main>
 
             <!-- Footer -->
-            <footer class="bg-white shadow mt-auto">
-                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8
+            <footer class="bg-white border-t border-stone-200 mt-auto">
+                <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8
                 flex flex-col md:flex-row items-center md:justify-between text-center">
 
                     <!-- Текст копірайту -->
                     <div>
-                        <p class="text-gray-500 text-sm">
+                        <p class="text-stone-500 text-sm">
                             &copy; {{ date('Y') }}
-                            <a href="hey@calorize.com.ua" class="hover:text-gray-700">
+                            <a href="hey@calorize.com.ua" class="hover:text-amber-700 transition-colors">
                                 {{ __('Lialia') }}
                             </a> &
-                            <a href="https://www.linkedin.com/in/ulianasakhnoqa/" class="hover:text-gray-700">
+                            <a href="https://www.linkedin.com/in/ulianasakhnoqa/" class="hover:text-amber-700 transition-colors">
                                 {{ __('Uliana') }}
                             </a>
                             {{ __('Sakhno') }}. {{ __('All rights reserved.') }}
@@ -102,14 +102,14 @@
 
                     <!-- Посилання -->
                     <div class="mt-3 md:mt-0">
-                        <ul class="flex justify-center space-x-4 text-sm text-gray-500">
+                        <ul class="flex justify-center space-x-4 text-sm text-stone-500">
                             <li>
-                                <a href="{{ route('about') }}" class="hover:text-gray-700">
+                                <a href="{{ route('about') }}" class="hover:text-amber-700 transition-colors">
                                     {{ __('About us') }}
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('privacy') }}" class="hover:text-gray-700">
+                                <a href="{{ route('privacy') }}" class="hover:text-amber-700 transition-colors">
                                     {{ __('Privacy Policy') }}
                                 </a>
                             </li>

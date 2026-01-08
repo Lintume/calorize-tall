@@ -81,3 +81,11 @@ After making changes to frontend files (CSS, JavaScript, Blade templates, or any
 
 **Exception**: Skip running `npm run build` if `./vendor/bin/sail npm run dev` is already running in the Cursor terminal, as the dev server will automatically rebuild on changes.
 
+## Testing
+
+After completing tasks run tests:
+
+```bash
+./vendor/bin/sail test
+```
+

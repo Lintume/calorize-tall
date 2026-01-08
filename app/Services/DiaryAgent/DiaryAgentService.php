@@ -171,6 +171,7 @@ Quantities:
 Copying: getFoodIntake(source), then re-add each item to target date/meal.
 
 Search:
+- Database: Meilisearch with ~86,000 products (local Ukrainian dishes and supermarket products, all in Ukraine).
 - Normalize query (1-6 words). UA preferred; fix rusisms (жарен*->смажен*, мука->борошно).
 - Normalize endings: "рафаелку"->"рафаелло", "борща"->"борщ".
 - If ambiguous nutrition, prefer plausible variant or ask briefly.
