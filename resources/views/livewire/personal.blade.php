@@ -2,50 +2,86 @@
 
     @section('title', __('Personal'))
 
-    {{--    success message--}}
-    <div x-show="successMessage" x-text="successMessage" class="mt-4 bg-green-600 text-white p-2 rounded mb-4" x-cloak></div>
+    {{-- Success message --}}
+    <div x-show="successMessage" x-text="successMessage"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform -translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         class="mt-4 bg-emerald-600 text-white p-3 rounded-xl mb-4 shadow-lg"></div>
 
-    {{--    errors--}}
-    <div class="text-red-600">
-        @foreach ($errors->all() as $error)
-            <div>{{ $error }}</div>
-        @endforeach
-    </div>
-    <div class="flex flex-col justify-center">
-        <div class="flex flex-col shadow justify-between rounded-lg pb-4 xl:p-8 mt-3 bg-white">
-            <div class="p-4 md:p-8 xl:p-10">
+    {{-- Errors --}}
+    @if($errors->any())
+        <div class="mt-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl mb-4">
+            @foreach ($errors->all() as $error)
+                <div class="text-sm">{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
 
-                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4 mb-5">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Height') }}
+    <div class="mt-6 space-y-6">
+
+        {{-- Header Card with Avatar --}}
+        <div class="bg-gradient-to-r from-amber-50 via-orange-50/50 to-amber-50 rounded-2xl p-6 border border-amber-100/50">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-stone-800">{{ Auth::user()->name }}</h1>
+                    <p class="text-sm text-stone-500">{{ __('Personal Settings') }}</p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Basic Info Card --}}
+        <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-stone-100 bg-stone-50/50">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                        <i class="fas fa-user text-amber-600 text-sm"></i>
+                    </div>
+                    <h2 class="font-semibold text-stone-800">{{ __('Basic Information') }}</h2>
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-medium text-stone-500 uppercase tracking-wide">
+                            {{ __('Height') }} (см)
                         </label>
                         <input type="number" x-model="user.growth_cm" min="1"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                               class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Target weight') }}
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-medium text-stone-500 uppercase tracking-wide">
+                            {{ __('Target weight') }} (кг)
                         </label>
                         <input type="number" x-model="user.target_kg" min="1"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                               class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500">
                     </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-medium text-stone-500 uppercase tracking-wide">
                             {{ __('Sex') }}
                         </label>
                         <select x-model="user.sex"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500">
                             <option value="male">{{ __('Male') }}</option>
                             <option value="female">{{ __('Female') }}</option>
                         </select>
                     </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-medium text-stone-500 uppercase tracking-wide">
+                            {{ __('Birthday date') }}
+                        </label>
+                        <input type="date" x-model="user.birthday_date"
+                               class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500">
+                    </div>
+                    <div class="col-span-2 space-y-1.5">
+                        <label class="block text-xs font-medium text-stone-500 uppercase tracking-wide">
                             {{ __('Activity coefficient') }}
                         </label>
                         <select x-model="user.activity_coefficient"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500">
                             <option value="1.2">{{ __('Sedentary - little or no exercise') }}</option>
                             <option value="1.38">{{ __('Lightly Active - exercise/sports 1-3 times/week') }}</option>
                             <option value="1.55">{{ __('Moderately Active - exercise/sports 3-5 times/week') }}</option>
@@ -53,124 +89,220 @@
                             <option value="1.9">{{ __('Extra Active - very hard exercise/sports or physical job') }}</option>
                         </select>
                     </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Birthday date') }}
+                    <div class="col-span-2 space-y-1.5">
+                        <label class="block text-xs font-medium text-stone-500 uppercase tracking-wide">
+                            {{ __('Deficit kcal') }}
                         </label>
-                        <input type="date" x-model="user.birthday_date"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                        <input type="number" x-model="user.deficit_kcal" min="1"
+                               class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500">
+                        <p class="text-xs text-stone-400 mt-1">
+                            {{ __('Calories deficit per day. Recommended: ') }}
+                            <span x-show="calculated.kcal_per_day_normal"
+                                  x-text="calculated.recommended_deficit_kcal_from + ' - ' + calculated.recommended_deficit_kcal_to"
+                                  class="font-medium text-amber-600"></span>
+                        </p>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                {{--last measurements--}}
-                <div @click="active === 'measurements' ? active = null : active = 'measurements'"
-                     class="rounded-lg border border-gray-300 p-4 flex justify-between items-center cursor-pointer">
-                    <div> {{ __('Last Measurements') }}</div>
-                    <i x-show="active !== 'measurements'" class="fas fa-plus"></i>
-                    <i x-show="active === 'measurements'" class="fas fa-minus"></i>
+        {{-- Measurements Card --}}
+        <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+            <div @click="active === 'measurements' ? active = null : active = 'measurements'"
+                 class="px-5 py-4 border-b border-stone-100 bg-stone-50/50 cursor-pointer hover:bg-stone-100/50 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                             :class="active === 'measurements' ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-400'">
+                            <i class="fas fa-ruler text-sm"></i>
+                        </div>
+                        <h2 class="font-semibold text-stone-800">{{ __('Last Measurements') }}</h2>
+                    </div>
+                    <i :class="active === 'measurements' ? 'fas fa-chevron-up text-amber-500' : 'fas fa-chevron-down text-stone-300'"
+                       class="text-xs transition-transform"></i>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-7 gap-4 mt-4"
-                     x-show="active === 'measurements'">
+            </div>
+            <div x-show="active === 'measurements'"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="p-5">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
                     <template x-for="(measurement, index) in measurements" :key="index">
-                        <div>
+                        <div class="space-y-1.5">
                             <label x-text="measurement.translatable"
-                                   class="block text-sm font-medium text-gray-700"></label>
+                                   class="block text-xs font-medium text-stone-500 uppercase tracking-wide"></label>
                             <input type="number" x-model="measurement.value" min="1" step="0.1"
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                   class="w-full rounded-lg border-stone-200 text-sm py-2.5 px-3 focus:border-amber-500 focus:ring-amber-500"
                                    @focus="if (measurement.value == 0) measurement.value = ''">
                         </div>
                     </template>
                 </div>
+            </div>
+        </div>
 
-                {{--calculated info--}}
-                <div class="bold mt-7 text-xl mb-2">{{ __('Calculated info') }}</div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4 border-t pt-4">
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Body Mass Index (BMI)') }}</p>
-                        <p x-text="calculated.BMI" class="text-lg font-bold"></p>
-                        <p x-show="error.BMI"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight and growth.') }}</p>
-                        <p x-show="!error.BMI && calculated.BMI < 18.5" class="text-xs text-gray-500">{{ __('Underweight') }}</p>
-                        <p x-show="!error.BMI && calculated.BMI >= 18.5 && calculated.BMI < 24.9" class="text-xs text-gray-500">{{ __('Normal weight') }}</p>
-                        <p x-show="!error.BMI && calculated.BMI >= 25 && calculated.BMI < 29.9" class="text-xs text-gray-500">{{ __('Overweight') }}</p>
-                        <p x-show="!error.BMI && calculated.BMI >= 30 && calculated.BMI < 34.9" class="text-xs text-gray-500">{{ __('Obesity I') }}</p>
-                        <p x-show="!error.BMI && calculated.BMI >= 35 && calculated.BMI < 39.9" class="text-xs text-gray-500">{{ __('Obesity II') }}</p>
-                        <p x-show="!error.BMI && calculated.BMI >= 40" class="text-xs text-gray-500">{{ __('Obesity III') }}</p>
+        {{-- Calculated Results --}}
+        <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-stone-100 bg-stone-50/50">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <i class="fas fa-calculator text-emerald-600 text-sm"></i>
                     </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Fat percent') }}</p>
-                        <p x-text="calculated.fat_percent + '%'" class="text-lg font-bold"></p>
-                        <p x-show="error.fat_percent"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill waist, neck, hips (for women), height and birth date.') }}</p>
-                        <template x-if="!error.fat_percent && user.sex === 'male'">
-                            <div>
-                                <p x-show="calculated.fat_percent < 6" class="text-xs text-gray-500">{{ __('Essential fat') }}</p>
-                                <p x-show="calculated.fat_percent >= 6 && calculated.fat_percent < 14" class="text-xs text-gray-500">{{ __('Athletes') }}</p>
-                                <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 18" class="text-xs text-gray-500">{{ __('Fitness') }}</p>
-                                <p x-show="calculated.fat_percent >= 18 && calculated.fat_percent < 25" class="text-xs text-gray-500">{{ __('Average') }}</p>
-                                <p x-show="calculated.fat_percent >= 25" class="text-xs text-gray-500">{{ __('Obese') }}</p>
-                            </div>
-                        </template>
-                        <template x-if="!error.fat_percent && user.sex === 'female'">
-                            <div>
-                                <p x-show="calculated.fat_percent < 14" class="text-xs text-gray-500">{{ __('Essential fat') }}</p>
-                                <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 21" class="text-xs text-gray-500">{{ __('Athletes') }}</p>
-                                <p x-show="calculated.fat_percent >= 21 && calculated.fat_percent < 25" class="text-xs text-gray-500">{{ __('Fitness') }}</p>
-                                <p x-show="calculated.fat_percent >= 25 && calculated.fat_percent < 32" class="text-xs text-gray-500">{{ __('Average') }}</p>
-                                <p x-show="calculated.fat_percent >= 32" class="text-xs text-gray-500">{{ __('Obese') }}</p>
-                            </div>
-                        </template>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Basal metabolic rate (BMR)') }}</p>
-                        <p x-text="calculated.BMR" class="text-lg font-bold"></p>
-                        <p x-show="error.BMR"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height and birth date.') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Normal weight') }}</p>
-                        <p x-text="calculated.normal_weight_from + ' - ' + calculated.normal_weight_to + ' kg'"
-                           class="text-lg font-bold"></p>
-                        <p x-show="error.normal_weight"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill height.') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Calorie consumption per day with activity') }}</p>
-                        <p x-text="calculated.kcal_per_day_normal" class="text-lg font-bold"></p>
-                        <p x-show="error.kcal_per_day_normal"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height and DOB') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Your daily calorie limit based on desirable deficit') }}</p>
-                        <p x-text="calculated.kcal_per_day" class="text-lg font-bold"></p>
-                        <p x-show="error.kcal_per_day"
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, height, DOB and deficit kcal.') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('Weeks to target weight') }}</p>
-                        <p x-text="calculated.weeks_to_target" class="text-lg font-bold"></p>
-                        <p x-show="error.weeks_to_target"DOB
-                           class="text-red-600 text-xs">{{ __('Insufficient data. Please fill weight, target weight and deficit kcal.') }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            {{ __('Deficit kcal') }}
-                        </label>
-                        <input type="number" x-model="user.deficit_kcal" min="1"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                        <p class="text-xs text-gray-500">{{ __('Calories deficit per day. Recommended: ') }} <span x-show="calculated.kcal_per_day_normal"
-                                x-text="calculated.recommended_deficit_kcal_from + ' - ' + calculated.recommended_deficit_kcal_to"></span>
-                    </div>
+                    <h2 class="font-semibold text-stone-800">{{ __('Calculated info') }}</h2>
                 </div>
+            </div>
+            <div class="p-5">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
-                <div class="flex flex-col justify-end h-full">
-                    <x-primary-button @click="save" class="self-end mt-3">
-                        {{ __('Save') }}
-                    </x-primary-button>
+                    {{-- BMI Card --}}
+                    <div class="rounded-xl p-4 transition-all"
+                         :class="error.BMI ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-weight text-sky-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Body Mass Index (BMI)') }}</span>
+                        </div>
+                        <div x-show="!error.BMI">
+                            <p class="text-2xl font-bold text-sky-600" x-text="calculated.BMI"></p>
+                            <p x-show="calculated.BMI < 18.5" class="text-xs text-sky-500 mt-1">{{ __('Underweight') }}</p>
+                            <p x-show="calculated.BMI >= 18.5 && calculated.BMI < 24.9" class="text-xs text-emerald-500 mt-1">{{ __('Normal weight') }}</p>
+                            <p x-show="calculated.BMI >= 25 && calculated.BMI < 29.9" class="text-xs text-amber-500 mt-1">{{ __('Overweight') }}</p>
+                            <p x-show="calculated.BMI >= 30 && calculated.BMI < 34.9" class="text-xs text-orange-500 mt-1">{{ __('Obesity I') }}</p>
+                            <p x-show="calculated.BMI >= 35 && calculated.BMI < 39.9" class="text-xs text-red-500 mt-1">{{ __('Obesity II') }}</p>
+                            <p x-show="calculated.BMI >= 40" class="text-xs text-red-600 mt-1">{{ __('Obesity III') }}</p>
+                        </div>
+                        <p x-show="error.BMI" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill weight and growth.') }}
+                        </p>
+                    </div>
+
+                    {{-- Fat Percent Card --}}
+                    <div class="rounded-xl p-4 transition-all"
+                         :class="error.fat_percent ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-percentage text-violet-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Fat percent') }}</span>
+                        </div>
+                        <div x-show="!error.fat_percent">
+                            <p class="text-2xl font-bold text-violet-600" x-text="calculated.fat_percent + '%'"></p>
+                            <template x-if="user.sex === 'male'">
+                                <div>
+                                    <p x-show="calculated.fat_percent < 6" class="text-xs text-violet-500 mt-1">{{ __('Essential fat') }}</p>
+                                    <p x-show="calculated.fat_percent >= 6 && calculated.fat_percent < 14" class="text-xs text-sky-500 mt-1">{{ __('Athletes') }}</p>
+                                    <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 18" class="text-xs text-emerald-500 mt-1">{{ __('Fitness') }}</p>
+                                    <p x-show="calculated.fat_percent >= 18 && calculated.fat_percent < 25" class="text-xs text-amber-500 mt-1">{{ __('Average') }}</p>
+                                    <p x-show="calculated.fat_percent >= 25" class="text-xs text-red-500 mt-1">{{ __('Obese') }}</p>
+                                </div>
+                            </template>
+                            <template x-if="user.sex === 'female'">
+                                <div>
+                                    <p x-show="calculated.fat_percent < 14" class="text-xs text-violet-500 mt-1">{{ __('Essential fat') }}</p>
+                                    <p x-show="calculated.fat_percent >= 14 && calculated.fat_percent < 21" class="text-xs text-sky-500 mt-1">{{ __('Athletes') }}</p>
+                                    <p x-show="calculated.fat_percent >= 21 && calculated.fat_percent < 25" class="text-xs text-emerald-500 mt-1">{{ __('Fitness') }}</p>
+                                    <p x-show="calculated.fat_percent >= 25 && calculated.fat_percent < 32" class="text-xs text-amber-500 mt-1">{{ __('Average') }}</p>
+                                    <p x-show="calculated.fat_percent >= 32" class="text-xs text-red-500 mt-1">{{ __('Obese') }}</p>
+                                </div>
+                            </template>
+                        </div>
+                        <p x-show="error.fat_percent" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill waist, neck, hips (for women), height and birth date.') }}
+                        </p>
+                    </div>
+
+                    {{-- BMR Card --}}
+                    <div class="rounded-xl p-4 transition-all"
+                         :class="error.BMR ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-fire text-rose-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Basal metabolic rate (BMR)') }}</span>
+                        </div>
+                        <div x-show="!error.BMR">
+                            <p class="text-2xl font-bold text-rose-600" x-text="calculated.BMR"></p>
+                            <p class="text-xs text-stone-400 mt-1">{{ __('kcal/day at rest') }}</p>
+                        </div>
+                        <p x-show="error.BMR" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill weight, height and birth date.') }}
+                        </p>
+                    </div>
+
+                    {{-- Normal Weight Card --}}
+                    <div class="rounded-xl p-4 transition-all"
+                         :class="error.normal_weight ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-balance-scale text-emerald-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Normal weight') }}</span>
+                        </div>
+                        <div x-show="!error.normal_weight">
+                            <p class="text-2xl font-bold text-emerald-600" x-text="calculated.normal_weight_from + '-' + calculated.normal_weight_to"></p>
+                            <p class="text-xs text-stone-400 mt-1">кг</p>
+                        </div>
+                        <p x-show="error.normal_weight" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill height.') }}
+                        </p>
+                    </div>
+
+                    {{-- TDEE Card --}}
+                    <div class="rounded-xl p-4 transition-all"
+                         :class="error.kcal_per_day_normal ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-bolt text-amber-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Calorie consumption per day with activity') }}</span>
+                        </div>
+                        <div x-show="!error.kcal_per_day_normal">
+                            <p class="text-2xl font-bold text-amber-600" x-text="calculated.kcal_per_day_normal"></p>
+                            <p class="text-xs text-stone-400 mt-1">{{ __('kcal/day') }}</p>
+                        </div>
+                        <p x-show="error.kcal_per_day_normal" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill weight, height and DOB') }}
+                        </p>
+                    </div>
+
+                    {{-- Daily Limit Card --}}
+                    <div class="rounded-xl p-4 transition-all"
+                         :class="error.kcal_per_day ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-cyan-50 to-sky-50 border border-cyan-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-bullseye text-cyan-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Your daily calorie limit based on desirable deficit') }}</span>
+                        </div>
+                        <div x-show="!error.kcal_per_day">
+                            <p class="text-2xl font-bold text-cyan-600" x-text="calculated.kcal_per_day"></p>
+                            <p class="text-xs text-stone-400 mt-1">{{ __('kcal/day') }}</p>
+                        </div>
+                        <p x-show="error.kcal_per_day" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill weight, height, DOB and deficit kcal.') }}
+                        </p>
+                    </div>
+
+                    {{-- Weeks to Target Card --}}
+                    <div class="rounded-xl p-4 transition-all col-span-2"
+                         :class="error.weeks_to_target ? 'bg-stone-50 border border-dashed border-stone-200' : 'bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100'">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-flag-checkered text-indigo-500 text-sm"></i>
+                            <span class="text-xs font-medium text-stone-500">{{ __('Weeks to target weight') }}</span>
+                        </div>
+                        <div x-show="!error.weeks_to_target" class="flex items-baseline gap-2">
+                            <p class="text-3xl font-bold text-indigo-600" x-text="calculated.weeks_to_target"></p>
+                            <span class="text-sm text-indigo-400">{{ __('weeks') }}</span>
+                        </div>
+                        <p x-show="error.weeks_to_target" class="text-xs text-stone-400 mt-1">
+                            {{ __('Insufficient data. Please fill weight, target weight and deficit kcal.') }}
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>
+
+        {{-- Save Button --}}
+        <div class="flex justify-end">
+            <button @click="save"
+                    class="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-xl shadow-lg hover:shadow-xl transition-all">
+                <i class="fas fa-check mr-2"></i>
+                {{ __('Save') }}
+            </button>
+        </div>
+
     </div>
+
     <x-loading-screen/>
 </div>
 <script>
