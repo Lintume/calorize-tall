@@ -1,355 +1,405 @@
-<x-app-layout>
-
-    @section('title', __('Calorize — AI Food Diary & Calorie Tracker'))
+<x-app-layout :full-width="true">
+    @section('title', __('landing.meta.title'))
 
     @section('meta')
-        <meta name="description"
-              content="{{ __('Calorize is an AI-powered food diary and calorie tracker. Log meals by chat or voice, pick the right product variant from your history, track calories & macros, and use an 85,000+ Ukrainian product database.') }}">
-        <meta name="keywords"
-              content="{{ __('AI calorie tracker, AI food diary, calorie diary, macro tracker, calorie counting app, nutrition tracker, Ukrainian product database, recipes, weight loss') }}">
+        <meta name="description" content="{{ __('landing.meta.description') }}">
+        <meta name="keywords" content="{{ __('landing.meta.keywords') }}">
         <meta name="author" content="Calorize">
     @endsection
 
-    <div class="min-h-screen bg-gradient-to-b from-amber-50/50 via-white to-stone-50">
+    @php
+        $primaryUrl = auth()->check() ? route('dashboard') : route('register');
+        $primaryLabel = auth()->check() ? __('landing.hero.cta_primary_auth') : __('landing.hero.cta_primary_guest');
+        $secondaryUrl = auth()->check() ? route('dashboard') : route('login');
+    @endphp
 
-        <!-- Hero Section -->
-        <section class="relative overflow-hidden">
-            <!-- Decorative background elements -->
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-24 -right-24 w-96 h-96 bg-gradient-to-br from-amber-200/40 to-pink-200/30 rounded-full blur-3xl"></div>
-                <div class="absolute top-1/2 -left-24 w-80 h-80 bg-gradient-to-tr from-amber-100/50 to-orange-100/40 rounded-full blur-3xl"></div>
-            </div>
-
-            <div class="relative max-w-5xl mx-auto px-6 lg:px-8 pt-20 pb-28 lg:pt-28 lg:pb-36">
-                <div class="text-center">
-
-                    <!-- Logo (cropped bottom to hide text) -->
-                    <div class="mb-6 mx-auto w-36 lg:w-44 overflow-hidden" style="aspect-ratio: 1 / 0.82;">
-                <img
-                    src="/logo.png"
-                    alt="Calorize Logo"
-                            class="w-full drop-shadow-lg"
-                />
-                    </div>
-
-                    <!-- Main Heading -->
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
-                        <span class="bg-gradient-to-r from-amber-600 via-amber-700 to-orange-700 bg-clip-text text-transparent" style="font-family: 'Maven Pro', sans-serif; font-weight: 500;">Calorize</span>
-                        <span class="block text-3xl sm:text-4xl lg:text-5xl font-medium text-stone-800 mt-4">
-                            {{ __('is an AI food diary') }}
-                        </span>
-                </h1>
-
-                    <!-- Tagline -->
-                    <p class="text-xl sm:text-2xl text-stone-600 max-w-2xl mx-auto leading-relaxed mb-10">
-                        <span class="font-semibold text-stone-800">{{ __('Type it.') }}</span>
-                        <span class="font-semibold text-stone-800">{{ __('Say it.') }}</span>
-                        <br class="hidden sm:block">
-                        <span>{{ __('The AI logs it — with calories and macros.') }}</span>
-                    </p>
-
-                    <!-- Example chips -->
-                    <div class="flex flex-wrap justify-center gap-3 lg:gap-4 mb-12">
-                        <span class="px-5 py-2.5 text-base text-stone-700 bg-white/80 backdrop-blur rounded-full shadow-sm border border-stone-200/60">
-                            {{ __('A bowl of borscht') }}
-                        </span>
-                        <span class="px-5 py-2.5 text-base text-stone-700 bg-white/80 backdrop-blur rounded-full shadow-sm border border-stone-200/60">
-                            {{ __('2 eggs') }}
-                        </span>
-                        <span class="px-5 py-2.5 text-base text-stone-700 bg-white/80 backdrop-blur rounded-full shadow-sm border border-stone-200/60">
-                            {{ __('coffee with milk') }}
-                        </span>
-                    </div>
-
-                    <!-- CTA -->
-                    <div>
-                        <a href="{{ route('register') }}"
-                           class="inline-flex items-center px-10 py-5 text-lg font-semibold text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 rounded-full shadow-xl shadow-amber-600/25 hover:shadow-amber-700/30 transition-all duration-300 transform hover:scale-[1.02]">
-                            {{ __('Start Free') }}
-                            <i class="fas fa-arrow-right ml-3"></i>
-                        </a>
-                        <p class="text-sm text-stone-500 mt-5">{{ __('Free to use') }} · {{ __('No credit card required') }}</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Value Props -->
-        <section class="py-24 lg:py-32 bg-white border-y border-stone-200/80">
-            <div class="max-w-6xl mx-auto px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-20">
-                    <div class="text-center">
-                        <div class="w-18 h-18 mx-auto mb-6 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 shadow-lg shadow-amber-100/50" style="width: 4.5rem; height: 4.5rem;">
-                            <i class="fas fa-comments text-2xl text-amber-700"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ __('Chat-first logging') }}</h3>
-                        <p class="text-base text-stone-500 leading-relaxed">{{ __('Text or voice → saved to diary') }}</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-18 h-18 mx-auto mb-6 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 shadow-lg shadow-amber-100/50" style="width: 4.5rem; height: 4.5rem;">
-                            <i class="fas fa-brain text-2xl text-amber-700"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ __('Smarter matches') }}</h3>
-                        <p class="text-base text-stone-500 leading-relaxed">{{ __('Uses your recent entries to disambiguate') }}</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-18 h-18 mx-auto mb-6 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-100 to-amber-50 shadow-lg shadow-amber-100/50" style="width: 4.5rem; height: 4.5rem;">
-                            <i class="fas fa-database text-2xl text-amber-700"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ __('85,000+ foods') }}</h3>
-                        <p class="text-base text-stone-500 leading-relaxed">{{ __('Ukrainian products & local dishes') }}</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="py-24 lg:py-32">
-            <div class="max-w-6xl mx-auto px-6 lg:px-8">
-                <div class="text-center mb-16 lg:mb-20">
-                    <h2 class="text-4xl sm:text-5xl font-bold text-stone-900 mb-6">
-                        {{ __('Why Calorize?') }}
-            </h2>
-                    <p class="text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed">
-                        {{ __('Most calorie apps fail because logging is tedious. Calorize flips it: you describe your food in a message, the AI understands it, finds the right product, and updates your diary.') }}
-            </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                    <a href="{{ route('diary') }}" class="group block p-8 lg:p-10 bg-gradient-to-br from-white to-amber-50/30 rounded-3xl border border-stone-200 hover:border-amber-300 hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-300">
-                        <div class="flex items-center gap-5 mb-5">
-                            <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
-                                <i class="fas fa-wand-magic-sparkles text-xl"></i>
+    <div class="min-h-screen bg-[radial-gradient(1200px_circle_at_20%_-10%,rgba(245,158,11,0.18),transparent_55%),radial-gradient(900px_circle_at_90%_10%,rgba(14,165,233,0.16),transparent_50%),linear-gradient(to_bottom,rgba(250,250,249,1),rgba(255,255,255,1))]">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <!-- HERO -->
+                <section class="pt-10 sm:pt-12 lg:pt-16 pb-10 sm:pb-14 lg:pb-20">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                        <div class="lg:col-span-6">
+                            <div class="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white/70 backdrop-blur px-3.5 py-2 text-xs font-semibold text-stone-700">
+                                <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                <span>{{ __('landing.hero.eyebrow') }}</span>
                             </div>
-                            <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
-                                {{ __('AI Diary Assistant') }}
-                        </h3>
-                        </div>
-                        <p class="text-base text-stone-600 leading-relaxed">
-                            {{ __('Add, edit, delete, or copy meals by chat. Short messages work, and recent history helps pick the right variant — but your words always win (e.g. "lean").') }}
-                        </p>
-                    </a>
 
-                    <a href="{{ route('product.index') }}" class="group block p-8 lg:p-10 bg-gradient-to-br from-white to-amber-50/30 rounded-3xl border border-stone-200 hover:border-amber-300 hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-300">
-                        <div class="flex items-center gap-5 mb-5">
-                            <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
-                                <i class="fas fa-apple-whole text-xl"></i>
-                </div>
-                            <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
-                                {{ __('85,000+ Products (Ukraine)') }}
-                        </h3>
-                        </div>
-                        <p class="text-base text-stone-600 leading-relaxed">
-                            {{ __('Search fast, pick exact matches, and stop guessing. Great for branded foods, supermarket products, and everyday staples.') }}
-                        </p>
-                    </a>
+                            <div class="mt-6">
+                                <h1 class="text-[clamp(2.1rem,5vw,3.35rem)] leading-[1.04] font-extrabold tracking-tight text-stone-900">
+                                    <span class="bg-gradient-to-b from-stone-900 to-stone-700 bg-clip-text text-transparent">
+                                        {{ __('landing.hero.title') }}
+                                    </span>
+                                </h1>
+                                <p class="mt-4 text-base sm:text-lg leading-relaxed text-stone-600 max-w-xl">
+                                    {{ __('landing.hero.subtitle') }}
+                                </p>
+                            </div>
 
-                    <a href="{{ route('recipe.index') }}" class="group block p-8 lg:p-10 bg-gradient-to-br from-white to-amber-50/30 rounded-3xl border border-stone-200 hover:border-amber-300 hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-300">
-                        <div class="flex items-center gap-5 mb-5">
-                            <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
-                                <i class="fas fa-utensils text-xl"></i>
-                </div>
-                            <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
-                                {{ __('Recipes that actually work') }}
-                        </h3>
-                        </div>
-                        <p class="text-base text-stone-600 leading-relaxed">
-                            {{ __('Build your recipes from ingredients (even other recipes), keep nutrition per 100g, and let Calorize handle the calculations for calories and macros.') }}
-                        </p>
-                    </a>
+                            <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
+                                <a href="{{ $primaryUrl }}"
+                                   class="inline-flex items-center justify-center gap-2 rounded-2xl bg-stone-900 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-stone-900/10 hover:bg-stone-800 transition">
+                                    <span>{{ $primaryLabel }}</span>
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                                @guest
+                                    <a href="{{ $secondaryUrl }}"
+                                       class="inline-flex items-center justify-center rounded-2xl border border-stone-200 bg-white/70 backdrop-blur px-5 py-3.5 text-sm font-semibold text-stone-800 hover:bg-white transition">
+                                        {{ __('landing.hero.cta_secondary') }}
+                                    </a>
+                                @endguest
+                            </div>
 
-                    <a href="{{ route('statistic') }}" class="group block p-8 lg:p-10 bg-gradient-to-br from-white to-amber-50/30 rounded-3xl border border-stone-200 hover:border-amber-300 hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-300">
-                        <div class="flex items-center gap-5 mb-5">
-                            <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-600 to-amber-700 text-white shadow-lg shadow-amber-600/30">
-                                <i class="fas fa-chart-line text-xl"></i>
-                </div>
-                            <h3 class="text-2xl font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
-                                {{ __('Calories & macros made visible') }}
-                        </h3>
+                            <p class="mt-4 text-xs sm:text-sm text-stone-500 max-w-xl">
+                                {{ __('landing.hero.note') }}
+                            </p>
+
+                            <div class="mt-8 grid grid-cols-2 gap-3 sm:gap-4">
+                                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M4 6h16M4 12h10M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-sm font-semibold text-stone-800">{{ __('landing.proof.foods') }}</div>
+                                    </div>
+                                </div>
+                                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-xl bg-sky-500/10 text-sky-700 flex items-center justify-center">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z" stroke="currentColor" stroke-width="2"/>
+                                                <path d="M19 11a7 7 0 0 1-14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                <path d="M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-sm font-semibold text-stone-800">{{ __('landing.proof.voice') }}</div>
+                                    </div>
+                                </div>
+                                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-700 flex items-center justify-center">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M12 3l7 4v10l-7 4-7-4V7l7-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                                <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-sm font-semibold text-stone-800">{{ __('landing.proof.memory') }}</div>
+                                    </div>
+                                </div>
+                                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-9 w-9 rounded-xl bg-violet-500/10 text-violet-700 flex items-center justify-center">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M4 7h16M7 7v14m10-14v14M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-sm font-semibold text-stone-800">{{ __('landing.proof.recipes') }}</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-base text-stone-600 leading-relaxed">
-                            {{ __('Track calories, proteins, fats, and carbs. See trends, stay on target, and adjust based on real data — not vibes.') }}
-                        </p>
-                    </a>
-                </div>
+
+                        <!-- PHONE MOCK -->
+                        <div class="lg:col-span-6">
+                            <div class="relative">
+                                <div class="absolute -inset-4 sm:-inset-6 rounded-[2.25rem] bg-gradient-to-br from-amber-400/20 via-white/30 to-sky-400/20 blur-2xl"></div>
+
+                                <div class="relative mx-auto w-full max-w-[430px]">
+                                    <div class="rounded-[2.2rem] border border-stone-200 bg-white/80 backdrop-blur shadow-2xl shadow-stone-900/10 overflow-hidden">
+                                        <div class="px-5 pt-5 pb-3 border-b border-stone-200/60 bg-white/60">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="h-10 w-10 rounded-2xl bg-stone-900 text-white flex items-center justify-center font-extrabold tracking-tight">C</div>
+                                                    <div>
+                                                        <div class="text-sm font-semibold text-stone-900">Calorize</div>
+                                                        <div class="text-xs text-stone-500">{{ __('landing.demo.subtitle') }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="h-10 w-10 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center">
+                                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                        <path d="M12 20a8 8 0 1 0-8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                        <path d="M4 12a8 8 0 0 0 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+                                                        <path d="M12 12l4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-5 bg-[linear-gradient(to_bottom,rgba(250,250,249,1),rgba(245,245,244,1))]">
+                                            <div class="grid grid-cols-12 gap-4">
+                                                <div class="col-span-5 rounded-2xl border border-stone-200 bg-white p-4">
+                                                    <div class="text-[11px] font-semibold text-stone-500">{{ __('landing.mock.today') }}</div>
+                                                    <div class="mt-2 flex items-center gap-3">
+                                                        <div class="h-14 w-14 rounded-2xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-extrabold">
+                                                            1 420
+                                                        </div>
+                                                        <div>
+                                                            <div class="text-xs text-stone-500">kcal</div>
+                                                            <div class="text-sm font-semibold text-stone-800">{{ __('landing.mock.in_budget') }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-3 space-y-2">
+                                                        <div class="flex items-center justify-between text-[11px] text-stone-600">
+                                                            <span>Б</span><span class="font-semibold text-stone-800">86</span>
+                                                        </div>
+                                                        <div class="h-1.5 rounded-full bg-stone-100 overflow-hidden">
+                                                            <div class="h-full w-[62%] bg-emerald-500/70 rounded-full"></div>
+                                                        </div>
+                                                        <div class="flex items-center justify-between text-[11px] text-stone-600">
+                                                            <span>Ж</span><span class="font-semibold text-stone-800">44</span>
+                                                        </div>
+                                                        <div class="h-1.5 rounded-full bg-stone-100 overflow-hidden">
+                                                            <div class="h-full w-[48%] bg-amber-500/70 rounded-full"></div>
+                                                        </div>
+                                                        <div class="flex items-center justify-between text-[11px] text-stone-600">
+                                                            <span>В</span><span class="font-semibold text-stone-800">156</span>
+                                                        </div>
+                                                        <div class="h-1.5 rounded-full bg-stone-100 overflow-hidden">
+                                                            <div class="h-full w-[72%] bg-sky-500/70 rounded-full"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-span-7 rounded-2xl border border-stone-200 bg-white p-4">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="text-[11px] font-semibold text-stone-500">{{ __('landing.mock.lunch') }}</div>
+                                                        <div class="text-[11px] text-stone-500">12:40</div>
+                                                    </div>
+                                                    <div class="mt-3 space-y-2">
+                                                        <div class="flex items-center justify-between text-xs">
+                                                            <span class="text-stone-800 font-medium">Борщ домашній</span>
+                                                            <span class="text-stone-500">350 г</span>
+                                                        </div>
+                                                        <div class="flex items-center justify-between text-xs">
+                                                            <span class="text-stone-800 font-medium">Яйця</span>
+                                                            <span class="text-stone-500">120 г</span>
+                                                        </div>
+                                                        <div class="flex items-center justify-between text-xs">
+                                                            <span class="text-stone-800 font-medium">Кава + молоко</span>
+                                                            <span class="text-stone-500">250 мл</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4 rounded-2xl border border-stone-200 bg-white overflow-hidden">
+                                                <div class="px-4 py-3 border-b border-stone-200/60 bg-white/70 flex items-center justify-between">
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="h-7 w-7 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-bold text-xs">AI</div>
+                                                    </div>
+                                                    <div class="h-8 w-8 rounded-xl bg-stone-100 flex items-center justify-center text-stone-700">
+                                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+
+                                                <div class="px-4 py-4 bg-stone-50 space-y-3">
+                                                    <div class="flex justify-end">
+                                                        <div class="max-w-[90%] rounded-2xl rounded-br-md bg-stone-900 text-white px-4 py-2.5 text-sm shadow-sm">
+                                                            {{ __('landing.demo.micro_1') }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-start">
+                                                        <div class="max-w-[92%] rounded-2xl rounded-bl-md bg-white border border-stone-200 px-4 py-2.5 text-sm text-stone-800 shadow-sm">
+                                                            <div class="text-xs font-semibold text-stone-500 mb-1">{{ __('landing.mock.memory') }}</div>
+                                                            <div class="text-sm">{{ __('landing.demo.memory_line') }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-start">
+                                                        <div class="max-w-[92%] rounded-2xl rounded-bl-md bg-white border border-stone-200 px-4 py-2.5 text-sm text-stone-800 shadow-sm">
+                                                            <div>{{ __('landing.demo.assistant_reply') }}</div>
+                                                            <div class="mt-2 text-xs text-stone-500">{{ __('landing.demo.assistant_reply_2') }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="px-4 py-3 bg-white border-t border-stone-200/60">
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="flex-1 rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs text-stone-500">
+                                                            {{ __('landing.demo.title') }}
+                                                        </div>
+                                                        <div class="h-10 w-10 rounded-xl bg-stone-100 text-stone-700 flex items-center justify-center border border-stone-200">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                                <path d="M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z" stroke="currentColor" stroke-width="2"/>
+                                                                <path d="M19 11a7 7 0 0 1-14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                                <path d="M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="h-10 w-10 rounded-xl bg-amber-600 text-white flex items-center justify-center">
+                                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                                <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 flex flex-wrap justify-center gap-2 text-xs text-stone-500">
+                                    <span class="rounded-full border border-stone-200 bg-white/70 backdrop-blur px-3 py-1.5">{{ __('landing.demo.micro_1') }}</span>
+                                    <span class="rounded-full border border-stone-200 bg-white/70 backdrop-blur px-3 py-1.5">{{ __('landing.demo.micro_2') }}</span>
+                                    <span class="rounded-full border border-stone-200 bg-white/70 backdrop-blur px-3 py-1.5">{{ __('landing.demo.micro_3') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI CAN -->
+                    <div class="mt-10 sm:mt-12">
+                        <div class="rounded-[2.2rem] border border-stone-200 bg-white/70 backdrop-blur p-6 sm:p-8">
+                            <div class="flex items-start justify-between gap-6">
+                                <div class="max-w-2xl">
+                                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">
+                                        {{ __('landing.ai_can.title') }}
+                                    </h2>
+                                    <p class="mt-2 text-sm sm:text-base text-stone-600 leading-relaxed">
+                                        {{ __('landing.ai_can.subtitle') }}
+                                    </p>
+                                </div>
+                                <div class="hidden sm:flex h-12 w-12 rounded-2xl bg-stone-900 text-white items-center justify-center">
+                                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M12 2v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M8 22h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M9 19h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M6 9a6 6 0 0 1 12 0c0 2.3-1.2 3.7-2.3 4.8-.8.8-1.7 1.8-1.7 3.2H10c0-1.4-.9-2.4-1.7-3.2C7.2 12.7 6 11.3 6 9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                                @foreach (__('landing.ai_can.items') as $item)
+                                    <div class="rounded-2xl border border-stone-200 bg-white p-5">
+                                        <div class="text-sm font-bold text-stone-900">{{ $item['title'] }}</div>
+                                        <div class="mt-2 text-sm text-stone-600">
+                                            <span class="text-stone-400">→</span>
+                                            <span class="font-medium text-stone-800">{{ $item['example'] }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </section>
+        </div>
 
-        <!-- How it works -->
-        <section class="py-24 lg:py-32 bg-gradient-to-br from-stone-900 via-stone-900 to-stone-800 text-white relative overflow-hidden">
-            <!-- Decorative elements -->
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl"></div>
-            </div>
-
-            <div class="max-w-6xl mx-auto px-6 lg:px-8 relative">
-                <div class="text-center mb-16 lg:mb-20">
-                    <h2 class="text-4xl sm:text-5xl font-bold mb-6">
-                        {{ __('How the AI calorie diary works') }}
+        <!-- WHY -->
+        <section class="py-12 sm:py-16 lg:py-20 border-t border-stone-200/60 bg-white/40 backdrop-blur">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="max-w-6xl mx-auto">
+                    <div class="max-w-2xl">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
+                            {{ __('landing.sections.why_title') }}
                         </h2>
-                    <p class="text-xl text-stone-400 max-w-3xl mx-auto leading-relaxed">
-                        {{ __('Calorize is a functional calorie counting app with an AI assistant. It understands natural language, finds products, and updates your diary with calories and macros.') }}
-                        </p>
-                </div>
+                    </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
-                    <div class="text-center">
-                        <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-white text-3xl font-bold shadow-2xl shadow-amber-500/30">
-                            1
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                        @foreach (__('landing.sections.why_items') as $item)
+                            <div class="rounded-3xl border border-stone-200 bg-white/70 backdrop-blur p-6 shadow-sm">
+                                <div class="text-base font-bold text-stone-900">{{ $item['title'] }}</div>
+                                <p class="mt-3 text-sm leading-relaxed text-stone-600">{{ $item['text'] }}</p>
                             </div>
-                        <h3 class="text-xl font-semibold mb-4">{{ __('1) Tell it what you ate') }}</h3>
-                        <p class="text-stone-400 leading-relaxed">{{ __('"a bowl of borscht", "200g chicken", "coffee with milk"') }}</p>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FREE -->
+        <section class="py-12 sm:py-16 lg:py-20">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="max-w-6xl mx-auto">
+                    <div class="rounded-[2.2rem] border border-stone-200 bg-gradient-to-br from-stone-900 via-stone-900 to-stone-800 text-white overflow-hidden">
+                        <div class="p-8 sm:p-10 lg:p-12">
+                            <div class="max-w-2xl">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                                    {{ __('landing.sections.free_title') }}
+                                </h2>
+                                <p class="mt-4 text-sm sm:text-base leading-relaxed text-stone-300">
+                                    {{ __('landing.sections.free_text') }}
+                                </p>
                             </div>
-                    <div class="text-center">
-                        <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-white text-3xl font-bold shadow-2xl shadow-amber-500/30">
-                            2
-                        </div>
-                        <h3 class="text-xl font-semibold mb-4">{{ __('2) AI finds the right item') }}</h3>
-                        <p class="text-stone-400 leading-relaxed">{{ __('Uses search + your recent diary to pick the most likely variant, and asks only when needed.') }}</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-white text-3xl font-bold shadow-2xl shadow-amber-500/30">
-                            3
-                        </div>
-                        <h3 class="text-xl font-semibold mb-4">{{ __('3) Your diary updates instantly') }}</h3>
-                        <p class="text-stone-400 leading-relaxed">{{ __('Saved to the correct meal with grams and macros. Edit later by message.') }}</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Story Section -->
-        <section class="py-24 lg:py-32">
-            <div class="max-w-6xl mx-auto px-6 lg:px-8">
-                <div class="text-center mb-14 lg:mb-16">
-                    <h2 class="text-4xl sm:text-5xl font-bold text-stone-900 mb-6">
-                        {{ __('Built with the heart of an engineer — and a daily user') }}
-                </h2>
-                    <p class="text-xl text-stone-600 max-w-4xl mx-auto leading-relaxed">
-                        {{ __('Calorize was created by a person who tracks food every day and continuously uses the product. The goal is simple: make calorie and macro tracking so effortless that you can stay consistent for months — not days.') }}
-                </p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10 max-w-4xl mx-auto">
-                    <div class="p-8 lg:p-10 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-200/50">
-                        <div class="w-14 h-14 mb-5 flex items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                            <i class="fas fa-bolt text-2xl"></i>
+                            <div class="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-7">
+                                <div class="text-sm font-semibold text-white/90">
+                                    {{ __('landing.sections.geek_title') }}
+                                </div>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    @foreach (__('landing.sections.geek_items') as $item)
+                                        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                                            <div class="text-sm font-semibold">{{ $item['title'] }}</div>
+                                            <div class="mt-2 text-xs text-stone-300 leading-relaxed">{{ $item['text'] }}</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ __('Less friction, more consistency') }}</h3>
-                        <p class="text-base text-stone-600 leading-relaxed">{{ __('The AI assistant reduces taps and choices — you just describe what you ate.') }}</p>
-                    </div>
-                    <div class="p-8 lg:p-10 bg-gradient-to-br from-amber-50 to-white rounded-2xl border border-amber-200/50">
-                        <div class="w-14 h-14 mb-5 flex items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                            <i class="fas fa-wrench text-2xl"></i>
-                    </div>
-                        <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ __('Practical features first') }}</h3>
-                        <p class="text-base text-stone-600 leading-relaxed">{{ __('Fast search, recipes, copy meals, edits, and a huge Ukrainian database — built for real-life use.') }}</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section class="py-28 lg:py-36 bg-gradient-to-br from-amber-600 via-amber-600 to-orange-600 text-white relative overflow-hidden">
-            <!-- Decorative elements -->
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-24 -right-24 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/30 rounded-full blur-3xl"></div>
-            </div>
-
-            <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
-                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8">
-                    {{ __('Start tracking without the busywork') }}
-                </h2>
-                <p class="text-xl lg:text-2xl text-amber-100 mb-12 leading-relaxed max-w-3xl mx-auto">
-                    {{ __('Calorize keeps it simple: quick logging, accurate nutrition, and an AI assistant that helps you stay consistent. Create your account and try it today.') }}
-                </p>
-                <a href="{{ route('register') }}"
-                   class="inline-flex items-center px-12 py-5 text-lg font-semibold text-amber-700 bg-white hover:bg-amber-50 rounded-full shadow-2xl shadow-black/20 transition-all duration-300 transform hover:scale-[1.02]">
-                    {{ __('Create Account') }}
-                    <i class="fas fa-arrow-right ml-3"></i>
-                </a>
-            </div>
-        </section>
-
-        <!-- Blog Section -->
-        <section class="py-24 lg:py-32 bg-white">
-            <div class="max-w-6xl mx-auto px-6 lg:px-8">
-                <div class="flex items-center justify-between mb-14 lg:mb-16">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-stone-900">
-                {{ __('Our Blog') }}
-            </h2>
-                    <a href="{{ route('blog') }}" class="text-base text-amber-700 hover:text-amber-800 font-semibold flex items-center gap-2">
-                        {{ __('View All Articles') }}
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-                    <!-- Blog Card 1 -->
-                    <a href="{{ route('blog-2') }}" class="group">
-                        <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
-                            <img src="/blog/blog-1.webp"
-                            alt="{{ __('5 tips for effective weight loss') }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        <!-- CTA -->
+        <section class="pb-12 sm:pb-16 lg:pb-20">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="max-w-6xl mx-auto">
+                    <div class="rounded-[2.2rem] border border-stone-200 bg-white/80 backdrop-blur p-8 sm:p-10 lg:p-12 shadow-xl shadow-stone-900/5">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                            <div class="lg:col-span-8">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
+                                    {{ __('landing.cta.title') }}
+                                </h2>
+                                <p class="mt-3 text-sm sm:text-base text-stone-600 leading-relaxed max-w-2xl">
+                                    {{ __('landing.cta.subtitle') }}
+                                </p>
+                            </div>
+                            <div class="lg:col-span-4 flex lg:justify-end">
+                                <a href="{{ $primaryUrl }}"
+                                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
+                                    <span>{{ auth()->check() ? __('landing.cta.button_auth') : __('landing.cta.button_guest') }}</span>
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                                {{ __('5 tips for effective weight loss') }}
-                            </h3>
-                        <p class="text-base text-stone-500 line-clamp-2">
-                                {{ __('Learn how to achieve your ideal weight without harming your health.') }}
-                            </p>
-                            </a>
 
-                    <!-- Blog Card 2 -->
-                    <a href="{{ route('blog-1') }}" class="group">
-                        <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
-                            <img src="/blog/blog-2.webp"
-                            alt="{{ __('How to count calories correctly?') }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                        <div class="mt-6 flex items-center gap-4 text-xs text-stone-500">
+                            <a class="hover:text-stone-800 transition" href="{{ route('about') }}">{{ __('About us') }}</a>
+                            <span class="text-stone-300">•</span>
+                            <a class="hover:text-stone-800 transition" href="{{ route('privacy') }}">{{ __('Privacy Policy') }}</a>
+                            <span class="text-stone-300">•</span>
+                            <a class="hover:text-stone-800 transition" href="{{ route('blog') }}">{{ __('Blog') }}</a>
                         </div>
-                        <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                                {{ __('How to count calories correctly?') }}
-                            </h3>
-                        <p class="text-base text-stone-500 line-clamp-2">
-                                {{ __('Step by step: Learn how calorie counting can change your life.') }}
-                            </p>
-                            </a>
-
-                    <!-- Blog Card 3 -->
-                    <a href="{{ route('blog-3') }}" class="group">
-                        <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
-                            <img src="/blog/blog-3.webp"
-                            alt="{{ __('Top 10 healthy foods') }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
-                        </div>
-                        <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                                {{ __('Top 10 healthy foods') }}
-                            </h3>
-                        <p class="text-base text-stone-500 line-clamp-2">
-                                {{ __('A list of foods that will help you stay healthy and active.') }}
-                            </p>
-                            </a>
-
-                    <!-- Blog Card 4 -->
-                    <a href="{{ route('blog-4') }}" class="group">
-                        <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-5 bg-stone-100 shadow-lg">
-                            <img src="/blog/blog-4.webp"
-                            alt="{{ __('Why is water important for weight loss?') }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
-                        </div>
-                        <h3 class="text-lg font-semibold text-stone-900 group-hover:text-amber-700 transition-colors mb-2">
-                                {{ __('Why is water important for weight loss?') }}
-                            </h3>
-                        <p class="text-base text-stone-500 line-clamp-2">
-                                {{ __('Find out why water is your best ally in weight management.') }}
-                            </p>
-                            </a>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- Sticky mobile CTA -->
+        @guest
+            <div class="sm:hidden fixed inset-x-0 bottom-0 z-40">
+                <div class="px-4 pb-4">
+                    <div class="rounded-2xl border border-stone-200 bg-white/85 backdrop-blur shadow-2xl shadow-stone-900/10 p-3 flex items-center gap-3">
+                        <div class="flex-1">
+                            <div class="text-xs font-semibold text-stone-900">{{ __('landing.hero.eyebrow') }}</div>
+                            <div class="text-[11px] text-stone-500">{{ __('landing.hero.note') }}</div>
+                        </div>
+                        <a href="{{ route('register') }}" class="shrink-0 inline-flex items-center justify-center rounded-xl bg-stone-900 px-4 py-2.5 text-xs font-semibold text-white">
+                            {{ __('landing.hero.cta_primary_guest') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="h-24"></div>
+        @endguest
     </div>
-
 </x-app-layout>
+

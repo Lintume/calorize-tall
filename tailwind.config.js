@@ -12,7 +12,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', ...defaultTheme.fontFamily.sans],
+                sans: ['Manrope', 'Inter', ...defaultTheme.fontFamily.sans],
             },
             animation: {
                 float: 'float 4s ease-in-out infinite',

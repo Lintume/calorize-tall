@@ -21,13 +21,13 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Maven+Pro:wght@500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Inter:wght@400;500;600;700&family=Maven+Pro:wght@500;600;700&display=swap"
             rel="stylesheet"
             media="print"
             onload="this.media='all'"
         />
         <noscript>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Maven+Pro:wght@500;600;700&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Inter:wght@400;500;600;700&family=Maven+Pro:wght@500;600;700&display=swap" />
         </noscript>
 
         <!-- Scripts -->
@@ -74,11 +74,15 @@
 
             <!-- Page Content -->
             <main class="content">
-                <div class="flex items-center justify-center">
-                    <div class="w-full max-w-4xl px-4 sm:px-6 lg:px-8 ">
-                        {{ $slot }}
+                @if (($fullWidth ?? false) === true)
+                    {{ $slot }}
+                @else
+                    <div class="flex items-center justify-center">
+                        <div class="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+                            {{ $slot }}
+                        </div>
                     </div>
-                </div>
+                @endif
             </main>
 
             <!-- Footer -->

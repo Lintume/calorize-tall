@@ -22,7 +22,7 @@ new class extends Component {
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center mr-3">
-                    <a href="{{ route('dashboard') }}" wire:navigate>
+                    <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" wire:navigate>
                         <x-application-logo class="w-8 md:w-10 fill-current text-stone-500 py-2"/>
                     </a>
                 </div>
