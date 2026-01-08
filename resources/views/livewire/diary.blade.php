@@ -22,73 +22,69 @@
     {{-- Main Content Card --}}
     <div class="rounded-2xl bg-white border border-stone-200 shadow-sm overflow-hidden mt-6">
 
-        {{-- Compact Header: Date + Macros + Save --}}
-        <div class="border-b border-stone-100 px-4 py-3">
-            <div class="flex items-center justify-between gap-3">
+        {{-- Gradient Header with Date + Progress --}}
+        <div class="bg-gradient-to-r from-amber-50 via-orange-50/50 to-amber-50 px-4 py-3 border-b border-amber-100/50">
+            {{-- Date Row --}}
+            <div class="flex flex-wrap items-center gap-2 mb-3">
                 {{-- Date Navigation --}}
-                <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-1">
                     <button wire:click="changeDate(-1)"
-                            class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-500 hover:bg-stone-100 transition-colors">
+                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/80 text-amber-600 hover:bg-white hover:shadow-sm transition-all">
                         <i class="fas fa-chevron-left text-xs"></i>
                     </button>
 
                     <div class="relative">
                         <input wire:model.live="date" type="date" id="date"
                                class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" />
-                        <div class="px-3 py-1.5 text-sm font-medium text-stone-800 cursor-pointer hover:text-amber-700 transition-colors">
-                            <span x-text="formattedDate"></span>
+                        <div class="px-3 py-1.5 bg-white/80 rounded-lg cursor-pointer hover:bg-white transition-all min-w-[100px] text-center">
+                            <span class="text-sm font-semibold text-stone-800" x-text="formattedDate"></span>
                         </div>
                     </div>
 
                     <button wire:click="changeDate(1)"
-                            class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-500 hover:bg-stone-100 transition-colors">
+                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/80 text-amber-600 hover:bg-white hover:shadow-sm transition-all">
                         <i class="fas fa-chevron-right text-xs"></i>
                     </button>
-
-                    <button wire:click="goToToday" x-show="!isToday"
-                            class="ml-1 px-2 py-1 text-xs font-medium text-amber-700 hover:bg-amber-50 rounded transition-colors">
-                        {{ __('Today') }}
-                    </button>
                 </div>
 
-                {{-- Macros inline --}}
-                <div class="hidden sm:flex items-center gap-4 text-xs">
-                    <span class="text-blue-600 font-medium">
-                        <span class="text-stone-400">{{ __('Prot') }}:</span>
-                        <span x-text="totalProteins"></span>
-                    </span>
-                    <span class="text-orange-500 font-medium">
-                        <span class="text-stone-400">{{ __('Fat') }}:</span>
-                        <span x-text="totalFats"></span>
-                    </span>
-                    <span class="text-emerald-600 font-medium">
-                        <span class="text-stone-400">{{ __('Carb') }}:</span>
-                        <span x-text="totalCarbohydrates"></span>
-                    </span>
-                </div>
+                {{-- Today button --}}
+                <button wire:click="goToToday" x-show="!isToday" x-cloak
+                        class="px-2.5 py-1 text-xs font-medium text-amber-700 bg-amber-100/80 hover:bg-amber-200 rounded-lg transition-colors">
+                    {{ __('Today') }}
+                </button>
 
                 {{-- Save button --}}
                 <button @click="save"
-                        class="px-3 py-1.5 text-sm font-medium text-amber-700 hover:bg-amber-50 rounded-lg transition-colors">
+                        class="ml-auto px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-sm transition-all">
                     <i class="fas fa-check mr-1"></i>
                     {{ __('Save') }}
                 </button>
             </div>
 
-            {{-- Mobile macros --}}
-            <div class="sm:hidden flex justify-center gap-4 text-xs mt-2 pt-2 border-t border-stone-100">
-                <span class="text-blue-600 font-medium">
-                    <span class="text-stone-400">{{ __('Prot') }}:</span>
-                    <span x-text="totalProteins"></span>
-                </span>
-                <span class="text-orange-500 font-medium">
-                    <span class="text-stone-400">{{ __('Fat') }}:</span>
-                    <span x-text="totalFats"></span>
-                </span>
-                <span class="text-emerald-600 font-medium">
-                    <span class="text-stone-400">{{ __('Carb') }}:</span>
-                    <span x-text="totalCarbohydrates"></span>
-                </span>
+            {{-- Progress Bar + Macros --}}
+            <div class="bg-white/60 rounded-xl p-2.5">
+                {{-- Calorie Progress --}}
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="flex-1">
+                        <div class="h-2 bg-stone-100 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-500"
+                                 :class="calorieProgress > 100 ? 'bg-gradient-to-r from-red-400 to-red-500' : 'bg-gradient-to-r from-amber-400 to-orange-500'"
+                                 :style="'width: ' + Math.min(calorieProgress, 100) + '%'">
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-semibold whitespace-nowrap">
+                        <span class="text-amber-600" x-text="totalCalories"></span>
+                        <span class="text-stone-400">/ {{ Auth::user()->kcal_per_day ?: 2000 }}</span>
+                    </span>
+                </div>
+
+                {{-- Macros --}}
+                <div class="flex items-center justify-center gap-4 text-xs">
+                    <span><span class="text-stone-400">{{ __('Prot') }}</span> <span class="font-semibold text-blue-600" x-text="totalProteins"></span></span>
+                    <span><span class="text-stone-400">{{ __('Fat') }}</span> <span class="font-semibold text-orange-500" x-text="totalFats"></span></span>
+                    <span><span class="text-stone-400">{{ __('Carb') }}</span> <span class="font-semibold text-emerald-600" x-text="totalCarbohydrates"></span></span>
+                </div>
             </div>
         </div>
 
@@ -97,11 +93,11 @@
             @foreach(['breakfast', 'lunch', 'dinner', 'snack'] as $intake)
                 {{-- Meal Header --}}
                 <div @click="setActiveMeal('{{ $intake }}')"
-                     :class="active === '{{ $intake }}' ? 'border-amber-200 bg-amber-50/50' : 'border-stone-100 hover:border-stone-200'"
+                     :class="active === '{{ $intake }}' ? 'border-amber-200 bg-amber-50/30' : 'border-stone-100 hover:border-stone-200 hover:bg-stone-50/30'"
                      class="rounded-xl border p-3 flex justify-between items-center cursor-pointer transition-all duration-200">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
-                             :class="active === '{{ $intake }}' ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all"
+                             :class="active === '{{ $intake }}' ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-400'">
                             @if($intake === 'breakfast')
                                 <i class="fas fa-sun"></i>
                             @elseif($intake === 'lunch')
@@ -112,14 +108,14 @@
                                 <i class="fas fa-cookie-bite"></i>
                             @endif
                         </div>
-                        <span class="font-medium text-stone-800" x-text="foodIntakes.{{ $intake }}.translatable"></span>
-                        <span x-text="foodIntakes.{{ $intake }}.totalCalories"
-                              :class="foodIntakes.{{ $intake }}.totalCalories > 0 ? 'text-amber-700' : 'text-stone-400'"
-                              class="text-sm font-medium">
+                        <span class="font-medium text-stone-700" x-text="foodIntakes.{{ $intake }}.translatable"></span>
+                        <span x-show="foodIntakes.{{ $intake }}.totalCalories > 0"
+                              x-text="foodIntakes.{{ $intake }}.totalCalories"
+                              class="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-700 border border-amber-200">
                         </span>
                     </div>
                     <i :class="active === '{{ $intake }}' ? 'fas fa-chevron-up text-amber-500' : 'fas fa-chevron-down text-stone-300'"
-                       class="text-xs"></i>
+                       class="text-xs transition-transform"></i>
                 </div>
 
                 {{-- Meal Content (expanded) --}}
@@ -200,17 +196,17 @@
 
             {{-- Measurements Section --}}
             <div @click="active === 'measurements' ? active = null : active = 'measurements'"
-                 :class="active === 'measurements' ? 'border-amber-200 bg-amber-50/50' : 'border-stone-100 hover:border-stone-200'"
+                 :class="active === 'measurements' ? 'border-amber-200 bg-amber-50/30' : 'border-stone-100 hover:border-stone-200 hover:bg-stone-50/30'"
                  class="rounded-xl border p-3 flex justify-between items-center cursor-pointer transition-all duration-200">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
-                         :class="active === 'measurements' ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm transition-all"
+                         :class="active === 'measurements' ? 'bg-amber-500 text-white' : 'bg-stone-100 text-stone-400'">
                         <i class="fas fa-ruler"></i>
                     </div>
-                    <span class="font-medium text-stone-800">{{ __('Measurements') }}</span>
+                    <span class="font-medium text-stone-700">{{ __('Measurements') }}</span>
                 </div>
                 <i :class="active === 'measurements' ? 'fas fa-chevron-up text-amber-500' : 'fas fa-chevron-down text-stone-300'"
-                   class="text-xs"></i>
+                   class="text-xs transition-transform"></i>
             </div>
 
             {{-- Measurements Content --}}
@@ -230,7 +226,7 @@
                 </template>
                 <div class="flex items-end">
                     <button @click="save"
-                            class="w-full py-2 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
+                            class="w-full py-2 text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
                         {{ __('Save') }}
                     </button>
                 </div>
@@ -334,6 +330,11 @@
                 const today = new Date();
                 const selected = new Date(this.$wire.date + 'T00:00:00');
                 return today.toDateString() === selected.toDateString();
+            },
+
+            get calorieProgress() {
+                const goal = {{ Auth::user()->kcal_per_day ?: 2000 }};
+                return Math.round((this.totalCalories / goal) * 100);
             },
 
             init() {

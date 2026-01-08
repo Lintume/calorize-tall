@@ -46,6 +46,11 @@ class ProductUpdate extends Component
         return redirect()->route('product.index');
     }
 
+    public function cancel()
+    {
+        return redirect()->route('product.index');
+    }
+
     public function render()
     {
         return view('livewire.product-form');
