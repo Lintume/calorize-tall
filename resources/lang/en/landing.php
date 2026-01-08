@@ -63,6 +63,10 @@ return [
                 'title' => 'Multiple foods in one message',
                 'example' => '"add 100g fish + 70g pineapple & shrimp skewers"',
             ],
+            [
+                'title' => 'Memory for “my borscht”',
+                'example' => '"add borscht" or "add Rafaello" — it picks your usual variant',
+            ],
         ],
     ],
 
