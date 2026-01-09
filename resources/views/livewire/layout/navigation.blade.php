@@ -59,6 +59,11 @@ new class extends Component {
                         <x-slot name="trigger">
                             <button
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-stone-500 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition ease-in-out duration-150">
+                                <svg class="h-4 w-4 me-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M2 12h20"/>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                </svg>
                                 <div>{{ __('welcome.language') }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -221,11 +226,25 @@ new class extends Component {
         <div class="py-1 border-t border-stone-200">
             @if (app()->getLocale() == 'uk')
                 <x-responsive-nav-link :href="LaravelLocalization::getLocalizedURL('en')" wire:navigate>
-                    English
+                    <span class="inline-flex items-center">
+                        <svg class="h-4 w-4 me-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        English
+                    </span>
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="LaravelLocalization::getLocalizedURL('uk')" wire:navigate>
-                    Українська
+                    <span class="inline-flex items-center">
+                        <svg class="h-4 w-4 me-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        Українська
+                    </span>
                 </x-responsive-nav-link>
             @endif
         </div>
