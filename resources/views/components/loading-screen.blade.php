@@ -8,7 +8,12 @@
             <!-- Внутрішній статичний круг із лого -->
             <div class="relative inline-flex items-center justify-center h-40 w-40 rounded-full bg-amber-300">
                 <!-- Лого -->
-                <img src="/logo.png" alt="Logo" class="h-16 w-16" />
+                <img
+                    src="/favicon/favicon.svg"
+                    onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
+                    alt="Calorize"
+                    class="h-16 w-16"
+                />
             </div>
         </div>
     </div>

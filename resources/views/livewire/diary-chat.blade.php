@@ -12,14 +12,19 @@
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-75"
         x-transition:enter-end="opacity-100 scale-100"
-        class="w-16 h-16 rounded-full flex flex-col items-center justify-center text-white cursor-pointer shadow-lg hover:scale-105 transition-transform"
+        class="relative group"
         :class="$wire.isProcessing ? 'animate-pulse' : ''"
-        style="background: linear-gradient(to bottom right, #0ea5e9, #0284c7);"
     >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-        <span class="text-[10px] font-medium opacity-80">AI</span>
+        {{-- Glow halo --}}
+        <div class="absolute -inset-1 rounded-3xl bg-amber-400/25 blur-md opacity-60 group-hover:opacity-80 transition-opacity"></div>
+
+        <div class="relative w-16 h-16 rounded-3xl bg-white border-2 border-amber-500/60 ring-1 ring-black/5 shadow-2xl shadow-stone-900/20 flex flex-col items-center justify-center overflow-hidden hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,165,233,0.10),transparent_55%)]"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-amber-600 drop-shadow-sm relative mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <span class="text-[10px] font-semibold text-stone-600 relative">Chat</span>
+        </div>
     </button>
 
     <!-- Chat Panel (expanded) -->
@@ -31,25 +36,27 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-        class="w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-300 flex flex-col overflow-hidden"
+        class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-auto sm:relative sm:bottom-auto sm:w-96 bg-white/95 backdrop-blur-sm rounded-[1.25rem] shadow-2xl shadow-stone-900/15 border border-stone-200 flex flex-col overflow-hidden z-50"
         style="max-height: min(70vh, 500px);"
         @click.outside="open = false"
     >
         <!-- Header -->
-        <div class="px-4 py-3 bg-gradient-to-r from-amber-600 to-amber-700 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <img
-                    src="/favicon/favicon.svg"
-                    onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
-                    alt="Calorize"
-                    class="h-5 w-5"
-                />
-                <span class="font-medium text-white">{{ __('AI Assistant') }}</span>
+        <div class="px-4 py-3 border-b border-stone-200/70 bg-[radial-gradient(600px_circle_at_15%_-30%,rgba(245,158,11,0.2),transparent_55%),radial-gradient(400px_circle_at_90%_-10%,rgba(14,165,233,0.15),transparent_55%),linear-gradient(to_bottom,rgba(255,255,255,0.95),rgba(255,255,255,0.9))] flex justify-between items-center">
+            <div class="flex items-center gap-2.5">
+                <div class="h-9 w-9 rounded-xl grid place-items-center bg-amber-100 border border-amber-200 shadow-inner shadow-amber-900/5">
+                    <img
+                        src="/favicon/favicon.svg"
+                        onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
+                        alt="Calorize"
+                        class="h-5 w-5"
+                    />
+                </div>
+                <span class="font-extrabold text-stone-900 text-sm">{{ __('AI Assistant') }}</span>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1">
                 <button
                     @click="$wire.clearChat()"
-                    class="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    class="h-8 w-8 rounded-xl grid place-items-center text-stone-500 hover:text-stone-700 hover:bg-stone-100 transition-colors"
                     title="{{ __('Clear chat') }}"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,9 +65,9 @@
                 </button>
                 <button
                     @click="open = false"
-                    class="p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    class="h-8 w-8 rounded-xl grid place-items-center text-stone-500 hover:text-stone-700 hover:bg-stone-100 transition-colors"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -70,70 +77,131 @@
         <!-- Messages -->
         <div
             x-ref="messagesContainer"
-            class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50"
+            class="relative flex-1 overflow-y-auto p-4 space-y-3 bg-stone-50/80"
             style="min-height: 200px;"
         >
+            <!-- Subtle background texture -->
+            <div class="pointer-events-none absolute inset-0">
+                <div class="absolute inset-0 bg-[radial-gradient(900px_circle_at_20%_-20%,rgba(245,158,11,0.10),transparent_55%),radial-gradient(900px_circle_at_85%_-10%,rgba(14,165,233,0.08),transparent_55%)]"></div>
+                <div class="absolute inset-0 opacity-[0.035] [background-image:radial-gradient(#0f172a_1px,transparent_1px)] [background-size:18px_18px]"></div>
+            </div>
+
+            <div class="relative">
             <!-- Welcome message if empty -->
-            <template x-if="localMessages.length === 0">
-                <div class="py-4 px-2">
+            <div x-show="localMessages.length === 0" x-cloak class="py-4 px-2">
                     <div class="text-center mb-4">
-                        <div class="text-3xl mb-2">🤖</div>
-                        <p class="text-sm font-medium text-gray-700">{{ __('AI Diary Assistant') }}</p>
+                        <div class="h-12 w-12 mx-auto rounded-2xl grid place-items-center bg-amber-100 border border-amber-200 shadow-inner shadow-amber-900/5 mb-3">
+                            <span class="text-xl">🤖</span>
+                        </div>
+                        <p class="text-sm font-extrabold text-stone-800">{{ __('AI Diary Assistant') }}</p>
                     </div>
 
-                    <div class="space-y-2 text-xs text-gray-600">
-                        <p class="font-medium text-gray-700">{{ __('I can help you:') }}</p>
+                    <div class="space-y-2 text-xs text-stone-600">
+                        <p class="font-semibold text-stone-700">{{ __('I can help you:') }}</p>
                         <ul class="space-y-1.5 ml-2">
                             <li class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-emerald-500 mt-0.5">✓</span>
                                 <span>{{ __('Add food to meals') }}</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-emerald-500 mt-0.5">✓</span>
                                 <span>{{ __('Edit portions or delete items') }}</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-emerald-500 mt-0.5">✓</span>
                                 <span>{{ __('Copy meals from other days') }}</span>
                             </li>
                             <li class="flex items-start gap-2">
-                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-emerald-500 mt-0.5">✓</span>
                                 <span>{{ __('Search products or create new ones') }}</span>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="mt-4 p-3 bg-amber-50 rounded-xl text-xs">
-                        <p class="font-medium text-amber-800 mb-2">{{ __('Examples:') }}</p>
-                        <div class="space-y-1 text-amber-700">
-                            <p>"{{ __('add apple to breakfast') }}"</p>
-                            <p>"{{ __('200g chicken to lunch') }}"</p>
-                            <p>"{{ __('copy yesterday dinner') }}"</p>
-                            <p>"{{ __('add a banana to lunch') }}"</p>
+                    <div class="mt-4 p-3 bg-amber-50/80 rounded-xl border border-amber-100 text-xs">
+                        <p class="font-semibold text-amber-800 mb-2">{{ __('Examples:') }}</p>
+                        <div class="space-y-2 text-amber-700">
+                            <button
+                                type="button"
+                                class="block w-full text-left underline decoration-amber-300 underline-offset-2 hover:decoration-amber-500"
+                                @click="input='{{ __('add apple to breakfast') }}'; $nextTick(()=>$refs.input?.focus())"
+                            >
+                                "{{ __('add apple to breakfast') }}"
+                            </button>
+                            <button
+                                type="button"
+                                class="block w-full text-left underline decoration-amber-300 underline-offset-2 hover:decoration-amber-500"
+                                @click="input='{{ __('200g chicken to lunch') }}'; $nextTick(()=>$refs.input?.focus())"
+                            >
+                                "{{ __('200g chicken to lunch') }}"
+                            </button>
+                            <button
+                                type="button"
+                                class="block w-full text-left underline decoration-amber-300 underline-offset-2 hover:decoration-amber-500"
+                                @click="input='{{ __('copy yesterday dinner') }}'; $nextTick(()=>$refs.input?.focus())"
+                            >
+                                "{{ __('copy yesterday dinner') }}"
+                            </button>
+                            <button
+                                type="button"
+                                class="block w-full text-left underline decoration-amber-300 underline-offset-2 hover:decoration-amber-500"
+                                @click="input='{{ __('add a banana to lunch') }}'; $nextTick(()=>$refs.input?.focus())"
+                            >
+                                "{{ __('add a banana to lunch') }}"
+                            </button>
                         </div>
                     </div>
 
-                    <p class="text-center text-xs text-gray-400 mt-3">
+                    <p class="text-center text-xs text-stone-400 mt-3">
                         🎤 {{ __('Type or use voice input') }}
                     </p>
                 </div>
-            </template>
+            </div>
 
             <!-- Message list -->
             <template x-for="(msg, index) in localMessages" :key="index">
                 <div :class="(typeof msg !== 'undefined' && msg.role === 'user') ? 'flex justify-end' : 'flex justify-start'">
                     <!-- User message -->
                     <template x-if="typeof msg !== 'undefined' && msg.role === 'user'">
-                        <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-br-md"
-                             style="background-color: #d97706; color: white;">
-                            <span class="whitespace-pre-line break-words" x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
+                        <div class="max-w-[90%] flex items-end gap-2">
+                            <div class="flex flex-col items-end gap-1">
+                                <div class="px-4 py-2.5 text-sm rounded-2xl rounded-br-md bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-sm shadow-amber-600/20">
+                                    <span class="whitespace-pre-line break-words" x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
+                                </div>
+                                <div class="text-[10px] font-semibold text-amber-700/80">
+                                    {{ __('You') }}
+                                </div>
+                            </div>
                         </div>
                     </template>
                     <!-- Assistant message -->
                     <template x-if="typeof msg !== 'undefined' && msg.role === 'assistant'">
-                        <div class="max-w-[85%] px-4 py-2.5 text-sm rounded-2xl rounded-bl-md shadow-sm border"
-                             :class="(typeof msg !== 'undefined' && msg.error) ? 'border-red-200 bg-red-50 text-red-700' : 'border-gray-100 bg-white text-gray-800'">
-                            <span class="whitespace-pre-line break-words" x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
+                        <div class="max-w-[90%] flex items-end gap-2">
+                            <div class="h-8 w-8 rounded-2xl grid place-items-center border border-amber-200 bg-amber-100 text-amber-800 shadow-inner shadow-amber-900/5 shrink-0">
+                                <span class="text-[10px] font-extrabold">AI</span>
+                            </div>
+                            <div class="flex flex-col items-start gap-1 min-w-0">
+                                <div class="inline-flex items-center gap-2">
+                                    <span
+                                        class="text-[10px] font-semibold uppercase tracking-wide"
+                                        :class="(typeof msg !== 'undefined' && msg.error) ? 'text-red-600' : 'text-stone-500'"
+                                    >
+                                        {{ __('Assistant') }}
+                                    </span>
+                                    <span
+                                        x-show="$wire.isProcessing && index === (localMessages.length - 1)"
+                                        class="text-[10px] font-semibold text-amber-700/80"
+                                    >
+                                        {{ __('Thinking...') }}
+                                    </span>
+                                </div>
+                                <div
+                                    class="px-4 py-2.5 text-sm rounded-2xl rounded-bl-md shadow-sm border"
+                                    :class="(typeof msg !== 'undefined' && msg.error) ? 'border-red-200 bg-red-50 text-red-700' : 'border-stone-100 bg-white text-stone-800'"
+                                >
+                                    <span class="whitespace-pre-line break-words" x-text="typeof msg !== 'undefined' ? msg.content : ''"></span>
+                                </div>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -141,13 +209,18 @@
 
             <!-- Processing indicator - shows during Livewire request -->
             <div wire:loading.flex wire:target="sendMessage" class="justify-start">
-                <div class="bg-white text-gray-800 rounded-2xl rounded-bl-md shadow-sm border border-gray-100 px-4 py-3">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-500 mr-1">{{ __('Thinking...') }}</span>
-                        <div class="flex space-x-1">
-                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
-                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
-                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+                <div class="max-w-[90%] flex items-end gap-2">
+                    <div class="h-8 w-8 rounded-2xl grid place-items-center border border-amber-200 bg-amber-100 text-amber-800 shadow-inner shadow-amber-900/5 shrink-0">
+                        <span class="text-[10px] font-extrabold">AI</span>
+                    </div>
+                    <div class="bg-white text-stone-800 rounded-2xl rounded-bl-md shadow-sm border border-stone-100 px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-stone-500 mr-1">{{ __('Thinking...') }}</span>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+                                <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+                                <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,14 +228,14 @@
         </div>
 
         <!-- Input Area -->
-        <div class="p-3 bg-white border-t border-gray-100">
+        <div class="p-3 bg-white/90 border-t border-stone-100">
             <div class="flex items-center gap-2">
                 <div class="relative flex-1">
                     <input
                         x-model="input"
                         @keydown.enter="send()"
                         type="text"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-2 text-base sm:text-sm bg-white shadow-inner shadow-stone-900/5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
                         :class="{
                             'ring-2 ring-sky-400 border-sky-300 animate-pulse': transcribing,
                             'ring-2 ring-red-400 border-red-300': recording
@@ -209,10 +282,10 @@
                     @click="toggleRecording()"
                     :disabled="$wire.isProcessing || transcribing"
                     :class="{
-                        'bg-red-500 hover:bg-red-600': recording,
-                        'bg-gray-100 hover:bg-gray-200': !recording
+                        'bg-red-500 hover:bg-red-600 border-red-400': recording,
+                        'bg-stone-100 hover:bg-stone-200 border-stone-200': !recording
                     }"
-                    class="relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+                    class="relative w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-200 disabled:opacity-50"
                 >
                     <span
                         x-show="recording"
@@ -220,7 +293,7 @@
                         style="animation-duration: 1s;"
                     ></span>
                     <template x-if="!recording">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-stone-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                         </svg>
                     </template>
@@ -237,9 +310,9 @@
                 <button
                     @click="send()"
                     :disabled="!input.trim() || $wire.isProcessing"
-                    class="w-11 h-11 bg-amber-600 hover:bg-amber-700 rounded-xl flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="w-11 h-11 bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 border border-amber-400/50 rounded-xl flex items-center justify-center shadow-lg shadow-amber-600/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white drop-shadow-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
                 </button>
