@@ -476,5 +476,7 @@
     "feedback.send_comment": "Send",
     "feedback.not_configured_title": "Feedback system is being configured",
     "feedback.not_configured_description": "The feedback system is currently being set up. Please check back later or contact us directly.",
-    "welcome.feedback": "Feedback"
+    "welcome.feedback": "Feedback",
+    "Install App": "Install App",
+    "Don't have an account?": "Don't have an account?"
 }

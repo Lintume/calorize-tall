@@ -57,6 +57,29 @@ new class extends Component {
             </div>
 
             <div class="flex">
+                <!-- Install App Button (PWA) - Desktop -->
+                <div
+                    x-data="{ canInstall: false }"
+                    x-init="
+                        canInstall = window.isInstallPromptAvailable ? window.isInstallPromptAvailable() : false;
+                        window.addEventListener('pwa-install-available', () => canInstall = true);
+                        window.addEventListener('pwa-installed', () => canInstall = false);
+                    "
+                    x-show="canInstall"
+                    x-cloak
+                    class="hidden sm:flex sm:items-center"
+                >
+                    <button
+                        @click="window.showInstallPrompt && window.showInstallPrompt()"
+                        class="inline-flex items-center px-3 py-2 border border-amber-200 text-sm leading-4 font-medium rounded-lg text-amber-700 bg-amber-50 hover:bg-amber-100 hover:border-amber-300 focus:outline-none transition ease-in-out duration-150"
+                    >
+                        <svg class="h-4 w-4 me-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        {{ __('Install App') }}
+                    </button>
+                </div>
+
                 <!-- Language Switcher -->
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
                     <x-dropdown align="right" width="48">
@@ -227,6 +250,31 @@ new class extends Component {
             <x-responsive-nav-link :href="route('feedback')" :active="request()->routeIs('feedback')" wire:navigate>
                 {{__('welcome.feedback')}}
             </x-responsive-nav-link>
+        </div>
+
+        <!-- Install App Button (PWA) -->
+        <div
+            x-data="{ canInstall: false }"
+            x-init="
+                canInstall = window.isInstallPromptAvailable ? window.isInstallPromptAvailable() : false;
+                window.addEventListener('pwa-install-available', () => canInstall = true);
+                window.addEventListener('pwa-installed', () => canInstall = false);
+            "
+            x-show="canInstall"
+            x-cloak
+            class="py-1 border-t border-stone-200"
+        >
+            <button
+                @click="window.showInstallPrompt && window.showInstallPrompt()"
+                class="block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-amber-600 hover:text-amber-800 hover:bg-amber-50 hover:border-amber-300 focus:outline-none focus:text-amber-800 focus:bg-amber-50 focus:border-amber-300 transition duration-150 ease-in-out"
+            >
+                <span class="inline-flex items-center">
+                    <svg class="h-4 w-4 me-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    {{ __('Install App') }}
+                </span>
+            </button>
         </div>
 
         <!-- Language Switcher -->

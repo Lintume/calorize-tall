@@ -484,5 +484,7 @@
     "feedback.send_comment": "Надіслати",
     "feedback.not_configured_title": "Система зворотного зв'язку налаштовується",
     "feedback.not_configured_description": "Система зворотного зв'язку наразі налаштовується. Будь ласка, спробуйте пізніше або зв'яжіться з нами напряму.",
-    "welcome.feedback": "Зворотний зв'язок"
+    "welcome.feedback": "Зворотний зв'язок",
+    "Install App": "Встановити додаток",
+    "Don't have an account?": "Немає акаунту?"
 }
