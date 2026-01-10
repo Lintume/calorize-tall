@@ -94,7 +94,7 @@
                     <div>
                         <p class="text-stone-500 text-sm">
                             &copy; {{ date('Y') }}
-                            <a href="hey@calorize.com.ua" class="hover:text-amber-700 transition-colors">
+                            <a href="https://www.linkedin.com/in/lialia-sakhno-114436b8/" target="_blank" rel="noopener noreferrer" class="hover:text-amber-700 transition-colors">
                                 {{ __('Lialia') }}
                             </a> &
                             <a href="https://www.linkedin.com/in/ulianasakhnoqa/" class="hover:text-amber-700 transition-colors">

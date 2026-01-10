@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'github' => [
+        'token' => env('GITHUB_FEEDBACK_TOKEN'),
+        'owner' => env('GITHUB_FEEDBACK_OWNER'),
+        'repo' => env('GITHUB_FEEDBACK_REPO'),
+        'project_id' => env('GITHUB_FEEDBACK_PROJECT_ID'), // GitHub Project V2 ID (e.g., PVT_kwDOxxxxxx)
+        'notify_email' => env('FEEDBACK_NOTIFY_EMAIL'),    // Email for feedback notifications
+    ],
+
 ];

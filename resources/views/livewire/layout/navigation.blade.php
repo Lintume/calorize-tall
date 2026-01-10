@@ -48,6 +48,10 @@ new class extends Component {
                                 wire:navigate>
                         {{__('welcome.recipes')}}
                     </x-nav-link>
+                    <x-nav-link :href="route('feedback')" :active="request()->routeIs('feedback')"
+                                wire:navigate>
+                        {{__('welcome.feedback')}}
+                    </x-nav-link>
                 </div>
 
             </div>
@@ -219,6 +223,9 @@ new class extends Component {
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('blog')" :active="request()->routeIs('blog')" wire:navigate>
                 {{__('Blog')}}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('feedback')" :active="request()->routeIs('feedback')" wire:navigate>
+                {{__('welcome.feedback')}}
             </x-responsive-nav-link>
         </div>
 
