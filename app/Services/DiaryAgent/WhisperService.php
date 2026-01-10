@@ -10,8 +10,10 @@ use Illuminate\Support\Str;
 
 class WhisperService
 {
+    private const MODEL = 'whisper-large-v3';
+
     /**
-     * Transcribe audio to text using OpenAI Whisper API
+     * Transcribe audio to text using Groq Whisper API (whisper-large-v3)
      */
     public function transcribe(string $audioBase64, ?string $mimeType = null): string
     {
@@ -46,29 +48,14 @@ class WhisperService
         file_put_contents($tempFilePath, $audioData);
 
         try {
-            $useHeliconeGateway = Helicone::enabled() && (bool) config('helicone.whisper_use_gateway', false);
-            $endpointBase = $useHeliconeGateway
-                ? rtrim((string) config('helicone.gateway_url'), '/')
-                : rtrim((string) config('prism.providers.openai.url'), '/');
+            // Use Groq API for Whisper transcription (OpenAI-compatible endpoint)
+            $endpoint = rtrim((string) config('prism.providers.groq.url'), '/').'/audio/transcriptions';
 
-            $endpoint = $endpointBase.'/audio/transcriptions';
+            $language = $this->detectLanguageHint();
+            $prompt = $this->getPromptHint();
 
             /** @var Response $response */
-            $response = Http::withToken(config('prism.providers.openai.api_key'))
-                ->withHeaders(Helicone::headers(
-                    sessionId: $requestId,
-                    sessionPath: 'diary_agent/whisper',
-                    targetUrl: $useHeliconeGateway ? Helicone::openAiTargetUrl() : null,
-                    properties: Helicone::defaultProperties([
-                        'Feature' => 'diary_agent_whisper',
-                        'RequestId' => $requestId,
-                        'Locale' => app()->getLocale(),
-                    ]),
-                    sessionProperties: [
-                        'feature' => 'diary_agent_whisper',
-                        'locale' => app()->getLocale(),
-                    ],
-                ))
+            $response = Http::withToken(config('prism.providers.groq.api_key'))
                 ->timeout(30)
                 ->attach(
                     'file',
@@ -78,10 +65,11 @@ class WhisperService
                         'Content-Type' => $filePartContentType,
                     ]
                 )
-                ->post($endpoint, [
-                    'model' => 'whisper-1',
-                    'language' => $this->detectLanguageHint(),
-                ]);
+                ->post($endpoint, array_filter([
+                    'model' => self::MODEL,
+                    'language' => $language,
+                    'prompt' => $prompt,
+                ]));
 
             if (! $response->successful()) {
                 $this->manualHeliconeLogWhisper(
@@ -89,8 +77,9 @@ class WhisperService
                     startedAt: $startedAt,
                     status: $response->status(),
                     providerRequest: [
-                        'model' => 'whisper-1',
-                        'language' => $this->detectLanguageHint(),
+                        'model' => self::MODEL,
+                        'language' => $language,
+                        'prompt' => $prompt,
                         'file' => [
                             'filename' => 'audio.'.$extension,
                             'contentType' => $filePartContentType,
@@ -111,8 +100,9 @@ class WhisperService
                 startedAt: $startedAt,
                 status: $response->status(),
                 providerRequest: [
-                    'model' => 'whisper-1',
-                    'language' => $this->detectLanguageHint(),
+                    'model' => self::MODEL,
+                    'language' => $language,
+                    'prompt' => $prompt,
                     'file' => [
                         'filename' => 'audio.'.$extension,
                         'contentType' => $filePartContentType,
@@ -161,38 +151,25 @@ class WhisperService
             throw new \InvalidArgumentException("Audio file not found: {$filePath}");
         }
 
-        $useHeliconeGateway = Helicone::enabled() && (bool) config('helicone.whisper_use_gateway', false);
-        $endpointBase = $useHeliconeGateway
-            ? rtrim((string) config('helicone.gateway_url'), '/')
-            : rtrim((string) config('prism.providers.openai.url'), '/');
+        // Use Groq API for Whisper transcription
+        $endpoint = rtrim((string) config('prism.providers.groq.url'), '/').'/audio/transcriptions';
 
-        $endpoint = $endpointBase.'/audio/transcriptions';
+        $language = $this->detectLanguageHint();
+        $prompt = $this->getPromptHint();
 
         /** @var Response $response */
-        $response = Http::withToken(config('prism.providers.openai.api_key'))
-            ->withHeaders(Helicone::headers(
-                sessionId: $requestId,
-                sessionPath: 'diary_agent/whisper',
-                targetUrl: $useHeliconeGateway ? Helicone::openAiTargetUrl() : null,
-                properties: Helicone::defaultProperties([
-                    'Feature' => 'diary_agent_whisper',
-                    'RequestId' => $requestId,
-                    'Locale' => app()->getLocale(),
-                ]),
-                sessionProperties: [
-                    'feature' => 'diary_agent_whisper',
-                    'locale' => app()->getLocale(),
-                ],
-            ))
+        $response = Http::withToken(config('prism.providers.groq.api_key'))
             ->timeout(30)
             ->attach(
                 'file',
                 file_get_contents($filePath),
                 basename($filePath)
             )
-            ->post($endpoint, [
-                'model' => 'whisper-1',
-            ]);
+            ->post($endpoint, array_filter([
+                'model' => self::MODEL,
+                'language' => $language,
+                'prompt' => $prompt,
+            ]));
 
         if (! $response->successful()) {
             throw new \RuntimeException('Failed to transcribe audio: '.$response->body());
@@ -213,6 +190,20 @@ class WhisperService
         return match ($locale) {
             'uk' => 'uk',
             'en' => 'en',
+            default => null,
+        };
+    }
+
+    /**
+     * Get prompt hint for food diary context to improve transcription accuracy
+     */
+    private function getPromptHint(): ?string
+    {
+        $locale = app()->getLocale();
+
+        return match ($locale) {
+            'uk' => 'Це щоденник харчування. Користувач додає продукти, страви та їх кількість. Наприклад: "200 грам гречки", "одне велике яблуко", "ні, звичайні, не консервовані", "борщ з м\'ясом".',
+            'en' => 'This is a food diary. The user adds food items, meals, and quantities. For example: "200g of chicken", "one large apple", "no, not canned", "pasta with tomato sauce".',
             default => null,
         };
     }
@@ -328,7 +319,7 @@ class WhisperService
         ], fn ($v) => $v !== '');
 
         Helicone::manualLog(
-            url: 'openai/audio/transcriptions',
+            url: 'groq/audio/transcriptions',
             providerRequestJson: $providerRequest,
             meta: $meta,
             status: $status,
@@ -339,4 +330,3 @@ class WhisperService
         );
     }
 }
-
