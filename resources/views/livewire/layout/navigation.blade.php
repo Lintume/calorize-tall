@@ -57,7 +57,7 @@ new class extends Component {
             </div>
 
             <div class="flex">
-                <!-- Install App Button (PWA) - Desktop -->
+                <!-- Install App Button (PWA) - Desktop (Android/Chrome) -->
                 <div
                     x-data="{ canInstall: false }"
                     x-init="
@@ -78,6 +78,44 @@ new class extends Component {
                         </svg>
                         {{ __('Install App') }}
                     </button>
+                </div>
+
+                <!-- iOS Install Hint - Desktop -->
+                <div
+                    x-data="{ showHint: false }"
+                    x-init="
+                        showHint = window.shouldShowIOSInstallHint ? window.shouldShowIOSInstallHint() : false;
+                        window.addEventListener('pwa-install-available', () => showHint = false);
+                    "
+                    x-show="showHint"
+                    x-cloak
+                    class="hidden sm:flex sm:items-center"
+                >
+                    <x-dropdown align="right" width="72">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-amber-200 text-sm leading-4 font-medium rounded-lg text-amber-700 bg-amber-50 hover:bg-amber-100 hover:border-amber-300 focus:outline-none transition ease-in-out duration-150">
+                                <svg class="h-4 w-4 me-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                {{ __('Install App') }}
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <div class="px-4 py-3">
+                                <p class="text-sm text-stone-700 mb-2">{{ __('ios_install.instruction') }}</p>
+                                <ol class="text-sm text-stone-600 space-y-1 list-decimal list-inside">
+                                    <li>{{ __('ios_install.step1') }}</li>
+                                    <li>{{ __('ios_install.step2') }}</li>
+                                </ol>
+                                <button
+                                    @click="window.dismissIOSInstallHint && window.dismissIOSInstallHint(); showHint = false"
+                                    class="mt-3 text-xs text-stone-400 hover:text-stone-600"
+                                >
+                                    {{ __('ios_install.dismiss') }}
+                                </button>
+                            </div>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
 
                 <!-- Language Switcher -->
@@ -252,7 +290,7 @@ new class extends Component {
             </x-responsive-nav-link>
         </div>
 
-        <!-- Install App Button (PWA) -->
+        <!-- Install App Button (PWA) - Android/Chrome -->
         <div
             x-data="{ canInstall: false }"
             x-init="
@@ -275,6 +313,46 @@ new class extends Component {
                     {{ __('Install App') }}
                 </span>
             </button>
+        </div>
+
+        <!-- iOS Install Hint - Mobile -->
+        <div
+            x-data="{ showHint: false, expanded: false }"
+            x-init="
+                showHint = window.shouldShowIOSInstallHint ? window.shouldShowIOSInstallHint() : false;
+                window.addEventListener('pwa-install-available', () => showHint = false);
+            "
+            x-show="showHint"
+            x-cloak
+            class="py-1 border-t border-stone-200"
+        >
+            <button
+                @click="expanded = !expanded"
+                class="block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-amber-600 hover:text-amber-800 hover:bg-amber-50 hover:border-amber-300 focus:outline-none transition duration-150 ease-in-out"
+            >
+                <span class="inline-flex items-center">
+                    <svg class="h-4 w-4 me-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    {{ __('Install App') }}
+                    <svg class="h-4 w-4 ms-1 transition-transform" :class="{ 'rotate-180': expanded }" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </span>
+            </button>
+            <div x-show="expanded" x-collapse class="px-4 py-3 bg-amber-50/50">
+                <p class="text-sm text-stone-700 mb-2">{{ __('ios_install.instruction') }}</p>
+                <ol class="text-sm text-stone-600 space-y-1 list-decimal list-inside">
+                    <li>{{ __('ios_install.step1') }}</li>
+                    <li>{{ __('ios_install.step2') }}</li>
+                </ol>
+                <button
+                    @click="window.dismissIOSInstallHint && window.dismissIOSInstallHint(); showHint = false"
+                    class="mt-3 text-xs text-stone-400 hover:text-stone-600"
+                >
+                    {{ __('ios_install.dismiss') }}
+                </button>
+            </div>
         </div>
 
         <!-- Language Switcher -->

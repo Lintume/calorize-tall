@@ -486,5 +486,9 @@
     "feedback.not_configured_description": "Система зворотного зв'язку наразі налаштовується. Будь ласка, спробуйте пізніше або зв'яжіться з нами напряму.",
     "welcome.feedback": "Зворотний зв'язок",
     "Install App": "Встановити додаток",
-    "Don't have an account?": "Немає акаунту?"
+    "Don't have an account?": "Немає акаунту?",
+    "ios_install.instruction": "Щоб встановити додаток на iPhone:",
+    "ios_install.step1": "Натисніть «Поділитися» (квадрат зі стрілкою)",
+    "ios_install.step2": "Виберіть «На Под. екран»",
+    "ios_install.dismiss": "Більше не показувати"
 }

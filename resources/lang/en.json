@@ -478,5 +478,9 @@
     "feedback.not_configured_description": "The feedback system is currently being set up. Please check back later or contact us directly.",
     "welcome.feedback": "Feedback",
     "Install App": "Install App",
-    "Don't have an account?": "Don't have an account?"
+    "Don't have an account?": "Don't have an account?",
+    "ios_install.instruction": "To install the app on iPhone:",
+    "ios_install.step1": "Tap the Share button (square with arrow)",
+    "ios_install.step2": "Select \"Add to Home Screen\"",
+    "ios_install.dismiss": "Don't show again"
 }
