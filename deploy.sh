@@ -16,6 +16,12 @@ git pull origin main
 echo "📦 Installing composer dependencies..."
 composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
+# Виправляємо права на public/build перед білдом
+echo "🔐 Fixing public/build permissions..."
+sudo chown -R deploy:www-data public/build 2>/dev/null || true
+sudo find public/build -type d -exec chmod 775 {} \; 2>/dev/null || true
+sudo find public/build -type f -exec chmod 664 {} \; 2>/dev/null || true
+
 # Встановлюємо npm залежності і збираємо assets
 echo "🎨 Building frontend assets..."
 npm ci
