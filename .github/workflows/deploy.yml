@@ -101,25 +101,3 @@ jobs:
           script: |
             cd /var/www/calorize-tall
             ./deploy.sh
-
-  notify-failure:
-    runs-on: ubuntu-latest
-    needs: [test, deploy]
-    if: failure()
-
-    steps:
-      - name: Send Telegram notification on failure
-        if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: |
-            ❌ Calorize CI/CD Failed!
-            
-            Repository: ${{ github.repository }}
-            Branch: ${{ github.ref_name }}
-            Commit: ${{ github.sha }}
-            Author: ${{ github.actor }}
-            
-            Check the workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
