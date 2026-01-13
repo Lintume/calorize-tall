@@ -83,6 +83,9 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --force
 
+      - name: Setup Meilisearch index
+        run: php artisan scout:index products
+
       - name: Run tests
         run: php artisan test
 
