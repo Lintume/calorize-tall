@@ -2,6 +2,12 @@
 
 This project uses Laravel Sail for local development with Docker.
 
+## ⛔ CRITICAL RULES - NEVER VIOLATE
+
+1. **NEVER overwrite or copy over `.env` file** - it contains API keys and secrets. Only suggest changes for the user to make manually.
+2. **NEVER use `sail down -v` or `docker volume rm`** - this deletes databases with user data.
+3. **NEVER touch the `landscape` project** - it's the main work project, hands off!
+
 ## Diary AI Agent (must-know)
 
 This repo contains an LLM-driven food diary agent used by the Diary chat UI.
@@ -91,4 +97,4 @@ After completing tasks run tests:
 
 ## Local App URL (for browser tests)
 
-The application is available locally at `http://localhost:80`.
+The application is available locally at `http://localhost:8081`.
