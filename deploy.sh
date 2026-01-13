@@ -3,10 +3,6 @@ set -e
 
 cd /var/www/calorize-tall
 
-# Завантажуємо nvm для доступу до npm
-export NVM_DIR="/root/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 echo "🚀 Starting deployment..."
 
 # Вмикаємо режим обслуговування
