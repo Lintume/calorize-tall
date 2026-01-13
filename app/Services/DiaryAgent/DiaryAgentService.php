@@ -2,6 +2,7 @@
 
 namespace App\Services\DiaryAgent;
 
+use App\Services\DiaryAgent\Tools\AddMeasurementTool;
 use App\Services\DiaryAgent\Tools\AddToFoodIntakeTool;
 use App\Services\DiaryAgent\Tools\CreateProductTool;
 use App\Services\DiaryAgent\Tools\DeleteFoodIntakeTool;
@@ -51,6 +52,7 @@ class DiaryAgentService
             Tool::make(AddToFoodIntakeTool::class),
             Tool::make(UpdateFoodIntakeTool::class),
             Tool::make(DeleteFoodIntakeTool::class),
+            Tool::make(AddMeasurementTool::class),
         ];
 
         // Build messages array with conversation history
@@ -156,12 +158,14 @@ class DiaryAgentService
         // Split prompt: static rules first (for implicit caching), dynamic context last
         $staticRules = <<<STATIC
 Food diary agent for calculating calories and macros. Use tools to add/edit/delete/copy items.
+Also can record body measurements (weight, chest, waist, thighs, wrist, neck, biceps, mood, hunger, sleep).
 
 Rules:
 - Plain text only, brief replies. Match user language (UA/EN).
 - Use history for references ("як вчора", "те саме").
 - Act immediately; ask only if truly ambiguous.
 - Meal: use user's name or context default. Don't ask "which meal?".
+- Measurements: use addMeasurement to log weight and body metrics. At least one param required (kg, chest, waist, thighs, wrist, neck, biceps, mood, hunger, sleep).
 
 Quantities:
 - Never add same product multiple times. Count items: "2 eggs" = 120g (one entry).
