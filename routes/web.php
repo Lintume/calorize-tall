@@ -37,10 +37,6 @@ Route::group(['prefix' => $localePrefix], function () {
 
     Route::view('/', 'pages.landing');
 
-    Route::get('dashboard', Diary::class)
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
-
     Route::get('statistic', Statistic::class)
         ->middleware(['auth', 'verified'])
         ->name('statistic');

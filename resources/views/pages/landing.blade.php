@@ -8,9 +8,9 @@
     @endsection
 
     @php
-        $primaryUrl = auth()->check() ? route('dashboard') : route('register');
+        $primaryUrl = auth()->check() ? route('diary') : route('register');
         $primaryLabel = auth()->check() ? __('landing.hero.cta_primary_auth') : __('landing.hero.cta_primary_guest');
-        $secondaryUrl = auth()->check() ? route('dashboard') : route('login');
+        $secondaryUrl = auth()->check() ? route('diary') : route('login');
     @endphp
 
     <div class="min-h-screen bg-[radial-gradient(1200px_circle_at_20%_-10%,rgba(245,158,11,0.18),transparent_55%),radial-gradient(900px_circle_at_90%_10%,rgba(14,165,233,0.16),transparent_50%),linear-gradient(to_bottom,rgba(250,250,249,1),rgba(255,255,255,1))]">

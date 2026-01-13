@@ -1,4 +1,5 @@
 # Calorize - Health Tracker Application
+
 <div align="center">
   <img src="https://i.ibb.co/XL4wz00/calorize300.png" alt="calorize300" border="0">
 </div>
@@ -73,6 +74,7 @@ Start the application and all its services:
 ```
 
 This command will:
+
 - Build the Docker containers
 - Start MySQL database
 - Start the Laravel application
@@ -97,6 +99,7 @@ This command will:
 ```
 
 This creates a test user:
+
 - Email: `test@example.com`
 - Password: (check the seeder for the password)
 
@@ -265,9 +268,9 @@ mysqldump -u root -p calorize > /var/www/calorize-tall/19_01_25_calorize.sql
 - Register a new account or log in with existing credentials.
 - Verify your email address if required.
 
-### Dashboard
+### Diary
 
-- Access the main dashboard to view an overview of your health data.
+- Access the food diary to log meals and track your daily nutrition.
 
 ### Weight Tracking
 

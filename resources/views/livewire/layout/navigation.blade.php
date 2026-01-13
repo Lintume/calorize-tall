@@ -22,7 +22,7 @@ new class extends Component {
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center mr-3">
-                    <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" wire:navigate>
+                    <a href="{{ auth()->check() ? route('diary') : url('/') }}" wire:navigate>
                         <img
                             src="/favicon/favicon.svg"
                             onerror="this.onerror=null;this.src='/favicon/favicon-96x96.png';"
@@ -37,7 +37,7 @@ new class extends Component {
                     <x-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                         {{__('welcome.statistic')}}
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                    <x-nav-link :href="route('diary')" :active="request()->routeIs('diary')" wire:navigate>
                         {{__('welcome.diary')}}
                     </x-nav-link>
                     <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')"
@@ -260,7 +260,7 @@ new class extends Component {
             <x-responsive-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                 {{__('welcome.statistic')}}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+            <x-responsive-nav-link :href="route('diary')" :active="request()->routeIs('diary')" wire:navigate>
                 {{__('welcome.diary')}}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('product.create')" :active="request()->routeIs('product.create')"

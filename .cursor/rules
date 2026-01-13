@@ -117,7 +117,7 @@ resources/views/
 **Usage**:
 - Always wrap user-facing text: `{{ __('Text to translate') }}`
 - Use `LaravelLocalization::getLocalizedURL()` for hreflang tags
-- Routes are prefixed with locale: `/{locale}/dashboard`
+- Routes are prefixed with locale: `/{locale}/diary`
 
 **Exporting translations**:
 ```bash

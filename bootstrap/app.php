@@ -18,6 +18,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'localeCookieRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
             'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
         ]);
+
+        $middleware->redirectGuestsTo(function ($request) {
+            // Redirect to home page for diary routes, login for all others
+            $path = $request->path();
+            if (preg_match('#(^|/)diary$#', $path)) {
+                return '/';
+            }
+
+            return route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

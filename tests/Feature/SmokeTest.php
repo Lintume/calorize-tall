@@ -138,15 +138,6 @@ class SmokeTest extends TestCase
     |--------------------------------------------------------------------------
     */
 
-    public function test_dashboard_page_loads_for_authenticated_user(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get('/dashboard');
-
-        $response->assertStatus(200);
-    }
-
     public function test_diary_page_loads_for_authenticated_user(): void
     {
         $user = User::factory()->create();
@@ -267,18 +258,11 @@ class SmokeTest extends TestCase
     |--------------------------------------------------------------------------
     */
 
-    public function test_dashboard_redirects_guest_to_login(): void
-    {
-        $response = $this->get('/dashboard');
-
-        $response->assertRedirect('/login');
-    }
-
-    public function test_diary_redirects_guest_to_login(): void
+    public function test_diary_redirects_guest_to_home(): void
     {
         $response = $this->get('/diary');
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect('/');
     }
 
     public function test_statistic_redirects_guest_to_login(): void

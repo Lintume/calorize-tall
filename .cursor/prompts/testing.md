@@ -39,14 +39,15 @@ class FeatureNameTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get('/dashboard');
+            ->get('/diary');
 
         $response->assertOk();
     }
 
     public function test_guest_cannot_access_protected_route(): void
     {
-        $response = $this->get('/dashboard');
+        // Note: /diary redirects guests to '/' (home), other protected routes redirect to '/login'
+        $response = $this->get('/statistic');
 
         $response->assertRedirect('/login');
     }
