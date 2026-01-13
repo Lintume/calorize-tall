@@ -32,8 +32,8 @@ new class extends Component {
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:-my-px sm:ms-3 sm:flex">
+                <!-- Navigation Links (desktop, full) -->
+                <div class="hidden space-x-6 xl:-my-px xl:ms-3 xl:flex">
                     <x-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                         {{__('welcome.statistic')}}
                     </x-nav-link>
@@ -54,6 +54,84 @@ new class extends Component {
                     </x-nav-link>
                 </div>
 
+                <!-- Navigation Links (tablet, grouped) -->
+                <div class="hidden md:flex md:items-center md:gap-2 xl:hidden">
+                    <x-dropdown align="left" width="w-64">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-stone-600 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition">
+                                <svg class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+                                </svg>
+                                <span>{{ __('nav.group.tracking') }}</span>
+                                <svg class="ms-1 h-4 w-4 text-stone-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('diary')" wire:navigate>
+                                {{ __('welcome.diary') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('statistic')" wire:navigate>
+                                {{ __('welcome.statistic') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+
+                    <x-dropdown align="left" width="w-72">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-stone-600 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition">
+                                <svg class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h10M4 17h16"/>
+                                </svg>
+                                <span>{{ __('nav.group.catalog') }}</span>
+                                <svg class="ms-1 h-4 w-4 text-stone-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('product.index')" wire:navigate>
+                                {{ __('welcome.productList') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('recipe.index')" wire:navigate>
+                                {{ __('welcome.recipes') }}
+                            </x-dropdown-link>
+
+                            <div class="my-1 border-t border-stone-200/70"></div>
+
+                            <x-dropdown-link :href="route('product.create')" wire:navigate>
+                                {{ __('Create Product') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('recipe.create')" wire:navigate>
+                                {{ __('Create Recipe') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+
+                    <x-dropdown align="left" width="w-64">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg text-stone-600 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition">
+                                <svg class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                                </svg>
+                                <span>{{ __('nav.group.more') }}</span>
+                                <svg class="ms-1 h-4 w-4 text-stone-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('feedback')" wire:navigate>
+                                {{ __('welcome.feedback') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('blog')" wire:navigate>
+                                {{ __('Blog') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+
             </div>
 
             <div class="flex">
@@ -67,7 +145,7 @@ new class extends Component {
                     "
                     x-show="canInstall"
                     x-cloak
-                    class="hidden sm:flex sm:items-center"
+                    class="hidden xl:flex xl:items-center"
                 >
                     <button
                         @click="window.showInstallPrompt && window.showInstallPrompt()"
@@ -89,7 +167,7 @@ new class extends Component {
                     "
                     x-show="showHint"
                     x-cloak
-                    class="hidden sm:flex sm:items-center"
+                    class="hidden xl:flex xl:items-center"
                 >
                     <x-dropdown align="right" width="72">
                         <x-slot name="trigger">
@@ -118,8 +196,8 @@ new class extends Component {
                     </x-dropdown>
                 </div>
 
-                <!-- Language Switcher -->
-                <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <!-- Language Switcher (desktop) -->
+                <div class="hidden xl:flex xl:items-center xl:ms-4">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -152,8 +230,8 @@ new class extends Component {
                     </x-dropdown>
                 </div>
 
-                <!-- Settings Dropdown -->
-                <div class="hidden sm:flex sm:items-center">
+                <!-- Settings Dropdown (desktop) -->
+                <div class="hidden xl:flex xl:items-center">
                     @auth
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
@@ -199,10 +277,86 @@ new class extends Component {
                         </x-nav-link>
                     @endauth
                 </div>
+
+                <!-- Tablet Actions Dropdown (language/install/auth) -->
+                <div class="hidden md:flex md:items-center xl:hidden md:ms-2">
+                    <x-dropdown align="right" width="w-72">
+                        <x-slot name="trigger">
+                            <button aria-label="{{ __('nav.group.actions') }}"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-stone-600 hover:text-amber-700 hover:bg-amber-50 focus:outline-none transition">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/>
+                                </svg>
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <div class="px-4 pt-3 pb-2 text-xs font-semibold text-stone-400 uppercase tracking-wide">
+                                {{ __('nav.group.actions') }}
+                            </div>
+
+                            <!-- Install App Button (PWA) -->
+                            <div
+                                class="px-2 pb-2"
+                                x-data="{ canInstall: false }"
+                                x-init="
+                                    canInstall = window.isInstallPromptAvailable ? window.isInstallPromptAvailable() : false;
+                                    window.addEventListener('pwa-install-available', () => canInstall = true);
+                                    window.addEventListener('pwa-installed', () => canInstall = false);
+                                "
+                                x-show="canInstall"
+                                x-cloak
+                            >
+                                <button
+                                    @click="window.showInstallPrompt && window.showInstallPrompt()"
+                                    class="w-full inline-flex items-center px-3 py-2 border border-amber-200 text-sm font-medium rounded-lg text-amber-700 bg-amber-50 hover:bg-amber-100 hover:border-amber-300 focus:outline-none transition"
+                                >
+                                    <svg class="h-4 w-4 me-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                    </svg>
+                                    {{ __('Install App') }}
+                                </button>
+                            </div>
+
+                            <div class="my-1 border-t border-stone-200/70"></div>
+
+                            <!-- Language -->
+                            <x-dropdown-link :href="LaravelLocalization::getLocalizedURL('en')" wire:navigate>
+                                English
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="LaravelLocalization::getLocalizedURL('uk')" wire:navigate>
+                                Українська
+                            </x-dropdown-link>
+
+                            <div class="my-1 border-t border-stone-200/70"></div>
+
+                            <!-- Auth -->
+                            @auth
+                                <x-dropdown-link :href="route('profile')" wire:navigate>
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('personal')" wire:navigate>
+                                    {{ __('welcome.personal') }}
+                                </x-dropdown-link>
+                                <button wire:click="logout" class="w-full text-start">
+                                    <span class="block w-full px-4 py-2 text-start text-sm leading-5 text-stone-700 hover:bg-amber-50 hover:text-amber-700 focus:outline-none focus:bg-amber-50 transition duration-150 ease-in-out">
+                                        {{ __('Log Out') }}
+                                    </span>
+                                </button>
+                            @else
+                                <x-dropdown-link :href="route('login')" wire:navigate>
+                                    {{ __('auth.login') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('register')" wire:navigate>
+                                    {{ __('auth.register') }}
+                                </x-dropdown-link>
+                            @endauth
+                        </x-slot>
+                    </x-dropdown>
+                </div>
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center md:hidden">
                 <button x-cloak
                         aria-label="{{ __('Open main menu') }}"
                         @click="open = ! open"
@@ -255,7 +409,7 @@ new class extends Component {
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-stone-100">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden md:hidden bg-white border-t border-stone-100">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('statistic')" :active="request()->routeIs('statistic')" wire:navigate>
                 {{__('welcome.statistic')}}

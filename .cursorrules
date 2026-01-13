@@ -89,3 +89,6 @@ After completing tasks run tests:
 ./vendor/bin/sail test
 ```
 
+## Local App URL (for browser tests)
+
+The application is available locally at `http://localhost:80`.
