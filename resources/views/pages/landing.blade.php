@@ -141,8 +141,8 @@
                                                 <div class="col-span-5 rounded-2xl border border-stone-200 bg-white p-4">
                                                     <div class="text-[11px] font-semibold text-stone-500">{{ __('landing.mock.today') }}</div>
                                                     <div class="mt-2 flex items-center gap-3">
-                                                        <div class="h-14 w-14 rounded-2xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-extrabold">
-                                                            1 420
+                                                        <div class="p-1 h-14 w-14 rounded-2xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-extrabold whitespace-nowrap tabular-nums">
+                                                            1&nbsp;420
                                                         </div>
                                                         <div>
                                                             <div class="text-xs text-stone-500">kcal</div>
@@ -376,14 +376,6 @@
                                     </svg>
                                 </a>
                             </div>
-                        </div>
-
-                        <div class="mt-6 flex items-center gap-4 text-xs text-stone-500">
-                            <a class="hover:text-stone-800 transition" href="{{ route('about') }}">{{ __('About us') }}</a>
-                            <span class="text-stone-300">•</span>
-                            <a class="hover:text-stone-800 transition" href="{{ route('privacy') }}">{{ __('Privacy Policy') }}</a>
-                            <span class="text-stone-300">•</span>
-                            <a class="hover:text-stone-800 transition" href="{{ route('blog') }}">{{ __('Blog') }}</a>
                         </div>
                     </div>
                 </div>

@@ -56,7 +56,7 @@
     @endsection
 
     {{-- Hero --}}
-    <div class="relative overflow-hidden rounded-[1.75rem] border border-stone-200 bg-white/90 backdrop-blur shadow-xl shadow-stone-900/5">
+    <div class="mt-7 relative overflow-hidden rounded-[1.75rem] border border-stone-200 bg-white/90 backdrop-blur shadow-xl shadow-stone-900/5">
         <div class="absolute inset-0 bg-[radial-gradient(1200px_circle_at_10%_-30%,rgba(245,158,11,0.2),transparent_55%),radial-gradient(900px_circle_at_100%_-20%,rgba(14,165,233,0.16),transparent_55%),linear-gradient(to_bottom,rgba(255,255,255,0.95),rgba(250,250,249,0.95))]"></div>
         <div class="relative p-6 md:p-8 space-y-6">
             <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
@@ -95,35 +95,17 @@
 
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                     @if($isRecipesRequest)
-                        <a href="{{ route('recipe.create') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
+                        <a href="{{ route('recipe.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
                             <i class="fas fa-plus text-xs"></i>{{ __('Create Recipe') }}
                         </a>
                     @else
-                        <a href="{{ route('product.create') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
+                        <a href="{{ route('product.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
                             <i class="fas fa-plus text-xs"></i>{{ __('Create Product') }}
                         </a>
                     @endif
-                    <a href="{{ route('diary') }}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 bg-white/80 px-4 py-3 text-sm font-semibold text-stone-800 hover:bg-white transition">
+                    <a href="{{ route('diary') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl border border-stone-200 bg-white/80 px-4 py-3 text-sm font-semibold text-stone-800 hover:bg-white transition">
                         <i class="fas fa-book-open text-xs"></i>{{ __('Open Diary') }}
                     </a>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
-                    <div class="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">{{ __('For every meal') }}</div>
-                    <div class="mt-2 text-base font-extrabold text-stone-900">{{ __('Breakfast → Snack ready') }}</div>
-                    <p class="mt-1 text-xs text-stone-600">{{ __('Tap any item to open details and drop into a meal from the diary.') }}</p>
-                </div>
-                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
-                    <div class="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">{{ __('Quality data') }}</div>
-                    <div class="mt-2 text-base font-extrabold text-stone-900">{{ __('Proteins • Fats • Carbs • kcal') }}</div>
-                    <p class="mt-1 text-xs text-stone-600">{{ __('Clean macros per 100 g keep AI and human flows aligned.') }}</p>
-                </div>
-                <div class="rounded-2xl border border-stone-200 bg-white/70 backdrop-blur p-4">
-                    <div class="text-[11px] font-semibold text-stone-500 uppercase tracking-wide">{{ __('Built for speed') }}</div>
-                    <div class="mt-2 text-base font-extrabold text-stone-900">{{ __('Search, skim, decide fast') }}</div>
-                    <p class="mt-1 text-xs text-stone-600">{{ __('Smart search + visual macros help users trust and act instantly.') }}</p>
                 </div>
             </div>
         </div>
@@ -179,17 +161,17 @@
                     </div>
                     <p class="text-lg font-extrabold text-stone-900 mb-2">{{ __('No products found.') }}</p>
                     <p class="text-sm text-stone-600 mb-5">{{ __('Try a shorter query or add your own item tailored to your diary flow.') }}</p>
-                    <div class="flex flex-wrap justify-center gap-3">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
                         @if($isRecipesRequest)
-                            <a href="{{ route('recipe.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
+                            <a href="{{ route('recipe.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
                                 <i class="fas fa-plus text-xs"></i>{{ __('Create Recipe') }}
                             </a>
                         @else
-                            <a href="{{ route('product.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
+                            <a href="{{ route('product.create') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition">
                                 <i class="fas fa-plus text-xs"></i>{{ __('Create Product') }}
                             </a>
                         @endif
-                        <a href="{{ route('diary') }}" class="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 hover:bg-stone-50 transition">
+                        <a href="{{ route('diary') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-800 hover:bg-stone-50 transition">
                             <i class="fas fa-book-open text-xs"></i>{{ __('Back to Diary') }}
                         </a>
                     </div>

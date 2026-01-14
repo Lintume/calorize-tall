@@ -27,10 +27,17 @@
     @endsection
 
     @php
-        $totalMacros = $product->proteins + $product->fats + $product->carbohydrates;
-        $proteinPercent = $totalMacros > 0 ? round(($product->proteins / $totalMacros) * 100) : 0;
-        $fatPercent = $totalMacros > 0 ? round(($product->fats / $totalMacros) * 100) : 0;
-        $carbPercent = $totalMacros > 0 ? round(($product->carbohydrates / $totalMacros) * 100) : 0;
+        // Macro energy distribution (kcal) per 100 g
+        // Proteins: 4 kcal/g, Carbs: 4 kcal/g, Fats: 9 kcal/g
+        $proteinKcal = $product->proteins * 4;
+        $fatKcal = $product->fats * 9;
+        $carbKcal = $product->carbohydrates * 4;
+
+        $totalMacroKcal = $proteinKcal + $fatKcal + $carbKcal;
+
+        $proteinPercent = $totalMacroKcal > 0 ? round(($proteinKcal / $totalMacroKcal) * 100) : 0;
+        $fatPercent = $totalMacroKcal > 0 ? round(($fatKcal / $totalMacroKcal) * 100) : 0;
+        $carbPercent = $totalMacroKcal > 0 ? round(($carbKcal / $totalMacroKcal) * 100) : 0;
     @endphp
 
     <div class="py-10 lg:py-16">
@@ -60,7 +67,7 @@
                                 {{ $product->title }}
                             </h1>
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                    <div class="w-full lg:w-auto">
+                    <div class="w-full">
                             <div class="mx-auto w-full max-w-xs">
                                 <div class="relative rounded-[1.75rem] border border-amber-200 bg-white shadow-xl shadow-amber-900/10 overflow-hidden">
                                     <div class="absolute inset-0 bg-[radial-gradient(260px_circle_at_30%_20%,rgba(245,158,11,0.12),transparent_60%)]"></div>
@@ -151,7 +158,7 @@
                 <div class="px-6 sm:px-8 py-6 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                         <div class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{{ __('Nutrition per 100 g') }}</div>
-                        <div class="text-lg font-extrabold text-stone-900">{{ __('Macro breakdown & balance') }}</div>
+                        <div class="text-lg font-extrabold text-stone-900">{{ __('Calorie distribution by macros') }}</div>
                     </div>
                     <div class="flex flex-wrap gap-2 text-[11px] font-semibold text-stone-700">
                         <span class="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5">
@@ -171,10 +178,13 @@
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-md shadow-amber-200"></div>
                                 <span class="text-base font-semibold text-stone-800">{{ __('Proteins') }}</span>
                             </div>
-                            <span class="text-lg font-extrabold text-stone-900">{{ number_format($product->proteins, 1) }} g</span>
+                            <div class="text-right leading-tight">
+                                <div class="text-lg font-extrabold text-stone-900">{{ number_format($proteinKcal) }} {{ __('kcal') }}</div>
+                                <div class="text-xs font-semibold text-stone-500">{{ number_format($product->proteins, 1) }} g</div>
+                            </div>
                         </div>
                         <div class="h-3 rounded-full bg-stone-100 overflow-hidden">
-                            <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-600" style="width: {{ min($proteinPercent, 100) }}%"></div>
+                            <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-600" style="width: <?php echo min($proteinPercent, 100); ?>%"></div>
                         </div>
                     </div>
 
@@ -185,10 +195,13 @@
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 shadow-md shadow-orange-200"></div>
                                 <span class="text-base font-semibold text-stone-800">{{ __('Fats') }}</span>
                             </div>
-                            <span class="text-lg font-extrabold text-stone-900">{{ number_format($product->fats, 1) }} g</span>
+                            <div class="text-right leading-tight">
+                                <div class="text-lg font-extrabold text-stone-900">{{ number_format($fatKcal) }} {{ __('kcal') }}</div>
+                                <div class="text-xs font-semibold text-stone-500">{{ number_format($product->fats, 1) }} g</div>
+                            </div>
                         </div>
                         <div class="h-3 rounded-full bg-stone-100 overflow-hidden">
-                            <div class="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500" style="width: {{ min($fatPercent, 100) }}%"></div>
+                            <div class="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500" style="width: <?php echo min($fatPercent, 100); ?>%"></div>
                         </div>
                     </div>
 
@@ -199,10 +212,13 @@
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-yellow-400 to-amber-400 shadow-md shadow-yellow-200"></div>
                                 <span class="text-base font-semibold text-stone-800">{{ __('Carbohydrates') }}</span>
                             </div>
-                            <span class="text-lg font-extrabold text-stone-900">{{ number_format($product->carbohydrates, 1) }} g</span>
+                            <div class="text-right leading-tight">
+                                <div class="text-lg font-extrabold text-stone-900">{{ number_format($carbKcal) }} {{ __('kcal') }}</div>
+                                <div class="text-xs font-semibold text-stone-500">{{ number_format($product->carbohydrates, 1) }} g</div>
+                            </div>
                         </div>
                         <div class="h-3 rounded-full bg-stone-100 overflow-hidden">
-                            <div class="h-full rounded-full bg-gradient-to-r from-yellow-400 to-amber-400" style="width: {{ min($carbPercent, 100) }}%"></div>
+                            <div class="h-full rounded-full bg-gradient-to-r from-yellow-400 to-amber-400" style="width: <?php echo min($carbPercent, 100); ?>%"></div>
                         </div>
                     </div>
 
