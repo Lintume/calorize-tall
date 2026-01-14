@@ -12,11 +12,6 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
     use Queueable;
 
     /**
-     * The locale to use when sending the notification.
-     */
-    public ?string $locale = null;
-
-    /**
      * Create a new notification instance.
      */
     public function __construct(#[\SensitiveParameter] string $token)
