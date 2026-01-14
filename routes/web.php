@@ -37,6 +37,9 @@ Route::group(['prefix' => $localePrefix], function () {
 
     Route::view('/', 'pages.landing');
 
+    Route::view('/503', 'errors.503');
+
+
     Route::get('statistic', Statistic::class)
         ->middleware(['auth', 'verified'])
         ->name('statistic');
