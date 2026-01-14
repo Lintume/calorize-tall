@@ -30,11 +30,33 @@ class FeedbackIndex extends Component
 
     public string $errorMessage = '';
 
+    // Cached issues list - loaded once, not on every render
+    public array $issues = ['issues' => [], 'total' => 0];
+
+    public bool $loadingIssues = true;
+
+    public bool $loadingIssueDetails = false;
+
     protected $rules = [
         'title' => 'required|min:5|max:255',
         'description' => 'required|min:10|max:5000',
         'type' => 'required|in:bug,feature,question',
     ];
+
+    public function mount(): void
+    {
+        $this->loadIssues();
+    }
+
+    public function loadIssues(): void
+    {
+        $this->loadingIssues = true;
+
+        $service = app(GitHubFeedbackService::class);
+        $this->issues = $service->getUserIssues(Auth::id());
+
+        $this->loadingIssues = false;
+    }
 
     public function openForm(): void
     {
@@ -80,6 +102,9 @@ class FeedbackIndex extends Component
             $this->showForm = false;
             $this->resetForm();
 
+            // Refresh the issues list to include the new one
+            $this->loadIssues();
+
             // Clear success message after 5 seconds
             $this->dispatch('clear-success');
         } else {
@@ -89,16 +114,21 @@ class FeedbackIndex extends Component
 
     public function viewIssue(int $issueNumber): void
     {
+        $this->loadingIssueDetails = true;
+        $this->viewingIssue = $issueNumber;
+        $this->newComment = '';
+
         $service = app(GitHubFeedbackService::class);
 
         $this->issueDetails = $service->getIssue($issueNumber) ?? [];
         $this->issueComments = $service->getIssueComments($issueNumber);
-        $this->viewingIssue = $issueNumber;
-        $this->newComment = '';
+
+        $this->loadingIssueDetails = false;
     }
 
     public function closeIssueView(): void
     {
+        // Just reset local state - no API calls, instant close
         $this->viewingIssue = null;
         $this->issueDetails = [];
         $this->issueComments = [];
@@ -129,13 +159,6 @@ class FeedbackIndex extends Component
         $this->successMessage = '';
     }
 
-    public function getIssuesProperty(): array
-    {
-        $service = app(GitHubFeedbackService::class);
-
-        return $service->getUserIssues(Auth::id());
-    }
-
     public function getIsConfiguredProperty(): bool
     {
         return app(GitHubFeedbackService::class)->isConfigured();
@@ -144,7 +167,6 @@ class FeedbackIndex extends Component
     public function render()
     {
         return view('livewire.feedback-index', [
-            'issues' => $this->issues,
             'isConfigured' => $this->isConfigured,
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;

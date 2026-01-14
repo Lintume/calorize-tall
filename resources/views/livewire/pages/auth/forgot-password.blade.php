@@ -36,26 +36,32 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+<div class="space-y-6">
+    <div class="text-center">
+        <div class="mx-auto h-12 w-12 rounded-2xl bg-sky-600 text-white grid place-items-center shadow-sm shadow-sky-600/20">
+            <i class="fas fa-envelope text-sm"></i>
+        </div>
+        <h1 class="mt-4 text-2xl font-extrabold text-stone-900 tracking-tight">
+            {{ __('Forgot password') }}
+        </h1>
+        <p class="mt-1 text-sm text-stone-600">
+            {{ __('We’ll send you a reset link to your email') }}
+        </p>
     </div>
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800" :status="session('status')" />
 
-    <form wire:submit="sendPasswordResetLink">
+    <form wire:submit="sendPasswordResetLink" class="space-y-4">
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
+            <x-text-input wire:model="email" id="email" class="block mt-1 w-full h-11 px-3 rounded-2xl" type="email" name="email" required autofocus />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+        <x-primary-button class="w-full justify-center rounded-2xl py-3">
+            {{ __('Email Password Reset Link') }}
+        </x-primary-button>
     </form>
 </div>

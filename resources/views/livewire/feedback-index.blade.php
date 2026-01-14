@@ -1,47 +1,104 @@
-<div x-data="{ showForm: @entangle('showForm'), viewingIssue: @entangle('viewingIssue') }" class="mb-10" x-cloak>
+<div x-data="{
+    showForm: @entangle('showForm'),
+    viewingIssue: @entangle('viewingIssue'),
+    closeIssue() {
+        // Instant close via Alpine, then sync with Livewire
+        this.viewingIssue = null;
+        $wire.closeIssueView();
+    }
+}" class="py-8 sm:py-10 lg:py-12 bg-stone-50" x-cloak>
 
     @section('title', __('feedback.title'))
 
-    {{-- Success message --}}
-    @if($successMessage)
-        <div x-data="{ show: true }"
-             x-show="show"
-             x-init="setTimeout(() => { show = false; $wire.clearSuccess() }, 5000)"
-             x-transition:leave="transition ease-in duration-300"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="mt-4 bg-emerald-600 text-white p-4 rounded-xl mb-4 shadow-lg flex items-center gap-3">
-            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            <span>{{ $successMessage }}</span>
-        </div>
-    @endif
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-    <div class="mt-6 space-y-6">
+        {{-- Success message --}}
+        @if($successMessage)
+            <div x-data="{ show: true }"
+                 x-show="show"
+                 x-init="setTimeout(() => { show = false; $wire.clearSuccess() }, 5000)"
+                 x-transition:leave="transition ease-in duration-300"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="bg-emerald-600 text-white p-4 rounded-xl shadow-lg flex items-center gap-3">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>{{ $successMessage }}</span>
+            </div>
+        @endif
+
+    <div class="space-y-6">
 
         {{-- Header Card --}}
-        <div class="bg-gradient-to-r from-amber-50 via-orange-50/50 to-amber-50 rounded-2xl p-6 border border-amber-100/50">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white shadow-lg">
+        <div class="relative overflow-hidden rounded-[1.5rem] border border-stone-200 bg-white shadow-xl shadow-stone-900/5">
+            <div class="absolute inset-0 bg-[radial-gradient(900px_circle_at_10%_-20%,rgba(245,158,11,0.12),transparent_55%),radial-gradient(600px_circle_at_90%_-10%,rgba(14,165,233,0.12),transparent_55%)]"></div>
+            <div class="relative p-6 sm:p-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-amber-600/25">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                         </svg>
                     </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-stone-800">{{ __('feedback.title') }}</h1>
-                        <p class="text-sm text-stone-500">{{ __('feedback.subtitle') }}</p>
+                    <div class="space-y-1">
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-stone-900">{{ __('feedback.title') }}</h1>
+                        <p class="text-sm text-stone-600">{{ __('feedback.subtitle') }}</p>
                     </div>
                 </div>
                 <button @click="showForm = true"
-                        class="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                        class="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 text-sm font-semibold text-white shadow-lg shadow-amber-700/20 hover:from-amber-700 hover:to-amber-800 active:scale-[0.99] transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
                     {{ __('feedback.new_request') }}
                 </button>
             </div>
+        </div>
+
+        {{-- How it works (compact) --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+            <div class="rounded-[1.25rem] border border-stone-200 bg-white/90 backdrop-blur p-5 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="h-10 w-10 rounded-2xl bg-amber-500/10 text-amber-700 border border-amber-200 grid place-items-center shrink-0">
+                        <i class="fas fa-pen-to-square text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-extrabold text-stone-900">{{ __('feedback.how_1_title') }}</div>
+                        <div class="mt-1 text-sm text-stone-600">{{ __('feedback.how_1_text') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-[1.25rem] border border-stone-200 bg-white/90 backdrop-blur p-5 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="h-10 w-10 rounded-2xl bg-sky-500/10 text-sky-700 border border-sky-200 grid place-items-center shrink-0">
+                        <i class="fas fa-inbox text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-extrabold text-stone-900">{{ __('feedback.how_2_title') }}</div>
+                        <div class="mt-1 text-sm text-stone-600">{{ __('feedback.how_2_text') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-[1.25rem] border border-stone-200 bg-white/90 backdrop-blur p-5 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="h-10 w-10 rounded-2xl bg-emerald-500/10 text-emerald-700 border border-emerald-200 grid place-items-center shrink-0">
+                        <i class="fas fa-check text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-extrabold text-stone-900">{{ __('feedback.how_3_title') }}</div>
+                        <div class="mt-1 text-sm text-stone-600">{{ __('feedback.how_3_text') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-[11px] font-semibold text-stone-700">
+            <span class="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white/80 px-3 py-1.5">
+                <i class="fas fa-shield-halved text-stone-500"></i>{{ __('feedback.note_privacy') }}
+            </span>
+            <span class="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white/80 px-3 py-1.5">
+                <i class="fas fa-clock text-stone-500"></i>{{ __('feedback.note_time') }}
+            </span>
         </div>
 
         {{-- Not Configured Warning --}}
@@ -62,17 +119,17 @@
         @endif
 
         {{-- Issues List --}}
-        <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden" @if(!$isConfigured) style="opacity: 0.5; pointer-events: none;" @endif>
-            <div class="px-5 py-4 border-b border-stone-100 bg-stone-50/50">
+        <div class="bg-white rounded-[1.5rem] border border-stone-200 shadow-lg shadow-stone-900/5 overflow-hidden" @if(!$isConfigured) style="opacity: 0.5; pointer-events: none;" @endif>
+            <div class="px-5 py-4 border-b border-stone-100 bg-white/80 backdrop-blur">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-9 h-9 rounded-xl bg-stone-100 flex items-center justify-center">
+                        <svg class="w-4.5 h-4.5 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
                     </div>
                     <h2 class="font-semibold text-stone-800">{{ __('feedback.my_requests') }}</h2>
                     @if($issues['total'] > 0)
-                        <span class="ml-2 px-2 py-0.5 text-xs font-medium bg-stone-200 text-stone-600 rounded-full">
+                        <span class="ml-2 px-2.5 py-0.5 text-xs font-medium bg-stone-200 text-stone-700 rounded-full">
                             {{ $issues['total'] }}
                         </span>
                     @endif
@@ -80,9 +137,18 @@
             </div>
 
             <div class="divide-y divide-stone-100">
+                {{-- Loading state --}}
+                @if($loadingIssues)
+                    <div class="p-12 text-center">
+                        <svg class="animate-spin h-8 w-8 mx-auto text-amber-500" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                @else
                 @forelse($issues['issues'] as $issue)
                     <div wire:click="viewIssue({{ $issue['number'] }})"
-                         class="p-5 hover:bg-stone-50/50 cursor-pointer transition-colors">
+                         class="p-5 hover:bg-stone-50/80 cursor-pointer transition-colors group">
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2 mb-1">
@@ -134,7 +200,12 @@
                                 </div>
                             </div>
 
-                            <svg class="w-5 h-5 text-stone-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {{-- Loading spinner when clicking --}}
+                            <svg wire:loading wire:target="viewIssue({{ $issue['number'] }})" class="animate-spin w-5 h-5 text-amber-500 flex-shrink-0" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <svg wire:loading.remove wire:target="viewIssue({{ $issue['number'] }})" class="w-5 h-5 text-stone-300 flex-shrink-0 group-hover:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
                         </div>
@@ -154,6 +225,7 @@
                         </button>
                     </div>
                 @endforelse
+                @endif
             </div>
         </div>
 
@@ -288,7 +360,7 @@
          class="fixed inset-0 z-50 overflow-y-auto"
          style="display: none;">
         <div class="flex items-start justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-stone-500/75" @click="$wire.closeIssueView()"></div>
+            <div class="fixed inset-0 transition-opacity bg-stone-500/75" @click="closeIssue()"></div>
 
             <div x-show="viewingIssue"
                  x-transition:enter="ease-out duration-300"
@@ -338,7 +410,7 @@
                                     {{ __('feedback.created') }} {{ \Carbon\Carbon::parse($issueDetails['created_at'])->diffForHumans() }}
                                 </p>
                             </div>
-                            <button @click="$wire.closeIssueView()" class="p-1 text-stone-400 hover:text-stone-600 transition-colors">
+                            <button @click="closeIssue()" class="p-1 text-stone-400 hover:text-stone-600 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>

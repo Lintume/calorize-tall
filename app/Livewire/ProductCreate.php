@@ -12,6 +12,21 @@ class ProductCreate extends Component
 {
     public ProductForm $form;
 
+    public bool $redirectOnSave = false;
+
+    public bool $redirectOnCancel = false;
+
+    public ?string $redirectUrl = null;
+
+    public string $mode = 'create';
+
+    public function mount(bool $redirectOnSave = false, bool $redirectOnCancel = false, ?string $redirectUrl = null): void
+    {
+        $this->redirectOnSave = $redirectOnSave;
+        $this->redirectOnCancel = $redirectOnCancel;
+        $this->redirectUrl = $redirectUrl ?? route('product.index');
+    }
+
     #[On('search-updated')]
     public function searchUpdated(string $search): void
     {
@@ -39,20 +54,37 @@ class ProductCreate extends Component
             return;
         }
 
-        $product = Auth::user()->products()->create($validated);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $product = $user->products()->create($validated);
 
         $this->form->reset();
+
+        if ($this->redirectOnSave) {
+            // Direct navigation for full-page create flow
+            $this->redirect($this->redirectUrl, navigate: true);
+
+            return;
+        }
 
         $this->dispatch('productAdded', $product);
     }
 
     public function cancel(): void
     {
+        if ($this->redirectOnCancel) {
+            $this->redirect($this->redirectUrl, navigate: true);
+
+            return;
+        }
+
         $this->dispatch('productCreateCancelled');
     }
 
     public function render()
     {
-        return view('livewire.product-form');
+        return view('livewire.product-form', [
+            'mode' => $this->mode,
+        ]);
     }
 }

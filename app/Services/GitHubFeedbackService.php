@@ -251,7 +251,8 @@ class GitHubFeedbackService
                 ->get("{$this->baseUrl}/repos/{$this->owner}/{$this->repo}/issues/{$issueNumber}");
 
             if ($response->successful()) {
-                return $this->formatIssue($response->json());
+                // Fetch project status for single issue view (worth the extra API call)
+                return $this->formatIssue($response->json(), fetchProjectStatus: true);
             }
 
             return null;
@@ -437,7 +438,7 @@ class GitHubFeedbackService
         }
     }
 
-    private function formatIssue(array $issue): array
+    private function formatIssue(array $issue, bool $fetchProjectStatus = false): array
     {
         $labels = collect($issue['labels'] ?? []);
 
@@ -450,12 +451,13 @@ class GitHubFeedbackService
             $type = 'question';
         }
 
-        // Determine status: first check project status, then labels, then issue state
+        // Determine status from labels first (fast), optionally fetch project status (slow)
         $status = $issue['state'];
         $projectStatus = null;
 
-        // Try to get status from project if we have node_id
-        if (! empty($issue['node_id'])) {
+        // Only fetch project status when explicitly requested (e.g., viewing single issue)
+        // This is an expensive API call - don't do it for list views!
+        if ($fetchProjectStatus && ! empty($issue['node_id'])) {
             $projectStatus = $this->getProjectStatus($issue['node_id']);
         }
 

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -38,6 +39,7 @@ class CreateRecipe extends Component
         DB::transaction(function () use ($selectedProducts, $calculated) {
             $product = Product::create([
                 'title' => $this->title,
+                'slug' => Str::slug($this->title),
                 'proteins' => $calculated['proteinsPer100g'],
                 'fats' => $calculated['fatsPer100g'],
                 'carbohydrates' => $calculated['carbohydratesPer100g'],
@@ -71,6 +73,6 @@ class CreateRecipe extends Component
     {
         return view('livewire.recipe-form', [
             'selectedProducts' => collect(),
-        ]);
+        ])->layout('layouts.app', ['fullWidth' => true]);
     }
 }
