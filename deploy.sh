@@ -54,5 +54,6 @@ sudo -u www-data php artisan event:cache
 
 # Вимикаємо режим обслуговування
 php artisan up
+php artisan queue:restart
 
 echo "✅ Deployment completed successfully!"

@@ -261,6 +261,21 @@ ssh root@185.67.0.147
 mysqldump -u root -p calorize > /var/www/calorize-tall/19_01_25_calorize.sql
 ```
 
+### Queues (email sending)
+
+This app sends some emails via Laravel queues (e.g. password reset emails and feedback notifications). Queue behavior depends on `QUEUE_CONNECTION` in your `.env`:
+
+- **Local development**: keep `QUEUE_CONNECTION=sync` to send emails immediately (no worker needed).
+- **Production**: set `QUEUE_CONNECTION=database` and run a queue worker.
+
+#### Run worker on production (Supervisor recommended)
+
+#### Run worker locally (only if you switch local queue driver to database/redis)
+
+```sh
+./vendor/bin/sail artisan queue:work
+```
+
 ## Usage
 
 ### Authentication

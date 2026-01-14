@@ -50,7 +50,7 @@ class GitHubFeedbackService
         }
 
         try {
-            Mail::to($this->notifyEmail)->send(new FeedbackSubmitted(
+            Mail::to($this->notifyEmail)->queue(new FeedbackSubmitted(
                 feedbackTitle: $title,
                 feedbackBody: $body,
                 feedbackType: $type,
@@ -59,12 +59,12 @@ class GitHubFeedbackService
                 issueUrl: $issue['html_url'],
             ));
 
-            Log::info('Feedback notification email sent', [
+            Log::info('Feedback notification email queued', [
                 'issue_number' => $issue['number'],
                 'to' => $this->notifyEmail,
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to send feedback notification email', [
+            Log::error('Failed to queue feedback notification email', [
                 'message' => $e->getMessage(),
                 'issue_number' => $issue['number'],
             ]);

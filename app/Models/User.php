@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\QueuedResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -79,5 +80,16 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Send the password reset notification via queue.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new QueuedResetPassword($token));
     }
 }
