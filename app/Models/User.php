@@ -90,6 +90,8 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new QueuedResetPassword($token));
+        // Important for queued notifications: persist the *current* locale at dispatch time,
+        // otherwise the queue worker will send using the default app locale.
+        $this->notify((new QueuedResetPassword($token))->locale(app()->getLocale()));
     }
 }

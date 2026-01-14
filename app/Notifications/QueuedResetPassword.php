@@ -5,45 +5,30 @@ namespace App\Notifications;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class QueuedResetPassword extends ResetPassword implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * Create a new notification instance.
-     */
-    public function __construct(#[\SensitiveParameter] string $token)
-    {
-        parent::__construct($token);
-
-        // Capture the current locale when the notification is created
-        $this->locale = app()->getLocale();
-    }
-
-    /**
-     * Build the mail representation of the notification.
+     * Generate a reset URL that includes the locale prefix (when non-default).
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * Why override? Because this notification is queued, and in a queue worker
+     * context the localized route definitions may not match the user's locale.
+     * By generating the path directly, we keep the link stable and correctly localized.
      */
-    public function toMail($notifiable)
+    protected function resetUrl($notifiable)
     {
-        // Set locale for queued job
-        if ($this->locale) {
-            app()->setLocale($this->locale);
-        }
+        $locale = $this->locale ?? app()->getLocale();
+        $defaultLocale = config('app.locale');
 
-        $url = $this->resetUrl($notifiable);
+        // This app uses locale prefixes only for non-default locales.
+        $path = ($locale && $locale !== $defaultLocale)
+            ? "{$locale}/reset-password/{$this->token}"
+            : "reset-password/{$this->token}";
 
-        return (new MailMessage)
-            ->subject(__('passwords.reset_notification_subject'))
-            ->greeting(__('Hello!'))
-            ->line(__('passwords.reset_notification_line1'))
-            ->action(__('passwords.reset_notification_action'), $url)
-            ->line(__('passwords.reset_notification_line2', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
-            ->line(__('passwords.reset_notification_line3'))
-            ->salutation(__('Regards,') . "\n" . config('app.name'));
+        $email = $notifiable->getEmailForPasswordReset();
+
+        return url($path.'?email='.urlencode($email));
     }
 }
