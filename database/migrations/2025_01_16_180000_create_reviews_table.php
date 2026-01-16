@@ -11,9 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        // Detect users.id column type for compatibility (old DBs use int, new use bigint)
+        $userIdType = \DB::selectOne("SHOW COLUMNS FROM users WHERE Field = 'id'")->Type;
+        $usesBigInt = str_contains($userIdType, 'bigint');
+
+        Schema::create('reviews', function (Blueprint $table) use ($usesBigInt) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            
+            if ($usesBigInt) {
+                $table->unsignedBigInteger('user_id');
+            } else {
+                $table->unsignedInteger('user_id');
+            }
+            
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('instagram')->nullable();
