@@ -35,14 +35,14 @@
             </button>
         </div>
     @else
-        <div class="mt-3 overflow-x-auto">
+        <div class="mt-3 overflow-x-hidden sm:overflow-x-auto">
             <table class="w-full table-fixed">
                 <thead>
                     <tr class="border-b border-stone-100">
-                        <th class="px-2 py-2 text-left text-xs font-medium text-stone-500 uppercase">{{ __('Title') }}</th>
-                        <th class="w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Prot') }}</th>
-                        <th class="w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Fat') }}</th>
-                        <th class="w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Carb') }}</th>
+                        <th class="w-full px-2 py-2 text-left text-xs font-medium text-stone-500 uppercase">{{ __('Title') }}</th>
+                        <th class="hidden sm:table-cell w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Prot') }}</th>
+                        <th class="hidden sm:table-cell w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Fat') }}</th>
+                        <th class="hidden sm:table-cell w-12 sm:w-14 px-1 py-2 text-center text-xs font-medium text-stone-400 uppercase">{{ __('Carb') }}</th>
                         <th class="w-14 sm:w-16 px-2 py-2 text-center text-xs font-medium text-stone-500 uppercase">{{ __('Kcal') }}</th>
                     </tr>
                 </thead>
@@ -52,10 +52,10 @@
                             wire:key="{{ $product->id }}"
                             class="cursor-pointer hover:bg-amber-50/50 transition-colors"
                         >
-                            <td class="px-2 py-2.5 text-sm text-stone-700 truncate">{{ $product->title }}</td>
-                            <td class="px-1 py-2 text-center text-sm text-stone-400">{{ $product->proteins }}</td>
-                            <td class="px-1 py-2 text-center text-sm text-stone-400">{{ $product->fats }}</td>
-                            <td class="px-1 py-2 text-center text-sm text-stone-400">{{ $product->carbohydrates }}</td>
+                            <td class="px-2 py-2.5 text-sm text-stone-700 truncate max-w-0">{{ $product->title }}</td>
+                            <td class="hidden sm:table-cell px-1 py-2 text-center text-sm text-stone-400">{{ $product->proteins }}</td>
+                            <td class="hidden sm:table-cell px-1 py-2 text-center text-sm text-stone-400">{{ $product->fats }}</td>
+                            <td class="hidden sm:table-cell px-1 py-2 text-center text-sm text-stone-400">{{ $product->carbohydrates }}</td>
                             <td class="px-2 py-2 text-center text-sm font-medium text-stone-600">{{ $product->calories }}</td>
                         </tr>
                     @endforeach
