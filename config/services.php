@@ -43,4 +43,8 @@ return [
         'notify_email' => env('FEEDBACK_NOTIFY_EMAIL'),    // Email for feedback notifications
     ],
 
+    'feedback' => [
+        'notify_email' => env('FEEDBACK_NOTIFY_EMAIL'),    // Email for review notifications
+    ],
+
 ];

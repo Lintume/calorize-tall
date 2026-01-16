@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\QueuedResetPassword;
+use App\Notifications\QueuedVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -82,6 +83,11 @@ class User extends Authenticatable
         return $this->hasMany(Product::class);
     }
 
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
     /**
      * Send the password reset notification via queue.
      *
@@ -93,5 +99,17 @@ class User extends Authenticatable
         // Important for queued notifications: persist the *current* locale at dispatch time,
         // otherwise the queue worker will send using the default app locale.
         $this->notify((new QueuedResetPassword($token))->locale(app()->getLocale()));
+    }
+
+    /**
+     * Send the email verification notification via queue.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        // Important for queued notifications: persist the *current* locale at dispatch time,
+        // otherwise the queue worker will send using the default app locale.
+        $this->notify((new QueuedVerifyEmail)->locale(app()->getLocale()));
     }
 }

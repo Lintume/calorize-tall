@@ -6,6 +6,7 @@ use App\Livewire\Diary;
 use App\Livewire\FeedbackIndex;
 use App\Livewire\Personal;
 use App\Livewire\ProductIndex;
+use App\Livewire\Reviews;
 use App\Livewire\Statistic;
 use App\Livewire\UpdateRecipe;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +71,8 @@ Route::group(['prefix' => $localePrefix], function () {
     Route::get('/personal', Personal::class)->middleware(['auth', 'verified'])->name('personal');
 
     Route::get('/feedback', FeedbackIndex::class)->middleware(['auth', 'verified'])->name('feedback');
+
+    Route::get('/reviews', Reviews::class)->name('reviews');
 
     Route::get('/blog/yak-pravylno-rakhuvaty-kaloriyi-dlya-skhudnennya-praktychnyy-gid', function () {
         return view('blog.blog-1');
