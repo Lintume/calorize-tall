@@ -31,19 +31,20 @@ npm run build
 echo "🗃️ Running migrations..."
 php artisan migrate --force
 
-# Очищуємо кеші
-echo "🧹 Clearing caches..."
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
-
-# Виправляємо права доступу ПЕРЕД кешуванням
+# Виправляємо права доступу ПЕРЕД очищенням/кешуванням
+# (інакше deploy user не зможе видалити файли створені www-data)
 echo "🔐 Fixing permissions..."
 sudo chown -R www-data:www-data storage bootstrap/cache
 sudo find storage bootstrap/cache -type d -exec chmod 775 {} \;
 sudo find storage bootstrap/cache -type d -exec chmod g+s {} \;
 sudo find storage bootstrap/cache -type f -exec chmod 664 {} \;
+
+# Очищуємо кеші (від www-data, бо файли належать йому)
+echo "🧹 Clearing caches..."
+sudo -u www-data php artisan config:clear
+sudo -u www-data php artisan route:clear
+sudo -u www-data php artisan view:clear
+sudo -u www-data php artisan cache:clear
 
 # Кешуємо (як www-data щоб файли мали правильного власника)
 echo "📦 Rebuilding caches..."
