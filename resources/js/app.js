@@ -158,7 +158,7 @@ window.dismissIOSInstallHint = () => {
                 const resistance = 0.5;
                 const actualPull = Math.min(pullDistance * resistance, maxPull);
                 
-                indicator.style.transform = `translateY(${actualPull - 60}px)`;
+                indicator.style.transform = `translateX(-50%) translateY(${actualPull - 80}px)`;
                 indicator.style.opacity = Math.min(actualPull / threshold, 1);
                 
                 // Rotate spinner based on pull distance
@@ -186,7 +186,7 @@ window.dismissIOSInstallHint = () => {
                 // Trigger refresh
                 refreshing = true;
                 indicator.classList.add('refreshing');
-                indicator.style.transform = 'translateY(10px)';
+                indicator.style.transform = 'translateX(-50%) translateY(10px)';
                 textEl.textContent = 'Оновлення...';
                 
                 // Reload the page
@@ -195,7 +195,7 @@ window.dismissIOSInstallHint = () => {
                 }, 300);
             } else {
                 // Reset indicator
-                indicator.style.transform = 'translateY(-60px)';
+                indicator.style.transform = 'translateX(-50%) translateY(-80px)';
                 indicator.style.opacity = '0';
             }
             

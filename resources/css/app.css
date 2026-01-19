@@ -10,23 +10,25 @@
 #pwa-pull-refresh {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
     z-index: 9999;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    transform: translateY(-60px);
+    padding: 16px 24px;
+    background: white;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     opacity: 0;
-    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
     pointer-events: none;
 }
 
 #pwa-pull-refresh .pwa-pull-refresh-spinner {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     color: #d97706; /* amber-600 */
     transition: transform 0.1s linear;
 }
@@ -37,17 +39,21 @@
 }
 
 #pwa-pull-refresh.refreshing .pwa-pull-refresh-spinner {
-    animation: pwa-spin 0.8s linear infinite;
+    animation: pwa-spin 0.7s linear infinite;
 }
 
 #pwa-pull-refresh .pwa-pull-refresh-text {
-    margin-top: 4px;
-    font-size: 12px;
+    margin-top: 6px;
+    font-size: 13px;
     font-weight: 600;
     color: #78716c; /* stone-500 */
 }
 
 #pwa-pull-refresh.ready .pwa-pull-refresh-text {
+    color: #d97706; /* amber-600 */
+}
+
+#pwa-pull-refresh.ready .pwa-pull-refresh-spinner {
     color: #d97706; /* amber-600 */
 }
 
