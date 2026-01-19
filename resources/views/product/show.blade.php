@@ -3,27 +3,13 @@
     @section('title', $product->title . ': ' . __('calories, proteins, fats, and carbohydrates'))
 
     @section('meta')
-        <meta name="description" content="{{ $product->title }} - {{ __('Find out the calorie content, proteins, fats and carbohydrates on our website. A simple and convenient tool for monitoring nutrition.') }}">
+        <meta name="description" content="{{ $product->title }} - {{ __('Unlock detailed nutrition facts, AI-powered tracking, and diet insights. See how this food fits your goals on Calorize!') }}">
         <meta name="keywords" content="{{ __('Product, Proteins, Fats, Carbohydrates, Calories') }}, {{ $product->title }}">
         <meta property="og:title" content="{{ $product->title }}">
-        <meta property="og:description" content="{{ $product->title }} - {{ __('Product details including proteins, fats, carbohydrates, and calories.') }}">
+        <meta property="og:description" content="{{ $product->title }} - {{ __('Unlock detailed nutrition facts, AI-powered tracking, and diet insights. See how this food fits your goals on Calorize!') }}">
         <meta property="og:type" content="article">
         <meta property="og:url" content="{{ url()->current() }}">
-
-        <script type="application/ld+json">
-            {
-                "@@context": "https://schema.org",
-                "@@type": "NutritionInformation",
-                "name": "{{ $product->title }}",
-                "description": "{{ __('Detailed information about') }} {{ $product->title }}",
-                "calories": "{{ number_format($product->calories) }} kcal",
-                "proteinContent": "{{ number_format($product->proteins, 2) }} g",
-                "fatContent": "{{ number_format($product->fats, 2) }} g",
-                "carbohydrateContent": "{{ number_format($product->carbohydrates, 2) }} g",
-                "servingSize": "100 g",
-                "url": "{{ url()->current() }}"
-            }
-        </script>
+        {{-- Schema.org markup removed to encourage click-through --}}
     @endsection
 
     @php
@@ -73,22 +59,22 @@
                                     <div class="absolute inset-0 bg-[radial-gradient(260px_circle_at_30%_20%,rgba(245,158,11,0.12),transparent_60%)]"></div>
                                     <div class="relative px-6 pt-7 pb-6 text-center">
                                         <div class="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">{{ __('Calories') }}</div>
-                                        <div class="mt-3 text-[56px] sm:text-[64px] font-black bg-gradient-to-br from-amber-600 to-amber-700 bg-clip-text text-transparent leading-none">
+                                        <div data-nosnippet class="mt-3 text-[56px] sm:text-[64px] font-black bg-gradient-to-br from-amber-600 to-amber-700 bg-clip-text text-transparent leading-none">
                                             {{ number_format($product->calories) }}
                                         </div>
                                         <div class="text-sm font-semibold text-stone-500 mt-1">{{ __('kcal per 100 g') }}</div>
                                         <div class="mt-6 grid grid-cols-3 gap-2">
                                             <div class="rounded-xl border border-sky-100 bg-sky-50 py-2">
                                                 <div class="text-[11px] font-semibold text-sky-700 uppercase">{{ __('Prot') }}</div>
-                                                <div class="text-base font-extrabold text-stone-900">{{ number_format($product->proteins, 1) }}</div>
+                                                <div data-nosnippet class="text-base font-extrabold text-stone-900">{{ number_format($product->proteins, 1) }}</div>
                                             </div>
                                             <div class="rounded-xl border border-amber-100 bg-amber-50 py-2">
                                                 <div class="text-[11px] font-semibold text-amber-700 uppercase">{{ __('Fat') }}</div>
-                                                <div class="text-base font-extrabold text-stone-900">{{ number_format($product->fats, 1) }}</div>
+                                                <div data-nosnippet class="text-base font-extrabold text-stone-900">{{ number_format($product->fats, 1) }}</div>
                                             </div>
                                             <div class="rounded-xl border border-emerald-100 bg-emerald-50 py-2">
                                                 <div class="text-[11px] font-semibold text-emerald-700 uppercase">{{ __('Carb') }}</div>
-                                                <div class="text-base font-extrabold text-stone-900">{{ number_format($product->carbohydrates, 1) }}</div>
+                                                <div data-nosnippet class="text-base font-extrabold text-stone-900">{{ number_format($product->carbohydrates, 1) }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +164,7 @@
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 shadow-md shadow-amber-200"></div>
                                 <span class="text-base font-semibold text-stone-800">{{ __('Proteins') }}</span>
                             </div>
-                            <div class="text-right leading-tight">
+                            <div data-nosnippet class="text-right leading-tight">
                                 <div class="text-lg font-extrabold text-stone-900">{{ number_format($proteinKcal) }} {{ __('kcal') }}</div>
                                 <div class="text-xs font-semibold text-stone-500">{{ number_format($product->proteins, 1) }} g</div>
                             </div>
@@ -195,7 +181,7 @@
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 shadow-md shadow-orange-200"></div>
                                 <span class="text-base font-semibold text-stone-800">{{ __('Fats') }}</span>
                             </div>
-                            <div class="text-right leading-tight">
+                            <div data-nosnippet class="text-right leading-tight">
                                 <div class="text-lg font-extrabold text-stone-900">{{ number_format($fatKcal) }} {{ __('kcal') }}</div>
                                 <div class="text-xs font-semibold text-stone-500">{{ number_format($product->fats, 1) }} g</div>
                             </div>
@@ -212,7 +198,7 @@
                                 <div class="w-4 h-4 rounded-full bg-gradient-to-br from-yellow-400 to-amber-400 shadow-md shadow-yellow-200"></div>
                                 <span class="text-base font-semibold text-stone-800">{{ __('Carbohydrates') }}</span>
                             </div>
-                            <div class="text-right leading-tight">
+                            <div data-nosnippet class="text-right leading-tight">
                                 <div class="text-lg font-extrabold text-stone-900">{{ number_format($carbKcal) }} {{ __('kcal') }}</div>
                                 <div class="text-xs font-semibold text-stone-500">{{ number_format($product->carbohydrates, 1) }} g</div>
                             </div>
@@ -222,7 +208,7 @@
                         </div>
                     </div>
 
-                    <div class="rounded-2xl border border-stone-200 bg-stone-50/70 px-4 py-3 flex items-center justify-center gap-6">
+                    <div data-nosnippet class="rounded-2xl border border-stone-200 bg-stone-50/70 px-4 py-3 flex items-center justify-center gap-6">
                         <div class="flex items-center gap-2 text-sm font-semibold text-stone-700">
                             <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-amber-500 to-amber-600"></span>
                             {{ $proteinPercent }}% {{ __('proteins') }}

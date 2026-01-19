@@ -88,3 +88,120 @@ window.shouldShowIOSInstallHint = () => {
 window.dismissIOSInstallHint = () => {
     localStorage.setItem('ios-install-hint-dismissed', 'true');
 };
+
+// ============================================
+// Pull-to-Refresh for iOS PWA Standalone Mode
+// ============================================
+(function initPullToRefresh() {
+    // Only enable for iOS in standalone mode
+    if (!window.isIOS || !window.isStandalone) return;
+    
+    // Wait for DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupPullToRefresh);
+    } else {
+        setupPullToRefresh();
+    }
+    
+    function setupPullToRefresh() {
+        // Don't initialize if not iOS standalone
+        if (!window.isIOS() || !window.isStandalone()) return;
+        
+        // Create the pull-to-refresh indicator element
+        const indicator = document.createElement('div');
+        indicator.id = 'pwa-pull-refresh';
+        indicator.innerHTML = `
+            <div class="pwa-pull-refresh-spinner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 12a9 9 0 11-6.219-8.56" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span class="pwa-pull-refresh-text"></span>
+        `;
+        document.body.prepend(indicator);
+        
+        let startY = 0;
+        let currentY = 0;
+        let pulling = false;
+        let refreshing = false;
+        const threshold = 80;
+        const maxPull = 120;
+        
+        // Get the spinner and text elements
+        const spinner = indicator.querySelector('.pwa-pull-refresh-spinner');
+        const textEl = indicator.querySelector('.pwa-pull-refresh-text');
+        
+        // Touch start - record starting position
+        document.addEventListener('touchstart', (e) => {
+            if (refreshing) return;
+            // Only trigger when at top of page
+            if (window.scrollY > 0) return;
+            
+            startY = e.touches[0].clientY;
+            pulling = true;
+            indicator.classList.remove('refreshing');
+        }, { passive: true });
+        
+        // Touch move - update indicator
+        document.addEventListener('touchmove', (e) => {
+            if (!pulling || refreshing) return;
+            if (window.scrollY > 0) {
+                pulling = false;
+                return;
+            }
+            
+            currentY = e.touches[0].clientY;
+            const pullDistance = Math.max(0, currentY - startY);
+            
+            if (pullDistance > 10) {
+                // Apply resistance to the pull
+                const resistance = 0.5;
+                const actualPull = Math.min(pullDistance * resistance, maxPull);
+                
+                indicator.style.transform = `translateY(${actualPull - 60}px)`;
+                indicator.style.opacity = Math.min(actualPull / threshold, 1);
+                
+                // Rotate spinner based on pull distance
+                const rotation = (actualPull / maxPull) * 360;
+                spinner.style.transform = `rotate(${rotation}deg)`;
+                
+                // Update text based on threshold
+                if (actualPull >= threshold) {
+                    textEl.textContent = 'Відпустіть';
+                    indicator.classList.add('ready');
+                } else {
+                    textEl.textContent = 'Потягніть вниз';
+                    indicator.classList.remove('ready');
+                }
+            }
+        }, { passive: true });
+        
+        // Touch end - trigger refresh or reset
+        document.addEventListener('touchend', () => {
+            if (!pulling || refreshing) return;
+            
+            const pullDistance = Math.max(0, currentY - startY) * 0.5;
+            
+            if (pullDistance >= threshold) {
+                // Trigger refresh
+                refreshing = true;
+                indicator.classList.add('refreshing');
+                indicator.style.transform = 'translateY(10px)';
+                textEl.textContent = 'Оновлення...';
+                
+                // Reload the page
+                setTimeout(() => {
+                    window.location.reload();
+                }, 300);
+            } else {
+                // Reset indicator
+                indicator.style.transform = 'translateY(-60px)';
+                indicator.style.opacity = '0';
+            }
+            
+            pulling = false;
+            startY = 0;
+            currentY = 0;
+        }, { passive: true });
+    }
+})();
