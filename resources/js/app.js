@@ -126,6 +126,8 @@ window.dismissIOSInstallHint = () => {
         let refreshing = false;
         const threshold = 80;
         const maxPull = 120;
+        const hiddenY = -64; // must match CSS initial translateY to keep it fully hidden
+        const refreshY = 12; // resting position while refreshing
         
         // Get the spinner and text elements
         const spinner = indicator.querySelector('.pwa-pull-refresh-spinner');
@@ -140,6 +142,9 @@ window.dismissIOSInstallHint = () => {
             startY = e.touches[0].clientY;
             pulling = true;
             indicator.classList.remove('refreshing');
+            indicator.classList.remove('ready');
+            // Don't show until the user actually pulls a bit
+            textEl.textContent = '';
         }, { passive: true });
         
         // Touch move - update indicator
@@ -158,8 +163,11 @@ window.dismissIOSInstallHint = () => {
                 const resistance = 0.5;
                 const actualPull = Math.min(pullDistance * resistance, maxPull);
                 
-                indicator.style.transform = `translateX(-50%) translateY(${actualPull - 80}px)`;
-                indicator.style.opacity = Math.min(actualPull / threshold, 1);
+                // Slide the pill in from hiddenY towards visible. Cap to avoid dropping too far.
+                const y = Math.min(hiddenY + actualPull, refreshY + 10);
+                indicator.style.transform = `translateX(-50%) translateY(${y}px)`;
+                // Make it appear quickly (more iOS-like)
+                indicator.style.opacity = Math.min(actualPull / 24, 1);
                 
                 // Rotate spinner based on pull distance
                 const rotation = (actualPull / maxPull) * 360;
@@ -186,7 +194,8 @@ window.dismissIOSInstallHint = () => {
                 // Trigger refresh
                 refreshing = true;
                 indicator.classList.add('refreshing');
-                indicator.style.transform = 'translateX(-50%) translateY(10px)';
+                indicator.style.transform = `translateX(-50%) translateY(${refreshY}px)`;
+                indicator.style.opacity = '1';
                 textEl.textContent = 'Оновлення...';
                 
                 // Reload the page
@@ -195,8 +204,9 @@ window.dismissIOSInstallHint = () => {
                 }, 300);
             } else {
                 // Reset indicator
-                indicator.style.transform = 'translateX(-50%) translateY(-80px)';
+                indicator.style.transform = `translateX(-50%) translateY(${hiddenY}px)`;
                 indicator.style.opacity = '0';
+                textEl.textContent = '';
             }
             
             pulling = false;

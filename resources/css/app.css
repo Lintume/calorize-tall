@@ -9,28 +9,36 @@
    ============================================ */
 #pwa-pull-refresh {
     position: fixed;
-    top: 0;
+    /* keep it below the top navigation and respect iPhone notch */
+    top: calc(env(safe-area-inset-top, 0px) + 56px);
     left: 50%;
-    transform: translateX(-50%) translateY(-80px);
+    transform: translateX(-50%) translateY(-64px);
     z-index: 9999;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 16px 24px;
-    background: white;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    padding: 10px 14px;
+
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(120, 113, 108, 0.18); /* stone-500 @ ~18% */
+    border-radius: 9999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
     opacity: 0;
-    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
     pointer-events: none;
+    max-width: calc(100vw - 24px);
 }
 
 #pwa-pull-refresh .pwa-pull-refresh-spinner {
-    width: 32px;
-    height: 32px;
+    width: 20px;
+    height: 20px;
     color: #d97706; /* amber-600 */
     transition: transform 0.1s linear;
+    flex: 0 0 auto;
 }
 
 #pwa-pull-refresh .pwa-pull-refresh-spinner svg {
@@ -43,10 +51,11 @@
 }
 
 #pwa-pull-refresh .pwa-pull-refresh-text {
-    margin-top: 6px;
-    font-size: 13px;
+    margin-top: 0;
+    font-size: 12px;
     font-weight: 600;
     color: #78716c; /* stone-500 */
+    white-space: nowrap;
 }
 
 #pwa-pull-refresh.ready .pwa-pull-refresh-text {
@@ -55,6 +64,10 @@
 
 #pwa-pull-refresh.ready .pwa-pull-refresh-spinner {
     color: #d97706; /* amber-600 */
+}
+
+#pwa-pull-refresh.ready {
+    border-color: rgba(217, 119, 6, 0.35); /* amber-600 @ ~35% */
 }
 
 @keyframes pwa-spin {
