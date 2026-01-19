@@ -48,7 +48,9 @@ sudo find storage bootstrap/cache -type f -exec chmod 664 {} \;
 # Кешуємо (як www-data щоб файли мали правильного власника)
 echo "📦 Rebuilding caches..."
 sudo -u www-data php artisan config:cache
-sudo -u www-data php artisan route:cache
+# ВАЖЛИВО: route:cache НЕ використовуємо - несумісно з mcamara/laravel-localization
+# (маршрути визначаються динамічно на основі LaravelLocalization::setLocale())
+# sudo -u www-data php artisan route:cache
 sudo -u www-data php artisan view:cache
 sudo -u www-data php artisan event:cache
 
