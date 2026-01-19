@@ -58,6 +58,13 @@ new class extends Component {
                                 wire:navigate>
                         {{__('welcome.recipes')}}
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('blog')"
+                        :active="request()->routeIs('blog') || request()->routeIs('blog-*')"
+                        wire:navigate
+                    >
+                        {{ __('Blog') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('feedback')" :active="request()->routeIs('feedback')"
                                 wire:navigate>
                         {{__('welcome.feedback')}}
@@ -72,7 +79,7 @@ new class extends Component {
                 @php
                     $trackingActive = request()->routeIs('diary') || request()->routeIs('statistic');
                     $catalogActive = request()->routeIs('product.*') || request()->routeIs('recipe.*');
-                    $moreActive = request()->routeIs('feedback') || request()->routeIs('blog');
+                    $moreActive = request()->routeIs('feedback') || request()->routeIs('blog') || request()->routeIs('blog-*');
 
                     $diaryItemActive = request()->routeIs('diary');
                     $statisticItemActive = request()->routeIs('statistic');
@@ -84,7 +91,7 @@ new class extends Component {
                     $recipeListActive = request()->routeIs('recipe.*') && ! $recipeCreateActive;
 
                     $feedbackItemActive = request()->routeIs('feedback');
-                    $blogItemActive = request()->routeIs('blog');
+                    $blogItemActive = request()->routeIs('blog') || request()->routeIs('blog-*');
                 @endphp
 
                 <div class="hidden md:flex md:items-center xl:hidden">
@@ -742,12 +749,12 @@ new class extends Component {
                 {{ __('nav.group.more') }}
             </div>
             <div class="space-y-1">
-                <x-responsive-nav-link :href="route('blog')" :active="request()->routeIs('blog')" wire:navigate class="group">
+                <x-responsive-nav-link :href="route('blog')" :active="request()->routeIs('blog') || request()->routeIs('blog-*')" wire:navigate class="group">
                     <span class="inline-flex items-center gap-2">
                         <svg @class([
                             'h-4 w-4',
-                            'text-amber-600' => request()->routeIs('blog'),
-                            'text-stone-400 group-hover:text-amber-600' => ! request()->routeIs('blog'),
+                            'text-amber-600' => request()->routeIs('blog') || request()->routeIs('blog-*'),
+                            'text-stone-400 group-hover:text-amber-600' => ! (request()->routeIs('blog') || request()->routeIs('blog-*')),
                         ]) xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 19a2 2 0 002 2h12a2 2 0 002-2V7l-6-4H6a2 2 0 00-2 2v14z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 11h8M8 15h8"/>

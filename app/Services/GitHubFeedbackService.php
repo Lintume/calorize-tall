@@ -71,10 +71,80 @@ class GitHubFeedbackService
         }
     }
 
+
+    /**
+     * Upload an image to GitHub repository and return the public URL.
+     */
+    public function uploadImageToRepository(string $imagePath, string $fileName): ?string
+    {
+        if (! $this->isConfigured()) {
+            return null;
+        }
+
+        try {
+            // Generate unique filename to avoid conflicts
+            $uniqueFileName = date('Y-m-d-His').'-'.uniqid().'-'.$fileName;
+            $path = "feedback-screenshots/{$uniqueFileName}";
+            $content = base64_encode(file_get_contents($imagePath));
+
+            // Check if file exists first (to avoid overwrite)
+            $checkResponse = Http::withToken($this->token)
+                ->withHeaders([
+                    'Accept' => 'application/vnd.github+json',
+                    'X-GitHub-Api-Version' => '2022-11-28',
+                ])
+                ->get("{$this->baseUrl}/repos/{$this->owner}/{$this->repo}/contents/{$path}");
+
+            $requestData = [
+                'message' => "Upload feedback screenshot: {$fileName}",
+                'content' => $content,
+            ];
+
+            // If file exists, include its SHA for update
+            if ($checkResponse->successful()) {
+                $existingData = $checkResponse->json();
+                $requestData['sha'] = $existingData['sha'];
+            }
+
+            $response = Http::withToken($this->token)
+                ->withHeaders([
+                    'Accept' => 'application/vnd.github+json',
+                    'X-GitHub-Api-Version' => '2022-11-28',
+                ])
+                ->put("{$this->baseUrl}/repos/{$this->owner}/{$this->repo}/contents/{$path}", $requestData);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                // Return the raw content URL which is publicly accessible
+                $publicUrl = "https://raw.githubusercontent.com/{$this->owner}/{$this->repo}/main/{$path}";
+
+                Log::info('Image uploaded to GitHub repository', [
+                    'url' => $publicUrl,
+                    'path' => $path,
+                ]);
+
+                return $publicUrl;
+            }
+
+            Log::error('GitHub image upload failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
+            return null;
+        } catch (\Exception $e) {
+            Log::error('GitHub image upload exception', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+    }
+
     /**
      * Create a new GitHub issue.
      */
-    public function createIssue(string $title, string $body, string $type = 'bug', ?int $userId = null, ?string $userEmail = null): ?array
+    public function createIssue(string $title, string $body, string $type = 'bug', ?int $userId = null, ?string $userEmail = null, array $attachmentUrls = []): ?array
     {
         if (! $this->isConfigured()) {
             Log::warning('GitHub Feedback Service is not configured');
@@ -85,7 +155,7 @@ class GitHubFeedbackService
         $labels = $this->getLabelsForType($type);
 
         // Add metadata to body
-        $fullBody = $this->buildIssueBody($body, $userId, $userEmail);
+        $fullBody = $this->buildIssueBody($body, $userId, $userEmail, $attachmentUrls);
 
         try {
             $response = Http::withToken($this->token)
@@ -340,7 +410,7 @@ class GitHubFeedbackService
         };
     }
 
-    private function buildIssueBody(string $body, ?int $userId, ?string $userEmail): string
+    private function buildIssueBody(string $body, ?int $userId, ?string $userEmail, array $attachmentUrls = []): string
     {
         $metadata = [];
 
@@ -352,6 +422,14 @@ class GitHubFeedbackService
 
         // User description
         $parts[] = $body;
+
+        // Attachments section
+        if (! empty($attachmentUrls)) {
+            $parts[] = "\n\n### Screenshots\n";
+            foreach ($attachmentUrls as $index => $url) {
+                $parts[] = "![Screenshot ".($index + 1)."]({$url})";
+            }
+        }
 
         // Separator
         $parts[] = "\n---\n";
@@ -468,10 +546,14 @@ class GitHubFeedbackService
             $status = 'in_progress';
         }
 
+        $rawBody = $issue['body'] ?? '';
+        $bodyData = $this->parseIssueBody($rawBody);
+
         return [
             'number' => $issue['number'],
             'title' => $issue['title'],
-            'body' => $this->cleanIssueBody($issue['body'] ?? ''),
+            'body' => $bodyData['text'],
+            'images' => $bodyData['images'],
             'state' => $issue['state'],
             'status' => $status,
             'project_status' => $projectStatus,
@@ -481,6 +563,29 @@ class GitHubFeedbackService
             'comments_count' => $issue['comments'] ?? 0,
             'html_url' => $issue['html_url'],
             'labels' => $labels->pluck('name')->toArray(),
+        ];
+    }
+
+    /**
+     * Parse issue body to extract text and image URLs.
+     */
+    private function parseIssueBody(string $body): array
+    {
+        // Extract image URLs from markdown ![alt](url) format
+        preg_match_all('/!\[([^\]]*)\]\(([^)]+)\)/', $body, $matches);
+        $images = $matches[2] ?? [];
+
+        // Remove images and screenshots section from body text
+        $text = preg_replace('/###?\s*Screenshots\s*/i', '', $body);
+        $text = preg_replace('/!\[([^\]]*)\]\(([^)]+)\)/', '', $text);
+
+        // Clean up the metadata section
+        $parts = explode("\n---\n", $text);
+        $text = trim($parts[0] ?? $text);
+
+        return [
+            'text' => $text,
+            'images' => array_values(array_filter($images)),
         ];
     }
 

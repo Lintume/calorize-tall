@@ -4,10 +4,14 @@ namespace App\Livewire;
 
 use App\Services\GitHubFeedbackService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class FeedbackIndex extends Component
 {
+    use WithFileUploads;
+
     public bool $showForm = false;
 
     public string $title = '';
@@ -15,6 +19,8 @@ class FeedbackIndex extends Component
     public string $description = '';
 
     public string $type = 'bug';
+
+    public array $attachments = [];
 
     public ?int $viewingIssue = null;
 
@@ -41,6 +47,7 @@ class FeedbackIndex extends Component
         'title' => 'required|min:5|max:255',
         'description' => 'required|min:10|max:5000',
         'type' => 'required|in:bug,feature,question',
+        'attachments.*' => 'image|max:5120', // 5MB max per image
     ];
 
     public function mount(): void
@@ -75,7 +82,14 @@ class FeedbackIndex extends Component
         $this->title = '';
         $this->description = '';
         $this->type = 'bug';
+        $this->attachments = [];
         $this->errorMessage = '';
+    }
+
+    public function removeAttachment(int $index): void
+    {
+        unset($this->attachments[$index]);
+        $this->attachments = array_values($this->attachments);
     }
 
     public function submit(): void
@@ -87,12 +101,35 @@ class FeedbackIndex extends Component
         $service = app(GitHubFeedbackService::class);
         $user = Auth::user();
 
+        // Upload attachments to GitHub repository
+        $attachmentUrls = [];
+
+        foreach ($this->attachments as $attachment) {
+            // Store temporarily
+            $tempPath = $attachment->store('temp-feedback', 'local');
+            $fullPath = Storage::disk('local')->path($tempPath);
+
+            // Upload to GitHub repository
+            $githubUrl = $service->uploadImageToRepository(
+                $fullPath,
+                $attachment->getClientOriginalName()
+            );
+
+            if ($githubUrl) {
+                $attachmentUrls[] = $githubUrl;
+            }
+
+            // Clean up temporary file
+            Storage::disk('local')->delete($tempPath);
+        }
+
         $result = $service->createIssue(
             $this->title,
             $this->description,
             $this->type,
             $user->id,
-            $user->email
+            $user->email,
+            $attachmentUrls
         );
 
         $this->submitting = false;
@@ -102,8 +139,26 @@ class FeedbackIndex extends Component
             $this->showForm = false;
             $this->resetForm();
 
-            // Refresh the issues list to include the new one
-            $this->loadIssues();
+            // Add the new issue to the list immediately (GitHub search has indexing delay)
+            $newIssue = [
+                'number' => $result['number'],
+                'title' => $result['title'],
+                'body' => $this->description,
+                'images' => $attachmentUrls,
+                'state' => $result['state'],
+                'status' => $result['state'],
+                'project_status' => null,
+                'type' => $this->type,
+                'created_at' => $result['created_at'],
+                'updated_at' => $result['updated_at'],
+                'comments_count' => 0,
+                'html_url' => $result['html_url'],
+                'labels' => $result['labels'] ?? [],
+            ];
+
+            // Add to the beginning of the issues list
+            array_unshift($this->issues['issues'], $newIssue);
+            $this->issues['total']++;
 
             // Clear success message after 5 seconds
             $this->dispatch('clear-success');

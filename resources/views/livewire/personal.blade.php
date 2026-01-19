@@ -33,7 +33,7 @@
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                     <div class="flex items-start gap-4 min-w-0">
                         <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white text-xl font-extrabold shadow-lg shadow-amber-600/25">
-                            {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                            {{ mb_strtoupper(mb_substr(Auth::user()->name ?? 'U', 0, 1)) }}
                         </div>
                         <div class="space-y-1 min-w-0">
                             <h1 class="text-xl sm:text-2xl font-extrabold text-stone-900">{{ Auth::user()->name }}</h1>
@@ -44,9 +44,9 @@
 
                 {{-- Quick stats --}}
                 <div class="grid grid-cols-3 gap-2 sm:gap-3 w-full lg:w-auto lg:shrink-0 lg:flex lg:flex-wrap lg:justify-end lg:gap-3">
-                        <div class="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur px-3 sm:px-4 py-3 min-w-0 sm:min-w-[7.25rem] lg:w-[8rem] lg:shrink-0 text-center">
+                        <div class="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur px-4 sm:px-5 py-4 min-w-0 sm:min-w-[7.25rem] lg:w-[8.5rem] lg:shrink-0 text-center">
                             <div class="text-[10px] font-semibold text-stone-500 leading-none whitespace-nowrap" title="{{ __('Your goal') }}">{{ __('personal.stat_goal_short') }}</div>
-                            <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                            <div class="mt-1.5 flex items-baseline justify-center gap-1.5">
                                 <div class="text-[1.05rem] font-extrabold text-stone-900 leading-none">
                                     <span x-show="!error.kcal_per_day" x-text="calculated.kcal_per_day"></span>
                                     <span x-show="error.kcal_per_day" class="text-stone-400">—</span>
@@ -54,9 +54,9 @@
                                 <div class="text-[10px] font-semibold text-stone-400 whitespace-nowrap">{{ __('kcal/day') }}</div>
                             </div>
                         </div>
-                        <div class="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur px-3 sm:px-4 py-3 min-w-0 sm:min-w-[7.25rem] lg:w-[8rem] lg:shrink-0 text-center">
+                        <div class="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur px-4 sm:px-5 py-4 min-w-0 sm:min-w-[7.25rem] lg:w-[8.5rem] lg:shrink-0 text-center">
                             <div class="text-[10px] font-semibold text-stone-500 leading-none whitespace-nowrap" title="{{ __('With activity') }}">{{ __('personal.stat_with_activity_short') }}</div>
-                            <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                            <div class="mt-1.5 flex items-baseline justify-center gap-1.5">
                                 <div class="text-[1.05rem] font-extrabold text-stone-900 leading-none">
                                     <span x-show="!error.kcal_per_day_normal" x-text="calculated.kcal_per_day_normal"></span>
                                     <span x-show="error.kcal_per_day_normal" class="text-stone-400">—</span>
@@ -64,9 +64,9 @@
                                 <div class="text-[10px] font-semibold text-stone-400 whitespace-nowrap">{{ __('kcal/day') }}</div>
                             </div>
                         </div>
-                        <div class="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur px-3 sm:px-4 py-3 min-w-0 sm:min-w-[7.25rem] lg:w-[8rem] lg:shrink-0 text-center">
+                        <div class="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur px-4 sm:px-5 py-4 min-w-0 sm:min-w-[7.25rem] lg:w-[8.5rem] lg:shrink-0 text-center">
                             <div class="text-[10px] font-semibold text-stone-500 leading-none whitespace-nowrap" title="{{ __('To target') }}">{{ __('personal.stat_to_target_short') }}</div>
-                            <div class="mt-1 flex items-baseline justify-center gap-1.5">
+                            <div class="mt-1.5 flex items-baseline justify-center gap-1.5">
                                 <div class="text-[1.05rem] font-extrabold text-stone-900 leading-none">
                                     <span x-show="!error.weeks_to_target" x-text="calculated.weeks_to_target"></span>
                                     <span x-show="error.weeks_to_target" class="text-stone-400">—</span>

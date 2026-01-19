@@ -323,6 +323,100 @@
                         @enderror
                     </div>
 
+                    {{-- Attachments --}}
+                    <div x-data="{
+                        dragover: false,
+                        handlePaste(e) {
+                            const items = e.clipboardData?.items;
+                            if (!items) return;
+
+                            for (const item of items) {
+                                if (item.type.startsWith('image/')) {
+                                    e.preventDefault();
+                                    const file = item.getAsFile();
+                                    if (file) {
+                                        const dt = new DataTransfer();
+                                        dt.items.add(file);
+                                        $refs.fileInput.files = dt.files;
+                                        $refs.fileInput.dispatchEvent(new Event('change'));
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }"
+                    x-on:paste.window="handlePaste($event)"
+                    >
+                        <label class="block text-sm font-medium text-stone-700 mb-1">
+                            {{ __('feedback.attachments') }}
+                            <span class="text-stone-400 font-normal">({{ __('reviews.optional') }})</span>
+                        </label>
+
+                        {{-- Upload zone --}}
+                        <div
+                            x-on:dragover.prevent="dragover = true"
+                            x-on:dragleave.prevent="dragover = false"
+                            x-on:drop.prevent="dragover = false; $refs.fileInput.files = $event.dataTransfer.files; $refs.fileInput.dispatchEvent(new Event('change'))"
+                            :class="dragover ? 'border-amber-500 bg-amber-50' : 'border-stone-200 bg-stone-50'"
+                            class="relative rounded-xl border-2 border-dashed p-4 transition-colors cursor-pointer hover:border-stone-300"
+                        >
+                            <input
+                                type="file"
+                                x-ref="fileInput"
+                                wire:model="attachments"
+                                accept="image/*"
+                                multiple
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            >
+                            <div class="text-center">
+                                <svg class="mx-auto h-8 w-8 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <p class="mt-1 text-sm text-stone-500">{{ __('feedback.attachments_hint') }}</p>
+                                <p class="text-xs text-stone-400">{{ __('feedback.attachments_formats') }}</p>
+                            </div>
+                        </div>
+
+                        {{-- Preview uploaded images --}}
+                        @if(count($attachments) > 0)
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                @foreach($attachments as $index => $attachment)
+                                    <div class="relative group">
+                                        <img
+                                            src="{{ $attachment->temporaryUrl() }}"
+                                            class="h-16 w-16 object-cover rounded-lg border border-stone-200"
+                                            alt="Attachment {{ $index + 1 }}"
+                                        >
+                                        <button
+                                            type="button"
+                                            wire:click="removeAttachment({{ $index }})"
+                                            class="absolute -top-1.5 -right-1.5 h-5 w-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                                        >
+                                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        {{-- Upload progress --}}
+                        <div wire:loading wire:target="attachments" class="mt-2">
+                            <div class="flex items-center gap-2 text-sm text-stone-500">
+                                <svg class="animate-spin h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ __('feedback.uploading') }}
+                            </div>
+                        </div>
+
+                        @error('attachments.*')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Actions --}}
                     <div class="flex justify-end gap-3 pt-2">
                         <button type="button"
@@ -423,6 +517,25 @@
                         <div class="prose prose-sm prose-stone max-w-none">
                             <p class="whitespace-pre-wrap text-stone-700">{{ $issueDetails['body'] }}</p>
                         </div>
+
+                        {{-- Screenshots --}}
+                        @if(!empty($issueDetails['images']))
+                            <div class="mt-4">
+                                <h4 class="text-sm font-medium text-stone-700 mb-2">{{ __('feedback.attachments') }}</h4>
+                                <div class="grid grid-cols-2 gap-2">
+                                    @foreach($issueDetails['images'] as $imageUrl)
+                                        <a href="{{ $imageUrl }}" target="_blank" class="group">
+                                            <img
+                                                src="{{ $imageUrl }}"
+                                                alt="Screenshot"
+                                                class="rounded-lg border border-stone-200 w-full h-auto hover:border-amber-500 transition-colors"
+                                                loading="lazy"
+                                            >
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Comments --}}

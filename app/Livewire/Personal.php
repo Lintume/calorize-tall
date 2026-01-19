@@ -50,28 +50,28 @@ class Personal extends Component
     public function save(array $user, array $calculations, array $measurements)
     {
         $validator = Validator::make($user, [
-            'growth_cm' => 'required|numeric|min:0|max:300',
-            'sex' => 'required|string|in:male,female',
-            'activity_coefficient' => 'required|numeric|min:1|max:2',
-            'birthday_date' => 'required|date',
-            'target_kg' => 'required|numeric|min:0|max:300',
-            'deficit_kcal' => 'required|numeric|min:0|max:1500',
+            'growth_cm' => 'nullable|numeric|min:0|max:300',
+            'sex' => 'nullable|string|in:male,female',
+            'activity_coefficient' => 'nullable|numeric|min:1|max:2',
+            'birthday_date' => 'nullable|date',
+            'target_kg' => 'nullable|numeric|min:0|max:300',
+            'deficit_kcal' => 'nullable|numeric|min:0|max:1500',
         ]);
         Auth::user()->update($validator->validated());
 
         $validator = Validator::make($calculations, [
-            'kcal_per_day' => 'required|numeric|min:500|max:6000',
+            'kcal_per_day' => 'nullable|numeric|min:500|max:6000',
         ]);
         Auth::user()->update($validator->validated());
 
         $validator = Validator::make($measurements, [
-            'weight.value' => 'required|numeric|min:0',
-            'chest.value' => 'required|numeric|min:0',
-            'waist.value' => 'required|numeric|min:0',
-            'thighs.value' => 'required|numeric|min:0',
-            'wrist.value' => 'required|numeric|min:0',
-            'neck.value' => 'required|numeric|min:0',
-            'biceps.value' => 'required|numeric|min:0',
+            'weight.value' => 'nullable|numeric|min:0',
+            'chest.value' => 'nullable|numeric|min:0',
+            'waist.value' => 'nullable|numeric|min:0',
+            'thighs.value' => 'nullable|numeric|min:0',
+            'wrist.value' => 'nullable|numeric|min:0',
+            'neck.value' => 'nullable|numeric|min:0',
+            'biceps.value' => 'nullable|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -88,6 +88,12 @@ class Personal extends Component
 
     private function saveMeasurements(array $measurements): void
     {
+        // Only save if at least one measurement has a value
+        $hasAnyValue = collect($measurements)->filter(fn ($m) => ! empty($m['value']))->isNotEmpty();
+        if (! $hasAnyValue) {
+            return;
+        }
+
         $measurement = Auth::user()->measurements()->where('date', now()->toDateString())->first();
         if (! $measurement) {
             $measurement = Auth::user()->measurements()->create([
@@ -95,13 +101,13 @@ class Personal extends Component
             ]);
         }
         $measurement->update([
-            'kg' => $measurements['weight']['value'],
-            'chest_cm' => $measurements['chest']['value'],
-            'waist_cm' => $measurements['waist']['value'],
-            'thighs_cm' => $measurements['thighs']['value'],
-            'wrist_cm' => $measurements['wrist']['value'],
-            'neck_cm' => $measurements['neck']['value'],
-            'biceps_cm' => $measurements['biceps']['value'],
+            'kg' => $measurements['weight']['value'] ?: null,
+            'chest_cm' => $measurements['chest']['value'] ?: null,
+            'waist_cm' => $measurements['waist']['value'] ?: null,
+            'thighs_cm' => $measurements['thighs']['value'] ?: null,
+            'wrist_cm' => $measurements['wrist']['value'] ?: null,
+            'neck_cm' => $measurements['neck']['value'] ?: null,
+            'biceps_cm' => $measurements['biceps']['value'] ?: null,
         ]);
     }
 
