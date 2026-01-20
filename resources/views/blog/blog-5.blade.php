@@ -19,7 +19,7 @@
         <!-- Structured Data -->
         <script type="application/ld+json">
         {
-            "@context": "https://schema.org",
+            "@@context": "https://schema.org",
             "@type": "Article",
             "headline": "{{ __('Sport Doesn\'t Make You Thin: Why Exercise Often Leads to Weight Gain') }}",
             "description": "{{ __('Exercise is important for health, but its effect on weight is variable. Learn why some people don\'t lose weight from training or even gain weight due to compensatory mechanisms.') }}",
