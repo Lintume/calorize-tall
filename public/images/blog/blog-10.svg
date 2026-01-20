@@ -1,0 +1,43 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ecfeff"/>
+      <stop offset="40%" stop-color="#e0e7ff"/>
+      <stop offset="100%" stop-color="#ffe4e6"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- soft blobs -->
+  <circle cx="280" cy="280" r="200" fill="#67e8f9" opacity="0.26"/>
+  <circle cx="1660" cy="260" r="160" fill="#a5b4fc" opacity="0.22"/>
+  <circle cx="1540" cy="860" r="260" fill="#fda4af" opacity="0.22"/>
+
+  <g transform="translate(960, 540)">
+    <!-- brain-ish outline + gut line -->
+    <path d="M-420 -40c0-160 150-260 300-260 120 0 190 60 240 120 40-20 90-25 135-10 85 30 135 115 120 205-10 60-50 110-110 140-10 120-110 205-235 205-95 0-175-45-215-115-30 30-70 48-120 48-95 0-175-70-175-160 0-10 0-20 2-30-90-35-142-120-142-205 0-65 30-125 80-165" fill="#ffffff" opacity="0.86"/>
+    <path d="M-420 -40c0-160 150-260 300-260 120 0 190 60 240 120 40-20 90-25 135-10 85 30 135 115 120 205-10 60-50 110-110 140-10 120-110 205-235 205-95 0-175-45-215-115-30 30-70 48-120 48-95 0-175-70-175-160 0-10 0-20 2-30-90-35-142-120-142-205 0-65 30-125 80-165" stroke="#e7e5e4" stroke-width="6" opacity="0.9"/>
+
+    <path d="M-320 40c120 60 240 60 360 0" stroke="url(#accent)" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.9"/>
+    <path d="M-180 100c80 40 160 40 240 0" stroke="url(#accent)" stroke-width="14" stroke-linecap="round" fill="none" opacity="0.85"/>
+
+    <!-- pill -->
+    <g transform="translate(420, -250) rotate(18)">
+      <rect x="-150" y="-55" width="300" height="110" rx="55" fill="#0c0a09" opacity="0.72"/>
+      <path d="M0 -55V55" stroke="#fafaf9" stroke-width="6" opacity="0.65"/>
+      <rect x="-150" y="-55" width="150" height="110" rx="55" fill="url(#accent)" opacity="0.95"/>
+    </g>
+
+    <!-- caption badge -->
+    <rect x="-520" y="260" width="1040" height="92" rx="26" fill="#0c0a09" opacity="0.68"/>
+    <text x="0" y="320" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="800" fill="#fafaf9">GLP-1: biology &gt; moralizing</text>
+  </g>
+
+  <text x="960" y="120" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#1c1917" opacity="0.86">Appetite is signaling</text>
+  <text x="960" y="170" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#44403c" opacity="0.75">satiety • reward • neuroendocrine control</text>
+</svg>

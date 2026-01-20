@@ -86,6 +86,30 @@ Route::group(['prefix' => $localePrefix], function () {
     Route::get('/blog/chomu-voda-vazhlyva-dlya-skhudnennya', function () {
         return view('blog.blog-4');
     })->name('blog-4');
+    Route::get('/blog/sport-ne-robyt-tebe-khudym', function () {
+        return view('blog.blog-5');
+    })->name('blog-5');
+    Route::get('/blog/rebound-ne-ye-zryvom', function () {
+        return view('blog.blog-6');
+    })->name('blog-6');
+    Route::get('/blog/syla-voli-mif', function () {
+        return view('blog.blog-7');
+    })->name('blog-7');
+    Route::get('/blog/set-point-prykladna-versiia', function () {
+        return view('blog.blog-8');
+    })->name('blog-8');
+    Route::get('/blog/intuyityvne-kharchuvannia-ne-universalne-rishennia', function () {
+        return view('blog.blog-9');
+    })->name('blog-9');
+    Route::get('/blog/glp-1-biologichnyi-perelom', function () {
+        return view('blog.blog-10');
+    })->name('blog-10');
+    Route::get('/blog/fitness-kouchi-selektsiinyi-baias', function () {
+        return view('blog.blog-11');
+    })->name('blog-11');
+    Route::get('/blog/zhinoche-tilo-ne-linuietsia', function () {
+        return view('blog.blog-12');
+    })->name('blog-12');
     Route::get('/blog', function () {
         return view('blog.index');
     })->name('blog');

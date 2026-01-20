@@ -1,0 +1,44 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ecfeff"/>
+      <stop offset="45%" stop-color="#fef9c3"/>
+      <stop offset="100%" stop-color="#ffe4e6"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- blobs -->
+  <circle cx="280" cy="260" r="190" fill="#67e8f9" opacity="0.28"/>
+  <circle cx="1680" cy="260" r="150" fill="#fdba74" opacity="0.28"/>
+  <circle cx="1560" cy="860" r="240" fill="#fda4af" opacity="0.24"/>
+
+  <g transform="translate(960, 520)">
+    <!-- plate + fork/knife -->
+    <circle cx="0" cy="0" r="230" fill="#ffffff" opacity="0.85"/>
+    <circle cx="0" cy="0" r="190" fill="#e7e5e4" opacity="0.9"/>
+    <circle cx="0" cy="0" r="150" fill="#ffffff" opacity="0.9"/>
+
+    <rect x="-360" y="-180" width="40" height="360" rx="20" fill="#0f172a" opacity="0.65"/>
+    <rect x="320" y="-180" width="40" height="360" rx="20" fill="#0f172a" opacity="0.65"/>
+    <rect x="300" y="-180" width="12" height="90" rx="6" fill="#0f172a" opacity="0.65"/>
+    <rect x="300" y="-60" width="12" height="90" rx="6" fill="#0f172a" opacity="0.65"/>
+    <rect x="300" y="60" width="12" height="90" rx="6" fill="#0f172a" opacity="0.65"/>
+
+    <!-- warning ribbon -->
+    <rect x="-520" y="210" width="1040" height="90" rx="24" fill="#0c0a09" opacity="0.68"/>
+    <text x="0" y="270" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="800" fill="#fafaf9">Intuitive ≠ universal</text>
+
+    <!-- accent arrow -->
+    <path d="M-140 -300c120-40 260-10 340 90" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.9"/>
+    <path d="M220 -210l70 30-60 45" fill="url(#accent)" opacity="0.9"/>
+  </g>
+
+  <text x="960" y="100" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#1c1917" opacity="0.85">Listen to the body — but know the context</text>
+  <text x="960" y="150" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#44403c" opacity="0.75">post-diet hunger signals can be distorted</text>
+</svg>

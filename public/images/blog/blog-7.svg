@@ -1,0 +1,44 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="45%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- blobs -->
+  <circle cx="260" cy="260" r="190" fill="#93c5fd" opacity="0.35"/>
+  <circle cx="1680" cy="260" r="150" fill="#fdba74" opacity="0.35"/>
+  <circle cx="1560" cy="860" r="240" fill="#fca5a5" opacity="0.28"/>
+
+  <!-- brain + hormone nodes -->
+  <g transform="translate(960, 520)">
+    <!-- brain outline-ish -->
+    <path d="M-260 -40c0-90 70-160 160-160 50 0 96 22 126 56 28-34 74-56 124-56 90 0 160 70 160 160 0 46-18 88-48 118 18 18 28 42 28 68 0 54-44 98-98 98-22 0-42-7-58-18-22 38-62 64-108 64-42 0-80-22-102-56-24 22-56 36-92 36-72 0-130-58-130-130 0-28 9-54 24-76-38-28-62-72-62-124z" fill="#0f172a" opacity="0.72"/>
+
+    <!-- nodes -->
+    <circle cx="-170" cy="-20" r="18" fill="url(#accent)"/>
+    <circle cx="-40" cy="-120" r="18" fill="url(#accent)"/>
+    <circle cx="120" cy="-60" r="18" fill="url(#accent)"/>
+    <circle cx="180" cy="70" r="18" fill="url(#accent)"/>
+    <circle cx="-90" cy="120" r="18" fill="url(#accent)"/>
+
+    <!-- connections -->
+    <path d="M-170 -20L-40 -120L120 -60L180 70L-90 120L-170 -20" stroke="#0ea5e9" stroke-width="6" opacity="0.55"/>
+
+    <!-- willpower crossed -->
+    <text x="0" y="260" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#1c1917" opacity="0.85">Willpower ≠ appetite</text>
+    <text x="0" y="308" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#44403c" opacity="0.75">hypothalamus • hormones • dopamine</text>
+  </g>
+
+  <rect x="0" y="900" width="1920" height="180" fill="#0c0a09" opacity="0.68"/>
+  <text x="960" y="980" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="800" fill="#fafaf9">Appetite is biology</text>
+  <text x="960" y="1040" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#d6d3d1">Not a character test</text>
+</svg>

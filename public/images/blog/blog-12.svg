@@ -1,0 +1,38 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf2f8"/>
+      <stop offset="45%" stop-color="#eff6ff"/>
+      <stop offset="100%" stop-color="#ecfeff"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- soft blobs -->
+  <circle cx="280" cy="260" r="190" fill="#f9a8d4" opacity="0.26"/>
+  <circle cx="1680" cy="260" r="150" fill="#93c5fd" opacity="0.22"/>
+  <circle cx="1540" cy="860" r="260" fill="#67e8f9" opacity="0.20"/>
+
+  <g transform="translate(960, 540)">
+    <!-- shield (defense) -->
+    <path d="M0 -330c95 0 180 48 180 48v130c0 130-92 222-180 266-88-44-180-136-180-266v-130s85-48 180-48z" fill="#0c0a09" opacity="0.55"/>
+    <path d="M-70 -165h140" stroke="#fafaf9" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+    <path d="M0 -235v140" stroke="#fafaf9" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- hormone waves -->
+    <path d="M-520 40c120-80 240-80 360 0s240 80 360 0 240-80 360 0" stroke="url(#accent)" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M-520 120c120-70 240-70 360 0s240 70 360 0 240-70 360 0" stroke="url(#accent)" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.70"/>
+
+    <!-- caption badge -->
+    <rect x="-520" y="250" width="1040" height="92" rx="26" fill="#0c0a09" opacity="0.68"/>
+    <text x="0" y="312" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="800" fill="#fafaf9">Biology ≠ laziness</text>
+  </g>
+
+  <text x="960" y="120" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#1c1917" opacity="0.86">Women &amp; weight loss</text>
+  <text x="960" y="170" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#44403c" opacity="0.75">hormones • energy expenditure • adaptation</text>
+</svg>

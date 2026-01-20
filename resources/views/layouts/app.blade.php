@@ -16,6 +16,13 @@
         <link rel="manifest" href="/favicon/site.webmanifest"/>
         <link rel="alternate" hreflang="uk" href="{{ LaravelLocalization::getLocalizedURL('uk') }}" />
         <link rel="alternate" hreflang="en" href="{{ LaravelLocalization::getLocalizedURL('en') }}" />
+        <link rel="canonical" href="{{ url()->current() }}" />
+        
+        <!-- Open Graph / Social -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ url()->current() }}" />
+        <meta property="og:site_name" content="Calorize" />
+        <meta property="og:locale" content="{{ app()->getLocale() === 'uk' ? 'uk_UA' : 'en_US' }}" />
 
         <!-- Підключення шрифту Inter із різною товщиною -->
         <link rel="preconnect" href="https://fonts.googleapis.com">

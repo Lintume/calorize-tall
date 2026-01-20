@@ -1,0 +1,52 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="40%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#fee2e2"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+
+  <!-- soft blobs -->
+  <circle cx="280" cy="260" r="200" fill="#93c5fd" opacity="0.30"/>
+  <circle cx="1650" cy="260" r="150" fill="#fca5a5" opacity="0.30"/>
+  <circle cx="1550" cy="860" r="250" fill="#fde68a" opacity="0.28"/>
+
+  <!-- chart/plateau + shield -->
+  <g transform="translate(960, 520)">
+    <!-- chart frame -->
+    <rect x="-520" y="-220" width="1040" height="420" rx="26" fill="#ffffff" opacity="0.82"/>
+    <rect x="-520" y="-220" width="1040" height="420" rx="26" stroke="#e7e5e4" stroke-width="4"/>
+
+    <!-- axes -->
+    <path d="M-470 150H470" stroke="#a8a29e" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+    <path d="M-470 150V-170" stroke="#a8a29e" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+
+    <!-- plateau line -->
+    <path d="M-440 -120C-300 -60 -200 -40 -80 -10C20 15 110 20 180 18C260 16 330 10 440 8" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <path d="M180 18H440 8" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" opacity="0.95"/>
+
+    <!-- plateau marker -->
+    <circle cx="240" cy="16" r="18" fill="#ef4444" opacity="0.95"/>
+
+    <!-- shield (defended weight) -->
+    <path d="M0 -310c90 0 170 45 170 45v120c0 120-86 205-170 245-84-40-170-125-170-245v-120s80-45 170-45z" fill="#0f172a" opacity="0.75"/>
+    <path d="M-80 -160h160" stroke="#fafaf9" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
+    <path d="M0 -240v160" stroke="#fafaf9" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
+
+    <!-- label -->
+    <text x="0" y="260" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="800" fill="#1c1917" opacity="0.86">Plateau ≠ failure</text>
+    <text x="0" y="308" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#44403c" opacity="0.75">defended weight • adaptation • appetite</text>
+  </g>
+
+  <!-- bottom bar -->
+  <rect x="0" y="900" width="1920" height="180" fill="#0c0a09" opacity="0.68"/>
+  <text x="960" y="980" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="800" fill="#fafaf9">Set point &amp; plateaus</text>
+  <text x="960" y="1040" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#d6d3d1">Energy expenditure ↓ • Hunger ↑</text>
+</svg>
