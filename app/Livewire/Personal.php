@@ -49,6 +49,10 @@ class Personal extends Component
      */
     public function save(array $user, array $calculations, array $measurements)
     {
+        // Convert empty strings to null before validation
+        $user = array_map(fn ($value) => $value === '' ? null : $value, $user);
+        $calculations = array_map(fn ($value) => $value === '' ? null : $value, $calculations);
+
         $validator = Validator::make($user, [
             'growth_cm' => 'nullable|numeric|min:0|max:300',
             'sex' => 'nullable|string|in:male,female',
