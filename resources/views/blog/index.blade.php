@@ -83,6 +83,14 @@
 
         $practicalPosts = [
             [
+                'href' => route('blog-13'),
+                'title' => __('Calorize: Full Feature Overview. Why It\'s the Most Effective Weight Loss Tool'),
+                'excerpt' => __('Most people quit counting due to complexity. Learn how Calorize solves this with precise meal calculation, instant search, and an AI assistant.'),
+                'image' => '/images/blog/blog-13.svg',
+                'tag' => __('How-to'),
+                'time' => __('6 min read'),
+            ],
+            [
                 'href' => route('blog-1'),
                 'title' => __('How to Count Calories for Weight Loss — A Practical Guide'),
                 'excerpt' => __('A beginner-friendly guide to calorie counting: BMR/TDEE, how to create a safe deficit, what foods to pick, and how Calorize helps you stay consistent.'),

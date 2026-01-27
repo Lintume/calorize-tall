@@ -110,6 +110,9 @@ Route::group(['prefix' => $localePrefix], function () {
     Route::get('/blog/zhinoche-tilo-ne-linuietsia', function () {
         return view('blog.blog-12');
     })->name('blog-12');
+    Route::get('/blog/calorize-gid-po-supersylakh', function () {
+        return view('blog.blog-13');
+    })->name('blog-13');
     Route::get('/blog', function () {
         return view('blog.index');
     })->name('blog');
