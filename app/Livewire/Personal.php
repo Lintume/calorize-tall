@@ -101,13 +101,13 @@ class Personal extends Component
             ]);
         }
         $measurement->update([
-            'kg' => $measurements['weight']['value'] ?: null,
-            'chest_cm' => $measurements['chest']['value'] ?: null,
-            'waist_cm' => $measurements['waist']['value'] ?: null,
-            'thighs_cm' => $measurements['thighs']['value'] ?: null,
-            'wrist_cm' => $measurements['wrist']['value'] ?: null,
-            'neck_cm' => $measurements['neck']['value'] ?: null,
-            'biceps_cm' => $measurements['biceps']['value'] ?: null,
+            'kg' => $measurements['weight']['value'] ?: 0,
+            'chest_cm' => $measurements['chest']['value'] ?: 0,
+            'waist_cm' => $measurements['waist']['value'] ?: 0,
+            'thighs_cm' => $measurements['thighs']['value'] ?: 0,
+            'wrist_cm' => $measurements['wrist']['value'] ?: 0,
+            'neck_cm' => $measurements['neck']['value'] ?: 0,
+            'biceps_cm' => $measurements['biceps']['value'] ?: 0,
         ]);
     }
 

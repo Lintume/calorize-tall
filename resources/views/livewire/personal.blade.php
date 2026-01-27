@@ -462,7 +462,7 @@
         const initial = el ? JSON.parse(el.textContent || '{}') : {};
 
         return {
-            active: null, // measurements
+            active: 'measurements', // expanded by default
 
             user: initial.user || {
                 growth_cm: '',
