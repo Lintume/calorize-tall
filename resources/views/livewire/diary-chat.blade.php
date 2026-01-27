@@ -229,13 +229,15 @@
 
         <!-- Input Area -->
         <div class="p-3 bg-white/90 border-t border-stone-100">
-            <div class="flex items-center gap-2">
+            <div class="flex items-end gap-2">
                 <div class="relative flex-1">
-                    <input
+                    <textarea
                         x-model="input"
-                        @keydown.enter="send()"
-                        type="text"
-                        class="w-full border border-stone-200 rounded-xl px-4 py-2 text-base sm:text-sm bg-white shadow-inner shadow-stone-900/5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
+                        @keydown.enter="handleEnter($event)"
+                        @input="autoResize($event.target)"
+                        x-init="$nextTick(() => autoResize($refs.input))"
+                        rows="1"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-base sm:text-sm bg-white shadow-inner shadow-stone-900/5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition resize-none overflow-hidden leading-normal"
                         :class="{
                             'ring-2 ring-sky-400 border-sky-300 animate-pulse': transcribing,
                             'ring-2 ring-red-400 border-red-300': recording
@@ -245,7 +247,8 @@
                             : (transcribing ? '' : '{{ __('Type or speak...') }}')"
                         :disabled="recording || transcribing || $wire.isProcessing"
                         x-ref="input"
-                    >
+                        style="min-height: 44px; max-height: 120px;"
+                    ></textarea>
 
                     <!-- Live voice meter overlay (fills the whole input during recording) -->
                     <div
@@ -349,6 +352,23 @@ function diaryChat() {
                     this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
                 }
             });
+        },
+
+        autoResize(el) {
+            if (!el) return;
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+        },
+
+        handleEnter(event) {
+            // Cmd/Ctrl + Enter - send on any device
+            if (event.metaKey || event.ctrlKey) {
+                event.preventDefault();
+                this.send();
+                return;
+            }
+            // Otherwise - allow new line (default behavior)
+            this.$nextTick(() => this.autoResize(event.target));
         },
 
         cloneMessages(messages) {
@@ -549,6 +569,13 @@ function diaryChat() {
             this.input = '';
             this.inputBeforeVoice = null;
 
+            // Reset textarea height after clearing
+            this.$nextTick(() => {
+                if (this.$refs.input) {
+                    this.$refs.input.style.height = '44px';
+                }
+            });
+
             // Optimistically show the user's message immediately
             this.localMessages = this.localMessages ?? [];
             this.localMessages.push({
@@ -575,7 +602,10 @@ function diaryChat() {
             this.input = [base, addition].filter(Boolean).join(' ');
             this.inputBeforeVoice = null;
             this.transcribing = false;
-            this.$refs.input?.focus();
+            this.$nextTick(() => {
+                this.autoResize(this.$refs.input);
+                this.$refs.input?.focus();
+            });
         },
 
         onTranscriptionError(message) {
@@ -584,6 +614,7 @@ function diaryChat() {
                 this.input = this.inputBeforeVoice;
             }
             this.inputBeforeVoice = null;
+            this.$nextTick(() => this.autoResize(this.$refs.input));
             alert(message);
         }
     }

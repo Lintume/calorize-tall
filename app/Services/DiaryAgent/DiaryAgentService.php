@@ -148,11 +148,9 @@ class DiaryAgentService
             : "No specific meal is selected. Based on current time ({$currentTime}), the likely meal is: {$suggestedMeal}. USE THIS MEAL BY DEFAULT without asking the user if user not specified otherwise.";
 
         $recentDiaryMemory = $this->buildRecentDiaryMemoryBlock(
-            command: $command,
             date: $date,
             candidateDays: 7,
-            frequencyDays: 30,
-            maxCandidates: 5
+            maxCandidates: 15
         );
 
         // Split prompt: static rules first (for implicit caching), dynamic context last
@@ -197,14 +195,12 @@ DYNAMIC;
 
     /**
      * Build a compact "memory" from the user's recent diary entries.
-     * The model should only use it to disambiguate short, generic messages.
+     * Sends all recent entries without word filtering (more effective for UA language).
      */
     private function buildRecentDiaryMemoryBlock(
-        string $command,
         string $date,
         int $candidateDays = 7,
-        int $frequencyDays = 30,
-        int $maxCandidates = 5
+        int $maxCandidates = 15
     ): string {
         $userId = Auth::id();
 
@@ -212,17 +208,10 @@ DYNAMIC;
             return "";
         }
 
-        $tokens = $this->extractFocusTokens($command);
-
-        // Skip memory if no tokens extracted (saves tokens)
-        if (empty($tokens)) {
-            return "";
-        }
-
         $to = Carbon::parse($date)->toDateString();
         $toCarbon = Carbon::parse($date)->startOfDay();
 
-        // 7-day candidates: recent matching entries, deduped by product_id, ordered by recency.
+        // 7-day entries: all recent entries, deduped by product_id, ordered by recency.
         $fromCandidates = Carbon::parse($date)->subDays($candidateDays)->toDateString();
         $recent = FoodIntake::query()
             ->where('user_id', $userId)
@@ -243,11 +232,6 @@ DYNAMIC;
 
             $pid = (int) $fi->product_id;
             $title = (string) $fi->product->title;
-            $hay = mb_strtolower($title);
-
-            if (! $this->containsAnyToken($hay, $tokens)) {
-                continue;
-            }
 
             if (! isset($candidateAgg[$pid])) {
                 // Don't introduce new candidates once we reached the cap,
@@ -282,230 +266,23 @@ DYNAMIC;
             }
         }
 
-        // 30-day "most frequent matching variant"
-        $fromFreq = Carbon::parse($date)->subDays($frequencyDays)->toDateString();
-        $freq = FoodIntake::query()
-            ->where('user_id', $userId)
-            ->whereBetween('date', [$fromFreq, $to])
-            ->with('product')
-            ->orderByDesc('date')
-            ->orderByDesc('id')
-            ->limit(1200)
-            ->get();
-
-        $freqAgg = [];
-        foreach ($freq as $fi) {
-            if (! $fi->product) {
-                continue;
-            }
-
-            $pid = (int) $fi->product_id;
-            $title = (string) $fi->product->title;
-            $hay = mb_strtolower($title);
-
-            if (! $this->containsAnyToken($hay, $tokens)) {
-                continue;
-            }
-
-            if (! isset($freqAgg[$pid])) {
-                $freqAgg[$pid] = [
-                    'productId' => $pid,
-                    'title' => $title,
-                    'count' => 0,
-                    'sumGrams' => 0,
-                    'lastDate' => (string) $fi->date,
-                    'lastRelative' => $this->relativeDayLabel($toCarbon, Carbon::parse((string) $fi->date)->startOfDay()),
-                    'lastGrams' => (int) $fi->g,
-                ];
-            }
-
-            $freqAgg[$pid]['count'] += 1;
-            $freqAgg[$pid]['sumGrams'] += (int) $fi->g;
-        }
-
-        $mostFrequent = null;
-        foreach ($freqAgg as $item) {
-            if ($mostFrequent === null || $item['count'] > $mostFrequent['count']) {
-                $mostFrequent = $item;
-            }
-        }
-
-        // Skip memory section entirely if no data found (saves tokens)
-        if (empty($candidates) && $mostFrequent === null) {
+        // Skip memory section entirely if no data found
+        if (empty($candidates)) {
             return "";
         }
 
         $lines = [];
-        $lines[] = "RECENT DIARY MEMORY (only for ambiguity):";
-        
-        if (!empty($candidates)) {
-            $lines[] = "Candidates (last {$candidateDays}d):";
-            foreach ($candidates as $i => $c) {
-                $typical = (int) round(($c['sumGrams'] ?? 0) / max(1, (int) ($c['count'] ?? 1)));
-                $title = $this->sanitizeOneLine((string) $c['title']);
-                $rel = $c['lastRelative'] ?? null;
-                $relPart = $rel ? " ({$rel})" : "";
-                $lines[] = ($i + 1) . ") id={$c['productId']} \"{$title}\" {$c['lastGrams']}g{$relPart} (avg {$typical}g, {$c['count']}x)";
-            }
-        }
+        $lines[] = "RECENT DIARY (last {$candidateDays}d, for disambiguation):";
 
-        if ($mostFrequent !== null) {
-            $typical = (int) round(($mostFrequent['sumGrams'] ?? 0) / max(1, (int) ($mostFrequent['count'] ?? 1)));
-            $title = $this->sanitizeOneLine((string) $mostFrequent['title']);
-            $rel = $mostFrequent['lastRelative'] ?? null;
+        foreach ($candidates as $c) {
+            $typical = (int) round(($c['sumGrams'] ?? 0) / max(1, (int) ($c['count'] ?? 1)));
+            $title = $this->sanitizeOneLine((string) $c['title']);
+            $rel = $c['lastRelative'] ?? null;
             $relPart = $rel ? " ({$rel})" : "";
-            $lines[] = "Most frequent (last {$frequencyDays}d): id={$mostFrequent['productId']} \"{$title}\" {$mostFrequent['count']}x, avg {$typical}g{$relPart}";
+            $lines[] = "- id={$c['productId']} \"{$title}\" {$c['lastGrams']}g{$relPart}, avg {$typical}g, {$c['count']}x";
         }
 
         return implode("\n", $lines);
-    }
-
-    private function extractFocusTokens(string $text): array
-    {
-        $t = mb_strtolower($text);
-        $t = preg_replace('/[0-9]+/u', ' ', $t);
-        $t = preg_replace('/[^\p{L}\s]+/u', ' ', $t);
-        $parts = preg_split('/\s+/u', trim($t)) ?: [];
-
-        $stop = [
-            'і','й','та','на','у','в','з','із','зі','до','по','за','для','без',
-            'це','цей','ця','ці','той','такий','я','ти','він','вона','вони','ми','ви',
-            'a','an','the','and','or','to','of','in','on','for','with','without',
-            'додай','додати','запиши','внеси','добав','постав','хочу','будь','ласка',
-            'тарілка','чашка','склянка','порція','шматок','ложка','ложки','шт','штуки',
-            'г','гр','грам','грами','ml','мл',
-        ];
-
-        $tokens = [];
-        foreach ($parts as $p) {
-            if ($p === '' || mb_strlen($p) < 3) {
-                continue;
-            }
-            if (in_array($p, $stop, true)) {
-                continue;
-            }
-            foreach ($this->tokenVariants($p) as $v) {
-                if ($v === '' || mb_strlen($v) < 3) {
-                    continue;
-                }
-                if (in_array($v, $stop, true)) {
-                    continue;
-                }
-                $tokens[] = $v;
-            }
-        }
-
-        return array_values(array_unique($tokens));
-    }
-
-    /**
-     * Generate a few variants for better matching across common UA/RU case endings.
-     * Goal: improve substring matching (e.g. "борща/борщу/борщем" -> "борщ").
-     */
-    private function tokenVariants(string $token): array
-    {
-        $token = trim(mb_strtolower($token));
-
-        // Normalize apostrophes (optional but helps UA words like "п'ять")
-        $token = str_replace(["’", "ʼ", "`"], "'", $token);
-
-        $variants = [$token];
-
-        // Also try without apostrophe (often product titles omit it)
-        if (str_contains($token, "'")) {
-            $variants[] = str_replace("'", '', $token);
-        }
-
-        $stem = $this->stemCyrillicToken($token);
-        if ($stem !== null) {
-            $variants[] = $stem;
-        }
-
-        // One more pass: if we removed apostrophe, stem that too
-        if (isset($variants[1]) && is_string($variants[1])) {
-            $stem2 = $this->stemCyrillicToken($variants[1]);
-            if ($stem2 !== null) {
-                $variants[] = $stem2;
-            }
-        }
-
-        // Unique, keep order
-        $out = [];
-        foreach ($variants as $v) {
-            if ($v === '' || in_array($v, $out, true)) {
-                continue;
-            }
-            $out[] = $v;
-        }
-
-        return $out;
-    }
-
-    /**
-     * Conservative stemmer for UA/RU: strips common inflectional endings.
-     * Returns null if no safe stemming applied.
-     */
-    private function stemCyrillicToken(string $token): ?string
-    {
-        $token = trim($token);
-        $len = mb_strlen($token);
-
-        // Too short -> don't touch
-        if ($len < 4) {
-            return null;
-        }
-
-        // Only attempt stemming for Cyrillic-ish words (UA/RU)
-        if (! preg_match('/\p{Cyrillic}/u', $token)) {
-            return null;
-        }
-
-        // Common case endings UA/RU (sorted by length desc)
-        $suffixes = [
-            'ями', 'ами',
-            'ові', 'еві',
-            'ому', 'ему',
-            'ого', 'его',
-            'ими',
-            'ях', 'ах',
-            'ів', 'їв', 'ев', 'ов', 'ей',
-            'ою', 'ею', 'єю',
-            'ом', 'ем',
-            'ої', 'єї',
-            'ий', 'ій',
-            'у', 'ю', 'а', 'я', 'і', 'ї', 'и', 'е',
-        ];
-
-        foreach ($suffixes as $suf) {
-            $sufLen = mb_strlen($suf);
-            if ($sufLen >= $len) {
-                continue;
-            }
-            if (! str_ends_with($token, $suf)) {
-                continue;
-            }
-
-            $stem = mb_substr($token, 0, $len - $sufLen);
-
-            // Keep stems useful for substring matching
-            if (mb_strlen($stem) < 3) {
-                return null;
-            }
-
-            return $stem;
-        }
-
-        return null;
-    }
-
-    private function containsAnyToken(string $haystackLower, array $tokens): bool
-    {
-        foreach ($tokens as $t) {
-            if ($t !== '' && mb_strpos($haystackLower, $t) !== false) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private function sanitizeOneLine(string $text): string
@@ -577,4 +354,3 @@ DYNAMIC;
 
     // Helicone now captures the full prompt/messages/tool calls/response for every LLM request.
 }
-

@@ -121,11 +121,15 @@ window.dismissIOSInstallHint = () => {
         document.body.prepend(indicator);
         
         let startY = 0;
+        let startX = 0;
         let currentY = 0;
         let pulling = false;
+        let pullConfirmed = false; // Only true when we've confirmed this is an intentional vertical pull
         let refreshing = false;
-        const threshold = 80;
-        const maxPull = 120;
+        const threshold = 100; // Increased from 80 - requires more intentional pull
+        const maxPull = 140;
+        const deadZone = 30; // Must pull at least this much before activating
+        const angleThreshold = 0.6; // tan(~31°) - pull must be mostly vertical
         const hiddenY = -64; // must match CSS initial translateY to keep it fully hidden
         const refreshY = 12; // resting position while refreshing
         
@@ -140,7 +144,9 @@ window.dismissIOSInstallHint = () => {
             if (window.scrollY > 0) return;
             
             startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
             pulling = true;
+            pullConfirmed = false;
             indicator.classList.remove('refreshing');
             indicator.classList.remove('ready');
             // Don't show until the user actually pulls a bit
@@ -152,22 +158,47 @@ window.dismissIOSInstallHint = () => {
             if (!pulling || refreshing) return;
             if (window.scrollY > 0) {
                 pulling = false;
+                pullConfirmed = false;
                 return;
             }
             
             currentY = e.touches[0].clientY;
-            const pullDistance = Math.max(0, currentY - startY);
+            const currentX = e.touches[0].clientX;
+            const pullDistanceY = currentY - startY;
+            const pullDistanceX = Math.abs(currentX - startX);
             
-            if (pullDistance > 10) {
-                // Apply resistance to the pull
-                const resistance = 0.5;
-                const actualPull = Math.min(pullDistance * resistance, maxPull);
+            // Ignore upward movements
+            if (pullDistanceY <= 0) return;
+            
+            // Check if this is a confirmed vertical pull
+            if (!pullConfirmed) {
+                // Need to move at least deadZone pixels before we decide
+                const totalDistance = Math.sqrt(pullDistanceY * pullDistanceY + pullDistanceX * pullDistanceX);
+                if (totalDistance < deadZone) return;
                 
+                // Check if the pull is predominantly vertical
+                // Horizontal distance should be less than angleThreshold * vertical distance
+                if (pullDistanceX > pullDistanceY * angleThreshold) {
+                    // This looks like a horizontal swipe, cancel
+                    pulling = false;
+                    return;
+                }
+                
+                // This is a confirmed vertical pull-down gesture
+                pullConfirmed = true;
+            }
+            
+            // Apply resistance to the pull (from original start, not from deadZone)
+            const resistance = 0.4; // Reduced from 0.5 - more resistance = less aggressive
+            const actualPull = Math.min(pullDistanceY * resistance, maxPull);
+            
+            // Only show indicator after we've pulled past a visible amount
+            if (actualPull > 15) {
                 // Slide the pill in from hiddenY towards visible. Cap to avoid dropping too far.
                 const y = Math.min(hiddenY + actualPull, refreshY + 10);
                 indicator.style.transform = `translateX(-50%) translateY(${y}px)`;
-                // Make it appear quickly (more iOS-like)
-                indicator.style.opacity = Math.min(actualPull / 24, 1);
+                // Make it appear gradually
+                indicator.style.opacity = Math.min((actualPull - 15) / 30, 1);
                 
                 // Rotate spinner based on pull distance
                 const rotation = (actualPull / maxPull) * 360;
@@ -188,9 +219,10 @@ window.dismissIOSInstallHint = () => {
         document.addEventListener('touchend', () => {
             if (!pulling || refreshing) return;
             
-            const pullDistance = Math.max(0, currentY - startY) * 0.5;
+            const pullDistance = Math.max(0, currentY - startY) * 0.4; // Match the resistance factor
             
-            if (pullDistance >= threshold) {
+            // Only trigger if we had a confirmed pull and it exceeded the threshold
+            if (pullConfirmed && pullDistance >= threshold) {
                 // Trigger refresh
                 refreshing = true;
                 indicator.classList.add('refreshing');
@@ -210,7 +242,9 @@ window.dismissIOSInstallHint = () => {
             }
             
             pulling = false;
+            pullConfirmed = false;
             startY = 0;
+            startX = 0;
             currentY = 0;
         }, { passive: true });
     }
