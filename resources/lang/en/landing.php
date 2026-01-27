@@ -113,5 +113,15 @@ return [
         'button_guest' => 'Create account',
         'button_auth' => 'Go to diary',
     ],
+
+    'blog' => [
+        'eyebrow' => 'Science of weight',
+        'title' => 'Why diets fail — and what to do instead',
+        'subtitle' => 'No scare tactics, no moralism. We explain biology — so you understand what\'s happening in your body.',
+        'view_all' => 'All articles',
+        'cta_title' => 'Want more?',
+        'cta_text' => 'Our blog has 12 research-backed articles. On appetite, metabolism, hormones, and fitness myths.',
+        'cta_button' => 'Read the blog',
+    ],
 ];
 

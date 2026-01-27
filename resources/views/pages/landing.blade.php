@@ -353,6 +353,125 @@
             </div>
         </section>
 
+        <!-- BLOG -->
+        <section class="py-12 sm:py-16 lg:py-20 border-t border-stone-200/60">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+                        <div>
+                            <div class="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white/70 backdrop-blur px-3 py-1.5 text-xs font-semibold text-stone-600 mb-4">
+                                <svg class="h-3.5 w-3.5 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>{{ __('landing.blog.eyebrow') }}</span>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
+                                {{ __('landing.blog.title') }}
+                            </h2>
+                            <p class="mt-2 text-sm sm:text-base text-stone-600 max-w-xl">
+                                {{ __('landing.blog.subtitle') }}
+                            </p>
+                        </div>
+                        <a href="{{ route('blog') }}"
+                           class="inline-flex items-center gap-2 text-sm font-semibold text-stone-700 hover:text-stone-900 transition shrink-0">
+                            <span>{{ __('landing.blog.view_all') }}</span>
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                        {{-- Article 1: Willpower is a myth --}}
+                        <a href="{{ route('blog-7') }}"
+                           class="group rounded-[1.75rem] border border-stone-200 bg-white/80 backdrop-blur shadow-sm hover:shadow-xl hover:shadow-stone-900/5 transition overflow-hidden">
+                            <div class="aspect-[16/10] bg-stone-100 overflow-hidden">
+                                <img src="/images/blog/blog-7.svg"
+                                     alt="{{ __('Willpower Is a Myth: Who Really Controls Your Appetite') }}"
+                                     class="h-full w-full object-cover group-hover:scale-[1.03] transition duration-300"
+                                     loading="lazy"/>
+                            </div>
+                            <div class="p-5">
+                                <div class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700">
+                                    {{ __('Science') }}
+                                </div>
+                                <h3 class="mt-3 text-base sm:text-lg font-extrabold tracking-tight text-stone-900 group-hover:text-sky-700 transition">
+                                    {{ __('Willpower Is a Myth: Who Really Controls Your Appetite') }}
+                                </h3>
+                                <p class="mt-2 text-sm text-stone-600 line-clamp-2">
+                                    {{ __('Appetite is regulated by hormones and the brain. When diets fail, it is often biology—not weakness.') }}
+                                </p>
+                            </div>
+                        </a>
+
+                        {{-- Article 2: Rebound is not a relapse --}}
+                        <a href="{{ route('blog-6') }}"
+                           class="group rounded-[1.75rem] border border-stone-200 bg-white/80 backdrop-blur shadow-sm hover:shadow-xl hover:shadow-stone-900/5 transition overflow-hidden">
+                            <div class="aspect-[16/10] bg-stone-100 overflow-hidden">
+                                <img src="/images/blog/blog-6.svg"
+                                     alt="{{ __('Rebound Is Not a Relapse: Why Weight Comes Back and Why That Is Normal') }}"
+                                     class="h-full w-full object-cover group-hover:scale-[1.03] transition duration-300"
+                                     loading="lazy"/>
+                            </div>
+                            <div class="p-5">
+                                <div class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700">
+                                    {{ __('Science') }}
+                                </div>
+                                <h3 class="mt-3 text-base sm:text-lg font-extrabold tracking-tight text-stone-900 group-hover:text-sky-700 transition">
+                                    {{ __('Rebound Is Not a Relapse: Why Weight Comes Back and Why That Is Normal') }}
+                                </h3>
+                                <p class="mt-2 text-sm text-stone-600 line-clamp-2">
+                                    {{ __('Weight regain after weight loss is not a failure. It is a predictable biological response driven by hormones and metabolism.') }}
+                                </p>
+                            </div>
+                        </a>
+
+                        {{-- Article 3: GLP-1 --}}
+                        <a href="{{ route('blog-10') }}"
+                           class="group rounded-[1.75rem] border border-stone-200 bg-white/80 backdrop-blur shadow-sm hover:shadow-xl hover:shadow-stone-900/5 transition overflow-hidden">
+                            <div class="aspect-[16/10] bg-stone-100 overflow-hidden">
+                                <img src="/images/blog/blog-10.svg"
+                                     alt="{{ __('GLP-1: How Hormonal Therapy Breaks All \"Moral\" Theories of Weight Loss') }}"
+                                     class="h-full w-full object-cover group-hover:scale-[1.03] transition duration-300"
+                                     loading="lazy"/>
+                            </div>
+                            <div class="p-5">
+                                <div class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700">
+                                    {{ __('Science') }}
+                                </div>
+                                <h3 class="mt-3 text-base sm:text-lg font-extrabold tracking-tight text-stone-900 group-hover:text-sky-700 transition">
+                                    {{ __('GLP-1: How Hormonal Therapy Breaks All "Moral" Theories of Weight Loss') }}
+                                </h3>
+                                <p class="mt-2 text-sm text-stone-600 line-clamp-2">
+                                    {{ __('GLP-1 drugs change appetite, satiety, and reward signaling—showing weight control is biology, not a moral test.') }}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="mt-8 rounded-[1.75rem] border border-stone-200 bg-gradient-to-r from-sky-50/50 via-white to-amber-50/50 p-6 sm:p-8">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                            <div class="flex-1">
+                                <div class="text-base sm:text-lg font-extrabold text-stone-900">
+                                    {{ __('landing.blog.cta_title') }}
+                                </div>
+                                <p class="mt-1 text-sm text-stone-600">
+                                    {{ __('landing.blog.cta_text') }}
+                                </p>
+                            </div>
+                            <a href="{{ route('blog') }}"
+                               class="inline-flex items-center justify-center gap-2 rounded-2xl border border-stone-200 bg-white px-5 py-3 text-sm font-semibold text-stone-800 hover:bg-stone-50 transition shrink-0">
+                                <span>{{ __('landing.blog.cta_button') }}</span>
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA -->
         <section class="pb-12 sm:pb-16 lg:pb-20">
             <div class="px-4 sm:px-6 lg:px-8">
