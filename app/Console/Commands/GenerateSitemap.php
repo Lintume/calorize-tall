@@ -53,7 +53,8 @@ class GenerateSitemap extends Command
                 ->add(Url::create(route('blog-9', ['locale' => $locale])))
                 ->add(Url::create(route('blog-10', ['locale' => $locale])))
                 ->add(Url::create(route('blog-11', ['locale' => $locale])))
-                ->add(Url::create(route('blog-12', ['locale' => $locale])));
+                ->add(Url::create(route('blog-12', ['locale' => $locale])))
+                ->add(Url::create(route('blog-13', ['locale' => $locale])));
 
             // Save the static sitemap for the current locale
             $staticFilename = "sitemaps/static_sitemap_{$locale}.xml";
