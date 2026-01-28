@@ -84,11 +84,11 @@
         $practicalPosts = [
             [
                 'href' => route('blog-13'),
-                'title' => __('Calorize: Full Feature Overview. Why It\'s the Most Effective Weight Loss Tool'),
-                'excerpt' => __('Most people quit counting due to complexity. Learn how Calorize solves this with precise meal calculation, instant search, and an AI assistant.'),
+                'title' => __('Calorize: The \'Anti-Boring\' Guide to Weight Loss (Class is in Session)'),
+                'excerpt' => __('Forget boring spreadsheets. Calorize uses physics, AI, and a bit of magic to make weight loss actually bearable.'),
                 'image' => '/images/blog/blog-13.svg',
-                'tag' => __('How-to'),
-                'time' => __('6 min read'),
+                'tag' => __('Product Update'),
+                'time' => __('5 min read'),
             ],
             [
                 'href' => route('blog-1'),
