@@ -231,14 +231,14 @@
         <!-- Input Area -->
         <div class="p-3 bg-white/90 border-t border-stone-100">
             <div class="flex items-end gap-2">
-                <div class="relative flex-1">
+                <div class="relative flex-1 min-h-[44px] self-end flex flex-col justify-end">
                     <textarea
                         x-model="input"
                         @keydown.enter="handleEnter($event)"
                         @input="autoResize($event.target)"
                         x-init="$nextTick(() => autoResize($refs.input))"
                         rows="1"
-                        class="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-base sm:text-sm bg-white shadow-inner shadow-stone-900/5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition resize-none overflow-hidden leading-normal"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-2 text-base sm:text-sm bg-white shadow-inner shadow-stone-900/5 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition resize-none overflow-hidden leading-normal"
                         :class="{
                             'ring-2 ring-sky-400 border-sky-300 animate-pulse': transcribing,
                             'ring-2 ring-red-400 border-red-300': recording
@@ -289,7 +289,7 @@
                         'bg-red-500 hover:bg-red-600 border-red-400': recording,
                         'bg-stone-100 hover:bg-stone-200 border-stone-200': !recording
                     }"
-                    class="relative w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+                    class="relative w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-200 disabled:opacity-50 shrink-0 self-end"
                 >
                     <span
                         x-show="recording"
@@ -314,7 +314,7 @@
                 <button
                     @click="send()"
                     :disabled="!input.trim() || $wire.isProcessing"
-                    class="w-11 h-11 bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 border border-amber-400/50 rounded-xl flex items-center justify-center shadow-lg shadow-amber-600/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="w-11 h-11 bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 border border-amber-400/50 rounded-xl flex items-center justify-center shadow-lg shadow-amber-600/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shrink-0 self-end"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white drop-shadow-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
