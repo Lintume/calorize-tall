@@ -85,7 +85,7 @@
             [
                 'href' => route('blog-13'),
                 'title' => __('Calorize: The \'Anti-Boring\' Guide to Weight Loss (Class is in Session)'),
-                'excerpt' => __('Forget boring spreadsheets. Calorize uses physics, AI, and a bit of magic to make weight loss actually bearable.'),
+                'excerpt' => __('Tracking fails when it feels like work. Calorize fixes that with a human AI assistant: slang, voice, context, and one-message logging.'),
                 'image' => '/images/blog/blog-13.svg',
                 'tag' => __('Product Update'),
                 'time' => __('5 min read'),

@@ -5,7 +5,7 @@
     @section('meta')
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{{ __('Forget boring spreadsheets. Calorize uses physics, AI, and a bit of magic to make weight loss actually bearable. Read the guide.') }}">
+        <meta name="description" content="{{ __('Most apps can count calories. The hard part is doing it every day. Calorize makes consistency easy with a human AI diary, Ukrainian-first search, and fast voice logging.') }}">
         <meta name="keywords" content="{{ __('Calorize, weight loss, AI nutritionist, funny diet app, precise calorie counting') }}">
         <meta name="author" content="Calorize">
     @endsection
@@ -41,7 +41,7 @@
                         </span>
                     </h1>
                     <p class="mt-4 text-base sm:text-lg leading-relaxed text-stone-600">
-                        {{ __('OK, class. Settle down. We\'ve got a lot to get through. Most diet apps are boring, inaccurate, and make you want to throw your phone at the wall. We fixed that.') }}
+                        {{ __('OK, class. Settle down. Most apps can calculate numbers. The real problem is that tracking feels like work. Calorize is built around a human AI assistant that makes logging feel natural, not like homework.') }}
                     </p>
                 </div>
             </div>
@@ -157,41 +157,34 @@
                             
                             <section>
                                 <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Physics class is back (but this time it helps you eat cake)') }}
+                                    {{ __('The most human AI food diary you’ll use') }}
                                 </h2>
                                 <div class="mt-4 space-y-4">
-                                    <p>{{ __('Here\'s the thing: food shrinks when you cook it. Water evaporates, calories stay. That stew you made? It\'s calorie-dense dynamite. Most apps ignore this and let you live in a fantasy world. We don\'t.') }}</p>
-                                    
-                                    <div class="bg-stone-50 border-l-4 border-stone-300 p-4 my-4">
-                                        <p class="font-semibold text-stone-900">{{ __('The Calorize Way:') }}</p>
-                                        <p class="mt-2 text-sm sm:text-base">{!! __('You weigh raw stuff. You weigh the cooked dish. <strong>We do the boring math.</strong> You get a scientifically accurate number for every spoon. It\'s cosmically precise. You\'re welcome.') !!}</p>
-                                    </div>
-                                </div>
-                            </section>
+                                    <p>{{ __('Most people don’t quit because they don’t understand calories. They quit because logging is annoying. So we made the diary conversational: you write like a human, and the AI does the admin work.') }}</p>
 
-                            <section>
-                                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Our AI speaks fluent "Hungry Human"') }}
-                                </h2>
-                                <div class="mt-4 space-y-4">
-                                    <p>{{ __('We get it. You don\'t want to search for "Confectionery product, glazed, cylindrical shape" at 11 PM. You just want to log your candy.') }}</p>
-                                    
                                     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                                         <li class="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
-                                            <div class="font-bold text-stone-900 mb-1">{{ __('It knows your slang') }}</div>
-                                            <p class="text-sm">{{ __('Type "kanhveta" or "raffaello". Our AI nods understandingly and logs it. No judgment, just data.') }}</p>
+                                            <div class="font-bold text-stone-900 mb-1">{{ __('It remembers context') }}</div>
+                                            <p class="text-sm">{{ __('Ate “Strila” candy yesterday? Today you can type one word (“kanhveta”) and the agent will add it — without interrogation.') }}</p>
                                         </li>
                                         <li class="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
-                                            <div class="font-bold text-stone-900 mb-1">{{ __('It hallucinates... correctly') }}</div>
-                                            <p class="text-sm">{{ __('Describe a mess of puff pastry, cinnamon, and air fryer magic. The agent simulates the recipe and gives you a scary-accurate number.') }}</p>
+                                            <div class="font-bold text-stone-900 mb-1">{{ __('It understands real Ukrainian') }}</div>
+                                            <p class="text-sm">{{ __('Slang, typos, mixed phrases, voice input — it’s built for how people actually talk, not how databases want you to.') }}</p>
+                                        </li>
+                                        <li class="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
+                                            <div class="font-bold text-stone-900 mb-1">{{ __('It can estimate complex dishes') }}</div>
+                                            <p class="text-sm">{{ __('Describe your pastry experiment with cinnamon, sugar, and an air fryer. The agent will model the recipe and create a reasonable calorie estimate.') }}</p>
+                                        </li>
+                                        <li class="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
+                                            <div class="font-bold text-stone-900 mb-1">{{ __('It logs measurements too') }}</div>
+                                            <p class="text-sm">{{ __('Just write “56.8 kg”. The agent understands it’s a measurement and records it. Done.') }}</p>
                                         </li>
                                     </ul>
 
-                                    <p class="mt-2">{{ __('Lazy commands for the efficiency-obsessed:') }}</p>
-                                    <ul class="list-disc pl-5 space-y-1 text-stone-600">
-                                        <li>{!! __('<em>"Copy yesterday\'s breakfast"</em> — because we are creatures of habit.') !!}</li>
-                                        <li>{!! __('<em>"Delete everything"</em> — for when you want to pretend today didn\'t happen.') !!}</li>
-                                    </ul>
+                                    <div class="bg-stone-50 border-l-4 border-stone-300 p-4 my-4">
+                                        <p class="font-semibold text-stone-900">{{ __('Short commands, big impact') }}</p>
+                                        <p class="mt-2 text-sm sm:text-base">{{ __('Try: “Copy yesterday to today”, “Delete all today”, or “Copy yesterday’s breakfast”. This is what “frictionless” looks like.') }}</p>
+                                    </div>
                                 </div>
                             </section>
 
@@ -202,6 +195,16 @@
                                 <div class="mt-4 space-y-4">
                                     <p>{{ __('Stop logging "Generic Cheddar Cheese" from a database made in Ohio. You shop at ATB and Silpo, and so does our database.') }}</p>
                                     <p>{{ __('86,000 local products. Yahotynske, Roshen, that specific bread you like. Real brands, zero duplicates. It\'s a beautiful, organized paradise.') }}</p>
+                                </div>
+                            </section>
+
+                            <section>
+                                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">
+                                    {{ __('Recipe calculation, but painless') }}
+                                </h2>
+                                <div class="mt-4 space-y-4">
+                                    <p>{{ __('Yes, many apps can calculate recipes. The difference is whether you want to use them on a random Tuesday.') }}</p>
+                                    <p>{!! __('In Calorize it’s straightforward: enter ingredient weights, then enter the final cooked weight. <strong>We handle the shrinkage math</strong> and give you accurate per-100g nutrition for the dish you actually eat.') !!}</p>
                                 </div>
                             </section>
 
@@ -235,7 +238,7 @@
                                     {{ __('TL;DR') }}
                                 </h2>
                                 <div class="mt-4 space-y-4">
-                                    <p>{{ __('Calorize isn\'t magic. It\'s just a tool that respects your time and intelligence. We did the hard physics and database work so you can just... eat.') }}</p>
+                                    <p>{{ __('Calorize is built around one idea: consistency beats perfection. Our AI makes tracking feel human, so you actually keep doing it. The rest (database, recipes, analytics) supports that.') }}</p>
                                 </div>
                             </section>
 
