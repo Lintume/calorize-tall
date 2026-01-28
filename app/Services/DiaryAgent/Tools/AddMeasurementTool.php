@@ -82,7 +82,7 @@ class AddMeasurementTool extends Tool
         ];
 
         if ($kg !== null) {
-            $data['kg'] = round($kg, 1);
+            $data['kg'] = round($kg, 2);
         }
 
         // Add optional measurements if provided
