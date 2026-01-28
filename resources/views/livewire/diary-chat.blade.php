@@ -37,8 +37,8 @@
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 scale-95"
         x-ref="chatPanel"
-        class="fixed left-4 right-4 sm:left-auto sm:right-auto sm:relative sm:bottom-auto sm:w-96 bg-white/95 backdrop-blur-sm rounded-[1.25rem] shadow-2xl shadow-stone-900/15 border border-stone-200 flex flex-col overflow-hidden z-50"
-        :style="`bottom: ${Math.max(16, keyboardOffset + 16)}px; max-height: min(${keyboardOffset > 0 ? '60vh' : '70vh'}, 500px);`"
+        class="fixed left-4 right-4 sm:left-auto sm:right-auto sm:relative sm:bottom-auto sm:w-96 bg-white/95 backdrop-blur-sm rounded-[1.25rem] shadow-2xl shadow-stone-900/15 border border-stone-200 flex flex-col overflow-hidden z-50 transition-[bottom] duration-150"
+        :style="`bottom: ${keyboardOffset > 0 ? keyboardOffset : 16}px; max-height: ${keyboardOffset > 0 ? 'calc(100dvh - ' + (keyboardOffset + 16) + 'px)' : 'min(70dvh, 500px)'};`"
         @click.outside="open = false"
     >
         <!-- Header -->
@@ -382,48 +382,43 @@ function diaryChat() {
         handleKeyboardVisibility() {
             // Use visualViewport API to detect keyboard on mobile
             if (window.visualViewport) {
-                const onResize = () => {
+                const updatePosition = () => {
                     if (!this.open) return;
 
-                    // Calculate keyboard height: difference between window height and visual viewport height
-                    const keyboardHeight = window.innerHeight - window.visualViewport.height;
-                    // Only apply offset if keyboard is likely open (height > 100px threshold)
-                    const newOffset = keyboardHeight > 100 ? keyboardHeight : 0;
+                    const vv = window.visualViewport;
+                    // Position panel at the top of visual viewport (just above keyboard)
+                    // vv.offsetTop tells us where the visual viewport starts relative to layout viewport
+                    const bottomFromViewport = window.innerHeight - (vv.offsetTop + vv.height);
 
-                    // Only update if changed significantly to avoid jitter
-                    if (Math.abs(this.keyboardOffset - newOffset) > 10) {
-                        this.keyboardOffset = newOffset;
-                    }
+                    // Only apply if keyboard seems open (significant difference)
+                    const newOffset = bottomFromViewport > 50 ? bottomFromViewport : 0;
 
-                    // Scroll input into view when keyboard opens
-                    if (newOffset > 0) {
-                        this.$nextTick(() => {
-                            this.$refs.input?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                        });
-                    }
+                    this.keyboardOffset = newOffset;
                 };
 
-                window.visualViewport.addEventListener('resize', onResize);
-                window.visualViewport.addEventListener('scroll', onResize);
+                window.visualViewport.addEventListener('resize', updatePosition);
+                window.visualViewport.addEventListener('scroll', updatePosition);
             }
 
-            // Fallback for browsers without visualViewport: scroll on focus
+            // Fallback: scroll input into view on focus (works on all devices)
             this.$refs.input?.addEventListener('focus', () => {
                 if (this.isMobile()) {
-                    setTimeout(() => {
-                        this.$refs.input?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                    }, 300);
+                    // Multiple attempts to handle iOS keyboard animation timing
+                    [150, 350].forEach(delay => {
+                        setTimeout(() => {
+                            this.$refs.input?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, delay);
+                    });
                 }
             });
 
             // Reset offset when input loses focus (keyboard closes)
             this.$refs.input?.addEventListener('blur', () => {
-                // Small delay to allow for tapping other elements without jarring layout shift
                 setTimeout(() => {
                     if (document.activeElement !== this.$refs.input) {
                         this.keyboardOffset = 0;
                     }
-                }, 100);
+                }, 200);
             });
         },
 
