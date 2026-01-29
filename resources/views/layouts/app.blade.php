@@ -130,5 +130,41 @@
             </footer>
         </div>
         @livewireScripts
+
+        {{-- Service Worker Registration --}}
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then((registration) => {
+                            // Check for updates on page load
+                            registration.update();
+                            
+                            // Auto-update when new SW is available
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New version available, activate it
+                                        newWorker.postMessage('skipWaiting');
+                                    }
+                                });
+                            });
+                        })
+                        .catch((error) => {
+                            console.log('SW registration failed:', error);
+                        });
+                    
+                    // Reload page when new SW takes control
+                    let refreshing = false;
+                    navigator.serviceWorker.addEventListener('controllerchange', () => {
+                        if (!refreshing) {
+                            refreshing = true;
+                            window.location.reload();
+                        }
+                    });
+                });
+            }
+        </script>
     </body>
 </html>

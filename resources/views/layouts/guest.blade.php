@@ -91,5 +91,34 @@
             </footer>
         </div>
         @livewireScripts
+
+        {{-- Service Worker Registration --}}
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then((registration) => {
+                            registration.update();
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        newWorker.postMessage('skipWaiting');
+                                    }
+                                });
+                            });
+                        })
+                        .catch((error) => console.log('SW registration failed:', error));
+                    
+                    let refreshing = false;
+                    navigator.serviceWorker.addEventListener('controllerchange', () => {
+                        if (!refreshing) {
+                            refreshing = true;
+                            window.location.reload();
+                        }
+                    });
+                });
+            }
+        </script>
     </body>
 </html>
