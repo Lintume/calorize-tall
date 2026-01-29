@@ -64,6 +64,9 @@
             gtag('config', 'G-3LXEJPCRR0');
         </script>
 
+        <!-- PostHog Analytics -->
+        @include('partials.posthog')
+
         @yield('meta')
     </head>
     <body class="font-sans antialiased">

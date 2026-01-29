@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\PostHogService;
 use App\Services\Prism\GeminiWithHelicone;
 use App\Support\Helicone;
 use Illuminate\Support\ServiceProvider;
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(PostHogService::class);
     }
 
     /**

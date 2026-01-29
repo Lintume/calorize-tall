@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use App\Services\PostHogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,13 @@ class CreateRecipe extends Component
                     'g' => $ingredient['grams'],
                 ]);
             }
+
+            // Track recipe creation
+            app(PostHogService::class)->captureForUser('recipe_created', [
+                'ingredients_count' => count($selectedProducts),
+                'total_weight' => $calculated['totalGrams'],
+                'calories_per_100g' => $calculated['kcalPer100g'],
+            ]);
         });
 
         return redirect()->route('recipe.index');

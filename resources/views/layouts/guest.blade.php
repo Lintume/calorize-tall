@@ -35,6 +35,9 @@
 
         <!-- Styles -->
         @livewireStyles
+
+        <!-- PostHog Analytics -->
+        @include('partials.posthog')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen flex flex-col bg-[radial-gradient(1200px_circle_at_20%_-10%,rgba(245,158,11,0.18),transparent_55%),radial-gradient(900px_circle_at_90%_10%,rgba(14,165,233,0.16),transparent_50%),linear-gradient(to_bottom,rgba(250,250,249,1),rgba(255,255,255,1))]">

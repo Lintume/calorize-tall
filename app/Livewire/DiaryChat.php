@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Services\DiaryAgent\DiaryAgentService;
 use App\Services\DiaryAgent\WhisperService;
+use App\Services\PostHogService;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -21,6 +22,11 @@ class DiaryChat extends Component
     public function mount(string $date)
     {
         $this->date = $date;
+
+        // Track chat component mounted (user sees the chat)
+        app(PostHogService::class)->captureForUser('diary_chat_opened', [
+            'date' => $date,
+        ]);
     }
 
     /**
@@ -56,10 +62,12 @@ class DiaryChat extends Component
 
         try {
             $agent = app(DiaryAgentService::class);
+            /** @var int|null $userId */
+            $userId = auth()->id();
             $result = $agent->process($text, [
                 'date' => $this->date,
                 'activeMeal' => $this->activeMeal,
-                'userId' => auth()->id(),
+                'userId' => $userId,
                 'messages' => $this->messages, // Pass conversation history (without current message)
             ]);
 
@@ -76,6 +84,13 @@ class DiaryChat extends Component
                 'content' => $result->message,
                 'timestamp' => now()->toIso8601String(),
             ];
+
+            // Track successful message
+            app(PostHogService::class)->captureForUser('diary_chat_message_sent', [
+                'message_length' => strlen($text),
+                'has_actions' => !empty($result->actions),
+                'actions_count' => count($result->actions ?? []),
+            ]);
 
             // Always refresh the diary after successful AI response
             // (the AI likely made changes if the user asked for something)
@@ -112,6 +127,11 @@ class DiaryChat extends Component
             // Dispatch event so the frontend can show the transcription
             // in the input field for editing before sending
             $this->dispatch('transcription-ready', text: $transcription);
+
+            // Track voice message usage
+            app(PostHogService::class)->captureForUser('diary_chat_voice_used', [
+                'transcription_length' => strlen($transcription),
+            ]);
 
         } catch (\Exception $e) {
             Log::error('Whisper transcription error', [
