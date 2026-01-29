@@ -62,9 +62,11 @@ class GenerateSitemap extends Command
             $sitemapIndex->add("/$staticFilename");
 
             $this->info("Processing products for locale: $locale...");
-            // Products for the current locale
+            // Products for the current locale (exclude private user products)
             $sitemapCounter = 1;
-            Product::select(['slug', 'updated_at'])->chunk($chunkSize, function ($products) use (&$sitemapCounter, $sitemapIndex, $locale) {
+            Product::select(['slug', 'updated_at'])
+                ->whereNull('user_id')
+                ->chunk($chunkSize, function ($products) use (&$sitemapCounter, $sitemapIndex, $locale) {
                 $sitemap = Sitemap::create();
 
                 foreach ($products as $product) {
