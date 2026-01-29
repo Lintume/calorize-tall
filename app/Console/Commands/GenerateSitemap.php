@@ -41,20 +41,33 @@ class GenerateSitemap extends Command
             $staticSitemap = Sitemap::create()
                 ->add(Url::create("/$locale")->setPriority(1.0)->setChangeFrequency('monthly'))
                 ->add(Url::create("/$locale/products")->setPriority(0.8)->setChangeFrequency('monthly'))
-                ->add(Url::create("/$locale/blog")->setPriority(0.8)->setChangeFrequency('monthly'))
-                ->add(Url::create(route('blog-1', ['locale' => $locale])))
-                ->add(Url::create(route('blog-2', ['locale' => $locale])))
-                ->add(Url::create(route('blog-3', ['locale' => $locale])))
-                ->add(Url::create(route('blog-4', ['locale' => $locale])))
-                ->add(Url::create(route('blog-5', ['locale' => $locale])))
-                ->add(Url::create(route('blog-6', ['locale' => $locale])))
-                ->add(Url::create(route('blog-7', ['locale' => $locale])))
-                ->add(Url::create(route('blog-8', ['locale' => $locale])))
-                ->add(Url::create(route('blog-9', ['locale' => $locale])))
-                ->add(Url::create(route('blog-10', ['locale' => $locale])))
-                ->add(Url::create(route('blog-11', ['locale' => $locale])))
-                ->add(Url::create(route('blog-12', ['locale' => $locale])))
-                ->add(Url::create(route('blog-13', ['locale' => $locale])));
+                ->add(Url::create("/$locale/blog")->setPriority(0.8)->setChangeFrequency('weekly'));
+
+            // Blog posts with modification dates for faster indexing
+            $blogPosts = [
+                'blog-1' => '2025-08-20',
+                'blog-2' => '2025-09-05',
+                'blog-3' => '2025-09-20',
+                'blog-4' => '2025-10-05',
+                'blog-5' => '2025-10-18',
+                'blog-6' => '2025-11-01',
+                'blog-7' => '2025-11-15',
+                'blog-8' => '2025-11-28',
+                'blog-9' => '2025-12-10',
+                'blog-10' => '2025-12-20',
+                'blog-11' => '2026-01-05',
+                'blog-12' => '2026-01-15',
+                'blog-13' => '2026-01-29',
+            ];
+
+            foreach ($blogPosts as $routeName => $date) {
+                $staticSitemap->add(
+                    Url::create(route($routeName, ['locale' => $locale]))
+                        ->setLastModificationDate(new \DateTime($date))
+                        ->setPriority(0.7)
+                        ->setChangeFrequency('monthly')
+                );
+            }
 
             // Save the static sitemap for the current locale
             $staticFilename = "sitemaps/static_sitemap_{$locale}.xml";

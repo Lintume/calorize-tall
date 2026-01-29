@@ -22,6 +22,7 @@
                 'image' => '/images/blog/blog-5.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2025-10-18',
             ],
             [
                 'href' => route('blog-6'),
@@ -30,6 +31,7 @@
                 'image' => '/images/blog/blog-6.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2025-11-01',
             ],
             [
                 'href' => route('blog-7'),
@@ -38,6 +40,7 @@
                 'image' => '/images/blog/blog-7.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2025-11-15',
             ],
             [
                 'href' => route('blog-8'),
@@ -46,6 +49,7 @@
                 'image' => '/images/blog/blog-8.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2025-11-28',
             ],
             [
                 'href' => route('blog-9'),
@@ -54,6 +58,7 @@
                 'image' => '/images/blog/blog-9.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2025-12-10',
             ],
             [
                 'href' => route('blog-10'),
@@ -62,6 +67,7 @@
                 'image' => '/images/blog/blog-10.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2025-12-20',
             ],
             [
                 'href' => route('blog-11'),
@@ -70,6 +76,7 @@
                 'image' => '/images/blog/blog-11.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2026-01-05',
             ],
             [
                 'href' => route('blog-12'),
@@ -78,6 +85,7 @@
                 'image' => '/images/blog/blog-12.svg',
                 'tag' => __('Science'),
                 'time' => __('8 min read'),
+                'date' => '2026-01-15',
             ],
         ];
 
@@ -89,6 +97,7 @@
                 'image' => '/images/blog/blog-13.svg',
                 'tag' => __('Product Update'),
                 'time' => __('5 min read'),
+                'date' => '2026-01-29',
             ],
             [
                 'href' => route('blog-1'),
@@ -97,6 +106,7 @@
                 'image' => '/images/blog/blog-1.webp',
                 'tag' => __('Calories'),
                 'time' => __('7 min read'),
+                'date' => '2025-08-20',
             ],
             [
                 'href' => route('blog-2'),
@@ -105,6 +115,7 @@
                 'image' => '/images/blog/blog-2.webp',
                 'tag' => __('Habits'),
                 'time' => __('5 min read'),
+                'date' => '2025-09-05',
             ],
             [
                 'href' => route('blog-3'),
@@ -113,6 +124,7 @@
                 'image' => '/images/blog/blog-3.webp',
                 'tag' => __('Foods'),
                 'time' => __('4 min read'),
+                'date' => '2025-09-20',
             ],
             [
                 'href' => route('blog-4'),
@@ -121,6 +133,7 @@
                 'image' => '/images/blog/blog-4.webp',
                 'tag' => __('Hydration'),
                 'time' => __('4 min read'),
+                'date' => '2025-10-05',
             ],
         ];
     @endphp
@@ -223,6 +236,8 @@
                                             {{ $post['tag'] }}
                                         </span>
                                         <span class="font-semibold">{{ $post['time'] }}</span>
+                                        <span class="text-stone-400">•</span>
+                                        <time datetime="{{ $post['date'] }}" class="font-medium">{{ \Carbon\Carbon::parse($post['date'])->translatedFormat('d M Y') }}</time>
                                     </div>
 
                                     <h3 class="mt-3 text-lg sm:text-xl font-extrabold tracking-tight text-stone-900 group-hover:text-sky-700 transition">
@@ -276,11 +291,13 @@
                                 </div>
 
                                 <div class="p-5">
-                                    <div class="flex items-center gap-2 text-xs text-stone-500">
+                                    <div class="flex flex-wrap items-center gap-2 text-xs text-stone-500">
                                         <span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700">
                                             {{ $post['tag'] }}
                                         </span>
                                         <span class="font-semibold">{{ $post['time'] }}</span>
+                                        <span class="text-stone-400">•</span>
+                                        <time datetime="{{ $post['date'] }}" class="font-medium">{{ \Carbon\Carbon::parse($post['date'])->translatedFormat('d M Y') }}</time>
                                     </div>
 
                                     <h3 class="mt-3 text-base sm:text-lg font-extrabold tracking-tight text-stone-900 group-hover:text-emerald-700 transition">

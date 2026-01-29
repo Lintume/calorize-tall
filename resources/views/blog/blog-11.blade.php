@@ -33,6 +33,8 @@
                         <span>{{ __('Science') }}</span>
                         <span class="text-stone-400">•</span>
                         <span>{{ __('8 min read') }}</span>
+                        <span class="text-stone-400">•</span>
+                        <time datetime="2026-01-05">{{ \Carbon\Carbon::parse('2026-01-05')->translatedFormat('d M Y') }}</time>
                     </div>
 
                     <h1 class="mt-4 text-[clamp(2rem,4.6vw,3rem)] leading-[1.06] font-extrabold tracking-tight text-stone-900">
