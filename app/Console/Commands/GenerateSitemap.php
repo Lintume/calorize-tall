@@ -58,6 +58,7 @@ class GenerateSitemap extends Command
                 'blog-11' => '2026-01-05',
                 'blog-12' => '2026-01-15',
                 'blog-13' => '2026-01-29',
+                'blog-14' => '2026-01-29',
             ];
 
             foreach ($blogPosts as $routeName => $date) {

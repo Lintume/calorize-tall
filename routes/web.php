@@ -113,6 +113,9 @@ Route::group(['prefix' => $localePrefix], function () {
     Route::get('/blog/calorize-gid-po-supersylakh', function () {
         return view('blog.blog-13');
     })->name('blog-13');
+    Route::get('/blog/kupiti-tirzepatid-ozempic-mounjaro-tsina-ukraina', function () {
+        return view('blog.blog-14');
+    })->name('blog-14');
     Route::get('/blog', function () {
         return view('blog.index');
     })->name('blog');
