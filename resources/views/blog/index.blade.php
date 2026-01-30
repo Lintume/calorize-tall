@@ -17,9 +17,9 @@
         $sciencePosts = [
             [
                 'href' => route('blog-14'),
-                'title' => __('280$ за 10 банок чи 5000 грн за одну? Вся правда про ціни на Тирзепатид в Україні'),
-                'excerpt' => __('Ми знайшли реальні ціни постачальників з Китаю. Націнка українських магазинів на пептиди (Тирзепатид, Семаглутид) сягає 900%. Розслідування ринку.'),
-                'image' => '/images/blog/blog-10.svg', // Reusing GLP-1 image for now as it fits the topic
+                'title' => __('280$ for 10 vials or 5000 UAH for one? The truth about Tirzepatide prices in Ukraine'),
+                'excerpt' => __('We found the real prices from Chinese suppliers. The markup of Ukrainian peptide shops (Tirzepatide, Semaglutide) reaches 900%. Market investigation.'),
+                'image' => '/images/blog/blog-10.svg',
                 'tag' => __('Market Analysis'),
                 'time' => __('6 min read'),
                 'date' => '2026-01-29',

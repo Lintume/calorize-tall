@@ -1,12 +1,12 @@
 <x-app-layout :full-width="true">
 
-    @section('title', __('280$ за 10 банок? Вся правда про ціни на Тирзепатид, Оземпік та Мунджаро в Україні'))
+    @section('title', __('280$ for 10 vials? The truth about Tirzepatide, Ozempic and Mounjaro prices in Ukraine'))
 
     @section('meta')
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{{ __('Розкриваємо реальні ціни на Тирзепатид, Семаглутид та Мунджаро. Чому в Україні націнка 800%, де купують перекупи та чи варто ризикувати здоров\'ям заради економії.') }}">
-        <meta name="keywords" content="{{ __('купити тирзепатид, мунджаро ціна, оземпік україна, семаглутид купити, ретатрутид, пептиди китай, схуднення уколи, tirzepatide ukraine price') }}">
+        <meta name="description" content="{{ __('We reveal the real prices of Tirzepatide, Semaglutide and Mounjaro. Why the markup in Ukraine is 800%, where resellers buy, and whether it\'s worth risking your health to save money.') }}">
+        <meta name="keywords" content="{{ __('buy tirzepatide, mounjaro price, ozempic ukraine, buy semaglutide, retatrutide, peptides china, weight loss injections, tirzepatide ukraine price') }}">
         <meta name="author" content="Calorize">
     @endsection
 
@@ -39,11 +39,11 @@
 
                     <h1 class="mt-4 text-[clamp(2rem,4.6vw,3rem)] leading-[1.06] font-extrabold tracking-tight text-stone-900">
                         <span class="bg-gradient-to-b from-stone-900 to-stone-700 bg-clip-text text-transparent">
-                            {{ __('280$ за 10 банок чи 5000 грн за одну? Вся правда про ціни на Тирзепатид в Україні') }}
+                            {{ __('280$ for 10 vials or 5000 UAH for one? The truth about Tirzepatide prices in Ukraine') }}
                         </span>
                     </h1>
                     <p class="mt-4 text-base sm:text-lg leading-relaxed text-stone-600">
-                        {{ __('Ми знайшли реальні ціни постачальників, у яких закуповуються українські магазини пептидів. Ваш шок буде у шоці, коли ви побачите націнку.') }}
+                        {{ __('We found the real prices from suppliers that Ukrainian peptide shops buy from. Your shock will be limitless when you see the markup.') }}
                     </p>
                 </div>
             </div>
@@ -85,22 +85,22 @@
                             
                             <section>
                                 <p class="font-bold text-xl text-stone-900">
-                                    {{ __('Спойлер: Вас "гріють" на гроші. Сильно.') }}
+                                    {{ __('Spoiler: You\'re being ripped off. Big time.') }}
                                 </p>
                                 <p class="mt-4">
-                                    {{ __('Якщо ви цікавитеся схудненням, ви точно бачили ці оголошення в Instagram або Telegram: "Тирзепатид", "Семаглутид", "Мунджаро-аналог", "Оземпік-дженерик". Ціни коливаються від 3000 до 6500 грн за один флакон (віалу).') }}
+                                    {{ __('If you\'re interested in weight loss, you\'ve definitely seen these ads on Instagram or Telegram: "Tirzepatide", "Semaglutide", "Mounjaro-analog", "Ozempic-generic". Prices range from 3000 to 6500 UAH per vial.') }}
                                 </p>
                                 <p class="mt-4">
-                                    {{ __('Ми вирішили перевірити, звідки береться цей товар. Результат розслідування змусив нас схопитися за голову.') }}
+                                    {{ __('We decided to check where this product comes from. The results of our investigation made us grab our heads.') }}
                                 </p>
                             </section>
 
                             <section>
                                 <h2 class="text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Математика шоку') }}
+                                    {{ __('The Math of Shock') }}
                                 </h2>
                                 <p class="mt-4">
-                                    {{ __('Ми знайшли прямих постачальників з Китаю (звідки їде 99% "сірого" ринку пептидів). Ось пропозиція від одного з "дорогих" та перевірених постачальників, який тестує кожну партію в незалежній лабораторії Janoshik (Чехія):') }}
+                                    {{ __('We found direct suppliers from China (where 99% of the "gray" peptide market comes from). Here\'s an offer from one of the "expensive" and verified suppliers who tests each batch at the independent Janoshik laboratory (Czech Republic):') }}
                                 </p>
                                 
                                 <div class="my-6 bg-stone-50 rounded-xl border border-stone-200 p-5 font-mono text-sm sm:text-base">
@@ -123,64 +123,64 @@
                                 </div>
 
                                 <p>
-                                    {{ __('Це ціна за "преміум" Китай з тестами чистоти. Якщо заглибитися у Reddit, можна знайти постачальників ще вдвічі дешевше — по $140-150 за такий самий набір. Але навіть за "дорогою" ціною одна банка 30 мг коштує 1150 грн.') }}
+                                    {{ __('This is the price for "premium" China with purity tests. If you dig into Reddit, you can find suppliers half the price — $140-150 for the same kit. But even at the "expensive" price, one 30mg vial costs 1150 UAH.') }}
                                 </p>
                                 <p class="mt-4">
-                                    {{ __('В Україні зазвичай продають флакони по 5 мг, 10 мг або 15 мг. Давайте порахуємо вартість 1 мг діючої речовини:') }}
+                                    {{ __('In Ukraine, vials of 5mg, 10mg or 15mg are usually sold. Let\'s calculate the cost of 1mg of active substance:') }}
                                 </p>
                                 <ul class="list-disc pl-5 mt-2 space-y-2">
-                                    <li><strong>{{ __('Китай (дорогий):') }}</strong> {{ __('~38 грн за 1 мг') }}</li>
-                                    <li><strong>{{ __('Китай (дешевий):') }}</strong> {{ __('~19 грн за 1 мг') }}</li>
-                                    <li><strong>{{ __('Україна (перекуп):') }}</strong> {{ __('~330-430 грн за 1 мг (при ціні 5000-6500 грн за 15 мг)') }}</li>
+                                    <li><strong>{{ __('China (expensive):') }}</strong> {{ __('~38 UAH per 1mg') }}</li>
+                                    <li><strong>{{ __('China (cheap):') }}</strong> {{ __('~19 UAH per 1mg') }}</li>
+                                    <li><strong>{{ __('Ukraine (reseller):') }}</strong> {{ __('~330-430 UAH per 1mg (at 5000-6500 UAH for 15mg)') }}</li>
                                 </ul>
                                 <p class="mt-4 font-bold text-rose-600">
-                                    {{ __('Націнка складає від 900% до 2200%.') }}
+                                    {{ __('The markup ranges from 900% to 2200%.') }}
                                 </p>
                             </section>
 
                             <section>
                                 <h2 class="text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Чому так дорого?') }}
+                                    {{ __('Why so expensive?') }}
                                 </h2>
                                 <p class="mt-4">
-                                    {{ __('Продавці скажуть вам про "складну логістику", "холодові ланцюги" та "митницю". Частково це правда — доставка пептидів вимагає дотримання температурного режиму (хоча не всі дотримуються його ідеально).') }}
+                                    {{ __('Sellers will tell you about "complex logistics", "cold chains" and "customs". This is partially true — peptide delivery requires temperature control (although not everyone follows it perfectly).') }}
                                 </p>
                                 <p class="mt-4">
-                                    {{ __('Але основна причина — це "податок на страх" і "податок на незнання". Люди бояться замовляти напряму з Китаю, не знають перевірених заводів (QSC та інші) і бояться проблем з оплатою криптою.') }}
+                                    {{ __('But the main reason is the "fear tax" and "ignorance tax". People are afraid to order directly from China, don\'t know verified factories (QSC and others) and are afraid of crypto payment issues.') }}
                                 </p>
                             </section>
 
                             <section>
                                 <h2 class="text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Небезпечна правда про "Сірий Ринок"') }}
+                                    {{ __('The Dangerous Truth About the "Gray Market"') }}
                                 </h2>
                                 <div class="bg-amber-50 border-l-4 border-amber-400 p-4 my-4 text-base">
-                                    <p class="font-bold text-amber-800">{{ __('Важливо:') }}</p>
-                                    <p class="mt-1 text-amber-700">{{ __('Ми не закликаємо купувати препарати в Китаї. Ми закликаємо розуміти ризики.') }}</p>
+                                    <p class="font-bold text-amber-800">{{ __('Important:') }}</p>
+                                    <p class="mt-1 text-amber-700">{{ __('We are not encouraging you to buy drugs from China. We are encouraging you to understand the risks.') }}</p>
                                 </div>
                                 <p class="mt-4">
-                                    {{ __('Коли ви купуєте "банку без наклейки" в українському телеграм-каналі за 5000 грн, ви отримуєте ТУ САМУ китайську банку, яка коштує 28$.') }}
+                                    {{ __('When you buy a "vial without a label" in a Ukrainian Telegram channel for 5000 UAH, you get THE SAME Chinese vial that costs $28.') }}
                                 </p>
                                 <p class="mt-4">
-                                    {{ __('Перекупник не має своєї лабораторії. Він не виробляє препарат. Він просто замовляє його оптом і перепродує вам. Ризики чистоти (purity), недоливу або зіпсованого при доставці товару залишаються тими ж самими, тільки ви платите за них у 9 разів більше.') }}
+                                    {{ __('The reseller doesn\'t have their own laboratory. They don\'t manufacture the drug. They just order it in bulk and resell it to you. The risks of purity, underfilling or spoiled goods during delivery remain the same, only you pay 9 times more for them.') }}
                                 </p>
                             </section>
 
                             <section>
                                 <h2 class="text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Що робити?') }}
+                                    {{ __('What to do?') }}
                                 </h2>
                                 <p class="mt-4">
-                                    <strong>{{ __('1. Не будьте наївними.') }}</strong> {{ __('Розумійте, що "авторський курс схуднення" за 10 тисяч гривень — це часто просто перепродаж дешевого дженерика.') }}
+                                    <strong>{{ __('1. Don\'t be naive.') }}</strong> {{ __('Understand that an "author\'s weight loss course" for 10 thousand hryvnias is often just a resale of a cheap generic.') }}
                                 </p>
                                 <p class="mt-2">
-                                    <strong>{{ __('2. Консультуйтеся з лікарем.') }}</strong> {{ __('Офіційні препарати (Ozempic, Mounjaro в шприц-ручках) коштують дорого через патентний захист, клінічні випробування і гарантію якості. Дженерики — це лотерея.') }}
+                                    <strong>{{ __('2. Consult a doctor.') }}</strong> {{ __('Official drugs (Ozempic, Mounjaro in pen-injectors) are expensive due to patent protection, clinical trials and quality guarantees. Generics are a lottery.') }}
                                 </p>
                                 <p class="mt-2">
-                                    <strong>{{ __('3. Терапія — це надовго.') }}</strong> {{ __('Ожиріння — це хронічна хвороба, і "курсом на місяць" її не вилікувати. Світові дослідження показують, що для утримання ваги терапія пептидами може бути потрібна роками або навіть довічно. "Просто сила волі" тут часто не працює.') }}
+                                    <strong>{{ __('3. Therapy is long-term.') }}</strong> {{ __('Obesity is a chronic disease, and a "one-month course" won\'t cure it. World research shows that peptide therapy may be needed for years or even lifelong to maintain weight. "Just willpower" often doesn\'t work here.') }}
                                 </p>
                                 <p class="mt-2">
-                                    {!! __('Але навіть на терапії вам потрібен контроль. Не для того, щоб "менше їсти" (препарат зробить це за вас), а щоб <strong>їсти достатньо</strong>. Головний ризик на пептидах — втрата м\'язів (саркопенія) через те, що ви просто перестаєте їсти білок.') !!}
+                                    {!! __('But even on therapy you need control. Not to "eat less" (the drug will do that for you), but to <strong>eat enough</strong>. The main risk on peptides is muscle loss (sarcopenia) because you simply stop eating protein.') !!}
                                 </p>
                             </section>
 
@@ -188,28 +188,28 @@
 
                             <section>
                                 <h2 class="text-2xl font-extrabold tracking-tight text-stone-900">
-                                    {{ __('Навіщо тоді Calorize?') }}
+                                    {{ __('Why Calorize then?') }}
                                 </h2>
                                 <p class="mt-4">
-                                    {{ __('Якщо ви на терапії, вам критично важливо добирати норму білка, щоб не перетворитися на "skinny fat" і не втратити волосся. Calorize — це ідеальний компаньйон для терапії.') }}
+                                    {{ __('If you\'re on therapy, it\'s critically important to get your protein intake, so you don\'t turn into "skinny fat" and lose your hair. Calorize is the ideal companion for therapy.') }}
                                 </p>
                                 <p class="mt-4">
-                                    {{ __('Наш AI-щоденник допоможе стежити за нутрієнтами без стресу. Просто скажіть "з\'їла стейк", і ми порахуємо білок за вас.') }}
+                                    {{ __('Our AI diary will help you track nutrients without stress. Just say "ate a steak" and we\'ll count the protein for you.') }}
                                 </p>
                             </section>
 
                         </div>
 
                         <div class="mt-12 rounded-[1.5rem] border border-stone-200 bg-stone-50 p-6 sm:p-8">
-                            <div class="text-sm font-semibold text-stone-500">{{ __('Ваш компаньйон у терапії') }}</div>
-                            <div class="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">{{ __('Стежте за білком, а не тільки за вагою') }}</div>
-                            <div class="mt-3 text-base text-stone-600">{{ __('Calorize допоможе зберегти здоров\'я та м\'язи під час схуднення. Спробуйте безкоштовно.') }}</div>
+                            <div class="text-sm font-semibold text-stone-500">{{ __('Your companion in therapy') }}</div>
+                            <div class="mt-2 text-xl sm:text-2xl font-extrabold tracking-tight text-stone-900">{{ __('Track protein, not just weight') }}</div>
+                            <div class="mt-3 text-base text-stone-600">{{ __('Calorize will help preserve your health and muscles during weight loss. Try it for free.') }}</div>
                             <div class="mt-6 flex flex-col sm:flex-row gap-4">
                                 <a href="{{ $primaryUrl }}" class="inline-flex items-center justify-center rounded-2xl bg-stone-900 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-stone-900/10 hover:bg-stone-800 transition">
                                     {{ $primaryLabel }}
                                 </a>
                                 <a href="{{ route('blog') }}" class="inline-flex items-center justify-center rounded-2xl border border-stone-200 bg-white px-6 py-3.5 text-base font-semibold text-stone-800 hover:bg-white transition">
-                                    {{ __('Читати інші статті') }}
+                                    {{ __('Read other articles') }}
                                 </a>
                             </div>
                         </div>
